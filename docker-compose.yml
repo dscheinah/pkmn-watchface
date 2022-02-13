@@ -1,0 +1,10 @@
+services:
+  sdk:
+    image: bboehmke/pebble-dev
+    environment:
+      - DISPLAY
+    volumes:
+      - /tmp/.X11-unit:/tmp.X11-unit
+      - ~/.Xauthority:/home/pebble/.Xauthority
+      - .:/pebble
+    network_mode: host
