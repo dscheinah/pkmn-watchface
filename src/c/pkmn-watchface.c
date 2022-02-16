@@ -9,7 +9,6 @@
 
 static Window *s_window;
 
-static Layer *centerLayer;
 static BitmapLayer *templateLayer;
 static TextLayer *timeLayer;
 static TextLayer *dateLayer;
@@ -194,13 +193,12 @@ static void prv_window_load(Window *window) {
 
   int x = (bounds.size.w - 144) / 2;
   int y = (bounds.size.h - 168) / 2;
-  centerLayer = layer_create(GRect(x, y, 144, 168));
 
-  templateLayer = bitmap_layer_create(bounds);
+  templateLayer = bitmap_layer_create(GRect(x, y, 144, 168));
   timeLayer = helper_create_text_layer(GRect(5, 121, 139, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
   dateLayer = helper_create_text_layer(GRect(73, 96, 60, 14), FONT_KEY_GOTHIC_14, GTextAlignmentRight);
 
-  layer_add_child(window_layer, bitmap_layer_get_layer(templateLayer));
+  Layer *centerLayer = bitmap_layer_get_layer(templateLayer);
   layer_add_child(window_layer, centerLayer);
   layer_add_child(centerLayer, text_layer_get_layer(timeLayer));
   layer_add_child(centerLayer, text_layer_get_layer(dateLayer));
@@ -219,7 +217,6 @@ static void prv_window_unload(Window *window) {
   bitmap_layer_destroy(templateLayer);
   text_layer_destroy(timeLayer);
   text_layer_destroy(dateLayer);
-  layer_destroy(centerLayer);
 }
 
 static void prv_init(void) {
