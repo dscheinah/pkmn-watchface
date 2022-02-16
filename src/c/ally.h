@@ -1,4 +1,5 @@
 #pragma once
+#include <pebble.h>
 
 typedef struct ally {
  int type;
@@ -14,6 +15,6 @@ Ally* ally_init();
 
 void ally_reset();
 
-int ally_evolution();
+void ally_evolution();
 
 void ally_deinit();

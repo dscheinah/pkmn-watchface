@@ -18,7 +18,7 @@ static GBitmap *templateBitmap;
 static Ally *ally;
 static Enemy *enemy;
 
-static void gameTick(int reset, int loop) {
+static void gameTick(bool reset, bool loop) {
   Health health = health_get_collected(loop, reset);
   game_set_ally_level(ally, health);
   game_set_enemy_level(enemy, health);
@@ -28,10 +28,10 @@ static void gameTick(int reset, int loop) {
     }
     if (game_deal_damage(ally, enemy, health)) {
       #if defined(TEST)
-        int killed = enemy_reset(0, 0);
+        bool killed = enemy_reset(0, 0);
       #else
         int event = rand() % 5;
-        int killed = enemy_reset(event == 0, event == 1);
+        bool killed = enemy_reset(event == 0, event == 1);
       #endif
       if (killed) {
         ally->level_modifier += 2;
@@ -54,7 +54,7 @@ static void gameTick(int reset, int loop) {
 #if defined(TEST)
   static void testTick(int tick) {
     static HealthValue steps, sleep, restful, active;
-    int day = 0;
+    bool day = false;
     switch (tick % 24) {
       case 0:
         steps = sleep = active = 0;
@@ -75,7 +75,7 @@ static void gameTick(int reset, int loop) {
         restful++;
         break;
       case 3:
-        day = 1;
+        day = true;
         restful++;
         break;
       case 4:
@@ -85,7 +85,7 @@ static void gameTick(int reset, int loop) {
         restful++;
         break;
       case 5:
-        day = 1;
+        day = true;
         restful++;
         break;
       case 6:
@@ -99,7 +99,7 @@ static void gameTick(int reset, int loop) {
         restful++;
         break;
       case 9:
-        day = 1;
+        day = true;
         restful++;
         break;
       case 10:
@@ -124,7 +124,7 @@ static void gameTick(int reset, int loop) {
       case 14:
         steps = rand() % 7000 + 5000;
         sleep = rand() % 40000 + 20000;
-        day = 1;
+        day = true;
         restful++;
         break;
       case 15:
@@ -136,7 +136,7 @@ static void gameTick(int reset, int loop) {
         break;
     }
     health_set(steps, sleep, restful, active);
-    gameTick(day, 1);
+    gameTick(day, true);
   }
 #endif
 
@@ -156,7 +156,7 @@ static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
   if (units_changed & MINUTE_UNIT) {
     renderTime(tick_time);
   }
-  int day = units_changed & DAY_UNIT, loop = !(units_changed & INIT_UNIT);
+  bool day = units_changed & DAY_UNIT, loop = !(units_changed & INIT_UNIT);
   if (day) {
     renderDate(tick_time);
   }

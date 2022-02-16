@@ -31,104 +31,104 @@ Enemy* enemy_init() {
   return &enemy;
 }
 
-int enemy_reset(int egg, int ghost) {
+bool enemy_reset(bool egg, bool ghost) {
   if (enemy.health > 0) {
-    return 0;
+    return false;
   }
   enemy.health = 100;
   if (egg) {
     enemy.type = RESOURCE_ID_egg;
     enemy.level_multiplier = 1;
     enemy.hours_alive = 0;
-    return 1;
+    return true;
   }
-  if (enemy.level_multiplier > 1 && ghost) {
+  if (ghost && enemy.level_multiplier > 1) {
     enemy.type = RESOURCE_ID_92;
     enemy.level_multiplier = 1;
     enemy.hours_alive = 0;
-    return 2;
+    return true;
   }
   if (enemy.hours_alive > 10) {
     enemy.type = RESOURCE_ID_86;
     enemy.level_multiplier = 1;
     enemy.hours_alive = 0;
-    return 3;
+    return true;
   }
   if (enemy.hours_alive < 3 && enemy.type == RESOURCE_ID_92) {
     enemy.type = RESOURCE_ID_93;
     enemy.level_multiplier = 2;
     enemy.hours_alive = 0;
-    return 4;
+    return true;
   }
   enemy.level_multiplier = 1;
   enemy.hours_alive = 0;
   if (enemy.type == RESOURCE_ID_133) {
     enemy.type = RESOURCE_ID_25;
-    return 5;
+    return true;
   }
   enemy.type = RESOURCE_ID_133;
-  return 6;
+  return true;
 }
 
-int enemy_evolution(Health health) {
+bool enemy_evolution(Health health) {
   if (health.restful_sleep_hour) {
-    return 0;
+    return false;
   }
   enemy.hours_alive++;
   if (rand() % 5 >= enemy.hours_alive) {
-    return 0;
+    return false;
   }
   switch (enemy.type) {
     case RESOURCE_ID_133:
       enemy.type = rand() % 3 + 28;
       enemy.level_multiplier = 2;
       enemy.hours_alive = 0;
-      return 1;
+      return true;
     case RESOURCE_ID_86:
       enemy.type = RESOURCE_ID_87;
       enemy.level_multiplier = 2;
       enemy.hours_alive = 0;
-      return 2;
+      return true;
     default:
       if (enemy.type >= 14 && enemy.type <= 19) {
         enemy.type += 3;
         enemy.level_multiplier++;
         enemy.hours_alive = 0;
-        return 3;
+        return true;
       }
   }
-  return 0;
+  return false;
 }
 
-int enemy_night() {
+bool enemy_night() {
   switch (enemy.type) {
     case RESOURCE_ID_133:
       enemy.type = RESOURCE_ID_197;
       enemy.level_multiplier = 2;
       enemy.hours_alive = 0;
-      return 1;
+      return true;
     case RESOURCE_ID_93:
       enemy.type = RESOURCE_ID_94;
       enemy.level_multiplier = 3;
       enemy.hours_alive = 0;
-      return 2;
+      return true;
   }
-  return 0;
+  return false;
 }
 
-int enemy_charge() {
+bool enemy_charge() {
   switch (enemy.type) {
     case RESOURCE_ID_133:
       enemy.type = RESOURCE_ID_135;
       enemy.level_multiplier = 2;
       enemy.hours_alive = 0;
-      return 1;
+      return true;
     case RESOURCE_ID_25:
       enemy.type = RESOURCE_ID_26;
       enemy.level_multiplier = 2;
       enemy.health = 100;
       enemy.hours_alive = 0;
-      return 2;
+      return true;
     case RESOURCE_ID_26:
       if (enemy.health < 100) {
         enemy.health = 100;
@@ -143,27 +143,27 @@ int enemy_charge() {
       }
       break;
   }
-  return 0;
+  return false;
 }
 
-int enemy_hatch(Health health) {
+bool enemy_hatch(Health health) {
   if (enemy.type != RESOURCE_ID_egg) {
-    return 0;
+    return false;
   }
   enemy.health = 100;
   enemy.hours_alive = 0;
   if (health.steps_yesterday > 20000) {
     enemy.type = RESOURCE_ID_151;
     enemy.level_multiplier = 4;
-    return 1;
+    return true;
   }
   enemy.level_multiplier = 1;
   if (health.steps_yesterday > 10000) {
     enemy.type = rand() % 3 + 14;
-    return 2;
+    return true;
   }
   enemy.type = RESOURCE_ID_133;
-  return 3;
+  return true;
 }
 
 void enemy_deinit() {

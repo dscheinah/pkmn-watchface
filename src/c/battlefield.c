@@ -12,7 +12,7 @@ struct part {
   TextLayer* level;
   Layer* health;
   Layer* experience;
-  int missing;
+  bool missing;
   int previous;
 };
 
@@ -84,7 +84,7 @@ void battlefield_load(Layer *root, Ally *ally, Enemy *enemy) {
   layer_set_update_proc(enemyPart.health, renderEnemyHealth);
 }
 
-void battlefield_set_enemy_missing(int missing) {
+void battlefield_set_enemy_missing(bool missing) {
   if (enemyPart.missing ^ missing) {
     enemyPart.missing = missing;
     battlefield_mark_dirty();

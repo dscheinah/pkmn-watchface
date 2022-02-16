@@ -1,4 +1,5 @@
 #pragma once
+#include <pebble.h>
 #include "health.h"
 
 typedef struct {
@@ -12,14 +13,14 @@ typedef struct {
 
 Enemy* enemy_init();
 
-int enemy_reset(int egg, int ghost);
+bool enemy_reset(bool egg, bool ghost);
 
-int enemy_evolution(Health health);
+bool enemy_evolution(Health health);
 
-int enemy_night();
+bool enemy_night();
 
-int enemy_charge();
+bool enemy_charge();
 
-int enemy_hatch(Health health);
+bool enemy_hatch(Health health);
 
 void enemy_deinit();

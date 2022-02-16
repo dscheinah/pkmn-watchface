@@ -61,7 +61,7 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
   return 1;
 }
 
-int game_set_ally_level(Ally *ally, Health health) {
+void game_set_ally_level(Ally *ally, Health health) {
   float level = 30.0 * health.steps / 10000;
   float experience = (float) health.steps / (health.steps_yesterday ?: 5000);
   if (level < 1) {
@@ -74,29 +74,25 @@ int game_set_ally_level(Ally *ally, Health health) {
   if (ally->level != level || ally->experience != experience) {
     ally->level = level;
     ally->experience = experience;
-    return 1;
   }
-  return 0;
 }
 
-int game_set_enemy_level(Enemy *enemy, Health health) {
+void game_set_enemy_level(Enemy *enemy, Health health) {
   float level = 30.0 * (health.sleep + health.restful_sleep) / 47520;
   if (level < 1) {
     level = 1;
   }
   if (level != enemy->level) {
     enemy->level = level;
-    return 1;
   }
-  return 0;
 }
 
-int game_deal_damage(Ally *ally, Enemy *enemy, Health health) {
+bool game_deal_damage(Ally *ally, Enemy *enemy, Health health) {
   if (health.restful_sleep_hour || enemy->type == RESOURCE_ID_egg) {
-    return 0;
+    return false;
   }
   float level = levelModifier(ally->level_final() - enemy->level_final());
   float effective = effectiveModifier(ally, enemy);
   enemy->health -= (90.0 * health.active_hour / 3600 + 10) * level * effective;
-  return 1;
+  return true;
 }

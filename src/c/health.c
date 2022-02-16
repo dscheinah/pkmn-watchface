@@ -44,7 +44,7 @@ void health_init() {
   health.active = 0;
 }
 
-void health_refresh(int update_yesterday) {
+void health_refresh(bool update_yesterday) {
   if (demo) {
     HealthValue steps = rand() % 1000, sleep, restful, active = rand() % 900;
     if (update_yesterday) {
@@ -74,7 +74,7 @@ void health_set(HealthValue steps, HealthValue sleep, HealthValue restful_sleep,
   health.active = active;
 }
 
-Health health_get_collected(int update_relative, int update_yesterday) {
+Health health_get_collected(bool update_relative, bool update_yesterday) {
   if (update_relative) {
     if (update_yesterday) {
       health.steps_yesterday = health.steps_last;

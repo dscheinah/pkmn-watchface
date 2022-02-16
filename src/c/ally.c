@@ -41,19 +41,14 @@ void ally_reset() {
   ally.level_modifier = 0;
 }
 
-int ally_evolution() {
+void ally_evolution() {
   int level = level_final();
   if (ally.type < 4 && level > 15) {
     ally.type += 3;
-    if (level < 36) {
-      return 1;
-    }
   }
   if (ally.type < 7 && level > 35) {
     ally.type += 3;
-    return 2;
   }
-  return 0;
 }
 
 void ally_deinit() {
