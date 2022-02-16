@@ -18,7 +18,7 @@ static GBitmap *templateBitmap;
 static Ally *ally;
 static Enemy *enemy;
 
-static void gameTick(bool reset, bool loop) {
+static void gameTick(bool reset, bool loop, int event) {
   Health health = health_get_collected(loop, reset);
   game_set_ally_level(ally, health);
   game_set_enemy_level(enemy, health);
@@ -26,16 +26,8 @@ static void gameTick(bool reset, bool loop) {
     if (enemy_evolution(health)) {
       ally->level_modifier++;
     }
-    if (game_deal_damage(ally, enemy, health)) {
-      #if defined(TEST)
-        bool killed = enemy_reset(0, 0);
-      #else
-        int event = rand() % 5;
-        bool killed = enemy_reset(event == 0, event == 1);
-      #endif
-      if (killed) {
-        ally->level_modifier += 2;
-      }
+    if (game_deal_damage(ally, enemy, health) && enemy_reset(event == 0, event == 1)) {
+      ally->level_modifier += 2;
     }
     if (reset) {
       ally_reset();
@@ -136,7 +128,7 @@ static void gameTick(bool reset, bool loop) {
         break;
     }
     health_set(steps, sleep, restful, active);
-    gameTick(day, true);
+    gameTick(day, true, 5);
   }
 #endif
 
@@ -168,7 +160,7 @@ static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
   #else
     if (units_changed & HOUR_UNIT) {
       health_refresh(day);
-      gameTick(day, loop);
+      gameTick(day, loop, rand() % 5);
     }
   #endif
 }
