@@ -6,8 +6,16 @@
 #define LEVEL_KEY 202
 #define HEALTH_KEY 203
 #define ALIVE_KEY 204
+#define MORPH_KEY 205
 
 static Enemy enemy;
+
+static void create_with_morph(int type, int level) {
+  enemy.type = type;
+  enemy.level_multiplier = level;
+  enemy.hours_alive = 0;
+  enemy.morph = rand() % 10 == 0;
+}
 
 static int level_final() {
   int level = enemy.level * enemy.level_multiplier;
@@ -21,11 +29,13 @@ Enemy* enemy_init() {
     enemy.level_multiplier = persist_read_int(LEVEL_KEY);
     enemy.health = persist_read_int(HEALTH_KEY);
     enemy.hours_alive = persist_read_int(ALIVE_KEY);
+    enemy.morph = persist_read_int(MORPH_KEY);
   } else {
     enemy.type = RESOURCE_ID_133;
     enemy.level_multiplier = 1;
     enemy.health = 100;
     enemy.hours_alive = 0;
+    enemy.morph = false;
   }
   enemy.level_final = &level_final;
   return &enemy;
@@ -43,30 +53,18 @@ bool enemy_reset(bool egg, bool ghost) {
     return true;
   }
   if (ghost && enemy.level_multiplier > 1) {
-    enemy.type = RESOURCE_ID_92;
-    enemy.level_multiplier = 1;
-    enemy.hours_alive = 0;
+    create_with_morph(RESOURCE_ID_92, 1);
     return true;
   }
   if (enemy.hours_alive > 10) {
-    enemy.type = RESOURCE_ID_86;
-    enemy.level_multiplier = 1;
-    enemy.hours_alive = 0;
+    create_with_morph(RESOURCE_ID_86, 1);
     return true;
   }
   if (enemy.hours_alive < 3 && enemy.type == RESOURCE_ID_92) {
-    enemy.type = RESOURCE_ID_93;
-    enemy.level_multiplier = 2;
-    enemy.hours_alive = 0;
+    create_with_morph(RESOURCE_ID_93, 2);
     return true;
   }
-  enemy.level_multiplier = 1;
-  enemy.hours_alive = 0;
-  if (enemy.type == RESOURCE_ID_133) {
-    enemy.type = RESOURCE_ID_25;
-    return true;
-  }
-  enemy.type = RESOURCE_ID_133;
+  create_with_morph(enemy.type == RESOURCE_ID_133 ? RESOURCE_ID_25 : RESOURCE_ID_133, 1);
   return true;
 }
 
@@ -75,19 +73,28 @@ bool enemy_evolution(Health health) {
     return false;
   }
   enemy.hours_alive++;
-  if (rand() % 5 >= enemy.hours_alive) {
+  int check = rand() % 5;
+  if (check == 0) {
+    if (enemy.type == RESOURCE_ID_132) {
+      enemy.type = rand() % 6 + 48;
+      return true;
+    }
+    if (enemy.morph) {
+      enemy.type = RESOURCE_ID_132;
+      return true;
+    }
+  }
+  if (check >= enemy.hours_alive) {
     return false;
   }
   switch (enemy.type) {
     case RESOURCE_ID_133:
       enemy.type = rand() % 3 + 28;
       enemy.level_multiplier = 2;
-      enemy.hours_alive = 0;
       return true;
     case RESOURCE_ID_86:
       enemy.type = RESOURCE_ID_87;
       enemy.level_multiplier = 2;
-      enemy.hours_alive = 0;
       return true;
     default:
       if (enemy.type >= 14 && enemy.type <= 19) {
@@ -105,12 +112,10 @@ bool enemy_night() {
     case RESOURCE_ID_133:
       enemy.type = RESOURCE_ID_197;
       enemy.level_multiplier = 2;
-      enemy.hours_alive = 0;
       return true;
     case RESOURCE_ID_93:
       enemy.type = RESOURCE_ID_94;
       enemy.level_multiplier = 3;
-      enemy.hours_alive = 0;
       return true;
   }
   return false;
@@ -121,13 +126,11 @@ bool enemy_charge() {
     case RESOURCE_ID_133:
       enemy.type = RESOURCE_ID_135;
       enemy.level_multiplier = 2;
-      enemy.hours_alive = 0;
       return true;
     case RESOURCE_ID_25:
       enemy.type = RESOURCE_ID_26;
       enemy.level_multiplier = 2;
       enemy.health = 100;
-      enemy.hours_alive = 0;
       return true;
     case RESOURCE_ID_26:
       if (enemy.health < 100) {
@@ -151,18 +154,19 @@ bool enemy_hatch(Health health) {
     return false;
   }
   enemy.health = 100;
-  enemy.hours_alive = 0;
-  if (health.steps_yesterday > 20000) {
-    enemy.type = RESOURCE_ID_151;
-    enemy.level_multiplier = 4;
+  if (health.steps_yesterday > 24000) {
+    create_with_morph(RESOURCE_ID_251, 4);
     return true;
   }
-  enemy.level_multiplier = 1;
+  if (health.steps_yesterday > 18000) {
+    create_with_morph(RESOURCE_ID_151, 4);
+    return true;
+  }
   if (health.steps_yesterday > 10000) {
-    enemy.type = rand() % 3 + 14;
+    create_with_morph(rand() % 3 + 14, 1);
     return true;
   }
-  enemy.type = RESOURCE_ID_133;
+  create_with_morph(RESOURCE_ID_133, 1);
   return true;
 }
 
@@ -172,4 +176,5 @@ void enemy_deinit() {
   persist_write_int(LEVEL_KEY, enemy.level_multiplier);
   persist_write_int(HEALTH_KEY, enemy.health);
   persist_write_int(ALIVE_KEY, enemy.hours_alive);
+  persist_write_int(MORPH_KEY, enemy.morph);
 }

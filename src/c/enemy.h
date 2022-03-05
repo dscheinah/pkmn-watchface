@@ -9,6 +9,7 @@ typedef struct {
   int (*level_final)();
   int health;
   int hours_alive;
+  bool morph;
 } Enemy;
 
 Enemy* enemy_init();

@@ -47,7 +47,7 @@ static void gameTick(bool reset, bool loop, int event) {
   static void testTick(int tick) {
     static HealthValue steps, sleep, restful, active;
     bool day = false;
-    switch (tick % 24) {
+    switch (tick % 32) {
       case 0:
         steps = sleep = active = 0;
         restful = 1;
@@ -58,12 +58,12 @@ static void gameTick(bool reset, bool loop, int event) {
         break;
       case 1:
         steps = 6000;
-        sleep = 30000;
+        sleep = 25000;
         restful++;
         break;
       case 2:
         steps = 12000;
-        sleep = 60000;
+        sleep = 50000;
         restful++;
         break;
       case 3:
@@ -73,7 +73,7 @@ static void gameTick(bool reset, bool loop, int event) {
       case 4:
         enemy->health = 0;
         enemy_reset(1, 0);
-        steps = 12500;
+        steps = 11000;
         restful++;
         break;
       case 5:
@@ -87,7 +87,7 @@ static void gameTick(bool reset, bool loop, int event) {
       case 8:
         enemy->health = 0;
         enemy_reset(1, 0);
-        steps = 25000;
+        steps = 19000;
         restful++;
         break;
       case 9:
@@ -95,36 +95,47 @@ static void gameTick(bool reset, bool loop, int event) {
         restful++;
         break;
       case 10:
+        enemy->health = 0;
+        enemy_reset(1, 0);
+        steps = 25000;
+        restful++;
+        break;
+      case 11:
+        day = true;
+        restful++;
+        break;
+      case 12:
         enemy->hours_alive = 15;
         enemy->health = 0;
         enemy_reset(0, 0);
         restful++;
         break;
-      case 11:
+      case 13:
         enemy->hours_alive = 5;
         break;
-      case 12:
+      case 14:
         enemy->health = 0;
         enemy_reset(0, 1);
-        restful++;
-        break;
-      case 13:
-        enemy->health = 0;
-        enemy_reset(0, 0);
-        restful++;
-        break;
-      case 14:
-        steps = rand() % 7000 + 5000;
-        sleep = rand() % 40000 + 20000;
-        day = true;
         restful++;
         break;
       case 15:
         enemy->health = 0;
         enemy_reset(0, 0);
+        restful++;
+        break;
+      case 16:
+        steps = rand() % 7000 + 5000;
+        sleep = rand() % 40000 + 20000;
+        day = true;
+        restful++;
+        break;
+      case 17:
+        enemy->health = 0;
+        enemy_reset(0, 0);
         ally->level_modifier = 12;
       default:
-        active += rand() % 1800;
+        active += rand() % 900;
+        enemy->morph = true;
         break;
     }
     health_set(steps, sleep, restful, active);
