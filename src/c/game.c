@@ -1,13 +1,19 @@
 #include <pebble.h>
 #include "game.h"
 
-static float levelModifier(float diff) {
+static float levelModifier(float diff, int type) {
   float level = 1.0 + (diff / 100);
+  if (type > 3) {
+    level += .2;
+  }
+  if (type > 6) {
+    level += .2;
+  }
   if (level < 0.25) {
     return 0.25;
   }
-  if (level > 2) {
-    return 2;
+  if (level > 3) {
+    return 3;
   }
   return level;
 }
@@ -122,7 +128,7 @@ bool game_deal_damage(Ally *ally, Enemy *enemy, Health health) {
   if (health.restful_sleep_hour || enemy->type == RESOURCE_ID_egg) {
     return false;
   }
-  float level = levelModifier(ally->level_final() - enemy->level_final());
+  float level = levelModifier(ally->level_final() - enemy->level_final(), ally->type);
   float effective = effectiveModifier(ally, enemy);
   enemy->health -= (90.0 * health.active_hour / 3600 + 10) * level * effective;
   return true;
