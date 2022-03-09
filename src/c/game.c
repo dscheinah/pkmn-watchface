@@ -19,9 +19,8 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
     case RESOURCE_ID_7:
       switch (ally->type % 3) {
         case 0:
-          return 0.5;
         case 1:
-          return 0.25;
+          return 0.5;
         case 2:
           return 2;
       }
@@ -34,7 +33,6 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
         case 0:
           return 2;
         case 1:
-          return 0.5;
         case 2:
           return 0.5;
       }
@@ -53,17 +51,18 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
     case RESOURCE_ID_86:
     case RESOURCE_ID_87:
       switch (ally->type % 3) {
+        case 0:
+          return 0.5;
+        case 1:
         case 2:
           return 2;
       }
       break;
-    case RESOURCE_ID_251:
-      switch (ally->type % 3) {
-        case 0:
-        case 1:
-          return 0.5;
-        case 2:
-          return 2;
+    case RESOURCE_ID_92:
+    case RESOURCE_ID_93:
+    case RESOURCE_ID_94:
+      if (ally->type % 3 == 1) {
+        return 0.5;
       }
       break;
     case RESOURCE_ID_213:
@@ -76,6 +75,15 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
       switch (ally->type % 3) {
         case 1:
           return 0.5;
+        case 2:
+          return 2;
+      }
+      break;
+    case RESOURCE_ID_251:
+      switch (ally->type % 3) {
+        case 0:
+        case 1:
+          return 1;
         case 2:
           return 2;
       }
