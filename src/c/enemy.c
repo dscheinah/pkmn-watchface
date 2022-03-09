@@ -72,7 +72,6 @@ bool enemy_evolution(Health health) {
   if (health.restful_sleep_hour) {
     return false;
   }
-  enemy.hours_alive++;
   int check = rand() % 5;
   if (check == 0) {
     if (enemy.type == RESOURCE_ID_132) {
@@ -85,6 +84,7 @@ bool enemy_evolution(Health health) {
     }
   }
   if (check >= enemy.hours_alive) {
+    enemy.hours_alive++;
     return false;
   }
   switch (enemy.type) {
@@ -104,6 +104,7 @@ bool enemy_evolution(Health health) {
         return true;
       }
   }
+  enemy.hours_alive++;
   return false;
 }
 
