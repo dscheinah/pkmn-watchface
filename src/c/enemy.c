@@ -60,8 +60,8 @@ bool enemy_reset(bool egg, bool ghost) {
     create_with_morph(RESOURCE_ID_86, 1);
     return true;
   }
-  if (enemy.hours_alive < 3 && enemy.type == RESOURCE_ID_92) {
-    create_with_morph(RESOURCE_ID_93, 2);
+  if (enemy.hours_alive < 3 && (enemy.type == RESOURCE_ID_92 || enemy.type == RESOURCE_ID_93)) {
+    create_with_morph(enemy.type + 1, enemy.level_multiplier + 1);
     return true;
   }
   create_with_morph(enemy.type == RESOURCE_ID_133 ? RESOURCE_ID_25 : RESOURCE_ID_133, 1);
@@ -113,9 +113,10 @@ bool enemy_night() {
       enemy.type = RESOURCE_ID_197;
       enemy.level_multiplier = 2;
       return true;
+    case RESOURCE_ID_92:
     case RESOURCE_ID_93:
-      enemy.type = RESOURCE_ID_94;
-      enemy.level_multiplier = 3;
+      enemy.type++;
+      enemy.level_multiplier++;
       return true;
   }
   return false;
