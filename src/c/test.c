@@ -87,7 +87,11 @@ void test_next_tick(Ally *ally, Enemy *enemy) {
       doKill();
       break;
     case 23:
-      ally->level_modifier += rand() % 10;
+      enemy->morph = true;
+      break;
+    case 31:
+      ally->level_modifier = ally->shiny ? 0 : 20;
+      break;
     default:
       event = 4;
       active += rand() % 900;
