@@ -22,9 +22,6 @@
     "watchapp": {
       "watchface": true
     },
-    "messageKeys": [
-      "dummy"
-    ],
     "capabilities": [
       "health"
     ],
