@@ -16,7 +16,7 @@ Enemy* enemy_init();
 
 bool enemy_reset(bool egg, bool ghost);
 
-bool enemy_evolution(Health health);
+bool enemy_evolution(Health health, int event);
 
 bool enemy_night();
 

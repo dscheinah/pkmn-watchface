@@ -68,12 +68,11 @@ bool enemy_reset(bool egg, bool ghost) {
   return true;
 }
 
-bool enemy_evolution(Health health) {
+bool enemy_evolution(Health health, int event) {
   if (health.restful_sleep_hour) {
     return false;
   }
-  int check = rand() % 5;
-  if (check == 0) {
+  if (event == 4) {
     if (enemy.type == RESOURCE_ID_132) {
       enemy.type = rand() % 6 + 48;
       return true;
@@ -83,7 +82,7 @@ bool enemy_evolution(Health health) {
       return true;
     }
   }
-  if (check >= enemy.hours_alive) {
+  if (event >= enemy.hours_alive) {
     enemy.hours_alive++;
     return false;
   }

@@ -5,6 +5,9 @@
 #include "game.h"
 #include "health.h"
 #include "helper.h"
+#if defined(TEST)
+  #include "test.h"
+#endif
 #define INIT_UNIT 128
 
 static Window *s_window;
@@ -18,7 +21,7 @@ static GBitmap *templateBitmap;
 static Ally *ally;
 static Enemy *enemy;
 
-static void gameTick(bool reset, bool loop, int event) {
+static void gameTick(bool loop, bool reset, int event) {
   Health health = health_get_collected(loop, reset);
   game_set_ally_level(ally, health);
   game_set_enemy_level(enemy, health);
@@ -29,7 +32,7 @@ static void gameTick(bool reset, bool loop, int event) {
         ally->level_modifier++;
       }
     }
-    if (enemy_evolution(health)) {
+    if (enemy_evolution(health, event)) {
       ally->level_modifier++;
     }
     if (game_deal_damage(ally, enemy, health) && enemy_reset(event == 0, event == 1)) {
@@ -42,106 +45,6 @@ static void gameTick(bool reset, bool loop, int event) {
   ally_evolution();
   battlefield_mark_dirty();
 }
-
-#if defined(TEST)
-  static void testTick(int tick) {
-    static HealthValue steps, sleep, restful, active;
-    bool day = false;
-    switch (tick % 32) {
-      case 0:
-        steps = sleep = active = 0;
-        restful = 1;
-        ally_reset();
-        enemy->type = RESOURCE_ID_0;
-        enemy->health = 0;
-        enemy_reset(0, 0);
-        break;
-      case 1:
-        steps = 6000;
-        sleep = 25000;
-        restful++;
-        break;
-      case 2:
-        steps = 12000;
-        sleep = 50000;
-        restful++;
-        break;
-      case 3:
-        day = true;
-        restful++;
-        break;
-      case 4:
-        enemy->health = 0;
-        enemy_reset(1, 0);
-        steps = 11000;
-        restful++;
-        break;
-      case 5:
-        day = true;
-        restful++;
-        break;
-      case 6:
-      case 7:
-        enemy->hours_alive = 5;
-        break;
-      case 8:
-        enemy->health = 0;
-        enemy_reset(1, 0);
-        steps = 19000;
-        restful++;
-        break;
-      case 9:
-        day = true;
-        restful++;
-        break;
-      case 10:
-        enemy->health = 0;
-        enemy_reset(1, 0);
-        steps = 25000;
-        restful++;
-        break;
-      case 11:
-        day = true;
-        restful++;
-        break;
-      case 12:
-        enemy->hours_alive = 15;
-        enemy->health = 0;
-        enemy_reset(0, 0);
-        restful++;
-        break;
-      case 13:
-        enemy->hours_alive = 5;
-        break;
-      case 14:
-        enemy->health = 0;
-        enemy_reset(0, 1);
-        restful++;
-        break;
-      case 15:
-        enemy->health = 0;
-        enemy_reset(0, 0);
-        restful++;
-        break;
-      case 16:
-        steps = rand() % 7000 + 5000;
-        sleep = rand() % 40000 + 20000;
-        day = true;
-        restful++;
-        break;
-      case 17:
-        enemy->health = 0;
-        enemy_reset(0, 0);
-        ally->level_modifier = 12;
-      default:
-        active += rand() % 900;
-        enemy->morph = true;
-        break;
-    }
-    health_set(steps, sleep, restful, active);
-    gameTick(day, true, 5);
-  }
-#endif
 
 static void renderTime(struct tm *tick_time) {
   static char timeBuffer[6];
@@ -164,14 +67,15 @@ static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
     renderDate(tick_time);
   }
   #if defined(TEST)
-    static int tick = 0;
     if (!loop || time(NULL) % 5 == 0) {
-      testTick(tick++);
+      test_health_refresh();
+      gameTick(loop, test_day(), test_event());
+      test_next_tick(ally, enemy);
     }
   #else
     if (units_changed & HOUR_UNIT) {
       health_refresh(day);
-      gameTick(day, loop, rand() % 5);
+      gameTick(loop, day, rand() % 5);
     }
   #endif
 }
