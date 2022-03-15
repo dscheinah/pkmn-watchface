@@ -75,10 +75,12 @@ bool enemy_evolution(Health health, int event) {
   if (event == 4) {
     if (enemy.type == RESOURCE_ID_132) {
       enemy.type = rand() % 6 + 48;
+      enemy.hours_alive = 0;
       return true;
     }
     if (enemy.morph) {
       enemy.type = RESOURCE_ID_132;
+      enemy.hours_alive = 0;
       return true;
     }
   }
@@ -90,10 +92,12 @@ bool enemy_evolution(Health health, int event) {
     case RESOURCE_ID_133:
       enemy.type = rand() % 3 + 28;
       enemy.level_multiplier = 2;
+      enemy.hours_alive = 0;
       return true;
     case RESOURCE_ID_86:
       enemy.type = RESOURCE_ID_87;
       enemy.level_multiplier = 2;
+      enemy.hours_alive = 0;
       return true;
     default:
       if (enemy.type >= 14 && enemy.type <= 19) {
@@ -112,11 +116,13 @@ bool enemy_night() {
     case RESOURCE_ID_133:
       enemy.type = RESOURCE_ID_197;
       enemy.level_multiplier = 2;
+      enemy.hours_alive = 0;
       return true;
     case RESOURCE_ID_92:
     case RESOURCE_ID_93:
       enemy.type++;
       enemy.level_multiplier++;
+      enemy.hours_alive = 0;
       return true;
   }
   return false;
@@ -127,11 +133,13 @@ bool enemy_charge() {
     case RESOURCE_ID_133:
       enemy.type = RESOURCE_ID_135;
       enemy.level_multiplier = 2;
+      enemy.hours_alive = 0;
       return true;
     case RESOURCE_ID_25:
       enemy.type = RESOURCE_ID_26;
       enemy.level_multiplier = 2;
       enemy.health = 100;
+      enemy.hours_alive = 0;
       return true;
     case RESOURCE_ID_26:
       if (enemy.health < 100) {
