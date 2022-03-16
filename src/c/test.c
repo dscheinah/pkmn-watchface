@@ -90,7 +90,7 @@ void test_next_tick(Ally *ally, Enemy *enemy) {
       enemy->morph = true;
       break;
     case 31:
-      ally->level_modifier = ally->shiny ? 0 : 20;
+      ally->level_modifier = 20;
       break;
     default:
       event = 4;

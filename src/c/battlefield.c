@@ -92,7 +92,7 @@ void battlefield_set_enemy_missing(bool missing) {
 }
 
 void battlefield_mark_dirty() {
-  int allyToRender = allyPart.ally->shiny ? allyPart.ally->type + 31 : allyPart.ally->type;
+  int allyToRender = allyPart.ally->shiny ? allyPart.ally->type + 9 : allyPart.ally->type;
   if (allyPart.previous != allyToRender) {
     allyPart.previous = allyToRender;
     renderBitmap(allyPart.image, allyPart.bitmap, allyPart.previous);

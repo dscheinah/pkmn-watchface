@@ -74,7 +74,7 @@ bool enemy_evolution(Health health, int event) {
   }
   if (event == 4) {
     if (enemy.type == RESOURCE_ID_132) {
-      enemy.type = rand() % 6 + 48;
+      enemy.type = rand() % 6 + 47;
       enemy.hours_alive = 0;
       return true;
     }
@@ -90,7 +90,7 @@ bool enemy_evolution(Health health, int event) {
   }
   switch (enemy.type) {
     case RESOURCE_ID_133:
-      enemy.type = rand() % 3 + 28;
+      enemy.type += 1 + rand() % 3;
       enemy.level_multiplier = 2;
       enemy.hours_alive = 0;
       return true;
@@ -100,7 +100,7 @@ bool enemy_evolution(Health health, int event) {
       enemy.hours_alive = 0;
       return true;
     default:
-      if (enemy.type >= 14 && enemy.type <= 19) {
+      if (enemy.type >= 23 && enemy.type <= 28) {
         enemy.type += 3;
         enemy.level_multiplier++;
         enemy.hours_alive = 0;
@@ -174,7 +174,7 @@ bool enemy_hatch(Health health) {
     return true;
   }
   if (health.steps_yesterday > 10000) {
-    createWithMorph(rand() % 3 + 14, 1);
+    createWithMorph(rand() % 3 + 23, 1);
     return true;
   }
   createWithMorph(RESOURCE_ID_133, 1);
