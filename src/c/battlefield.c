@@ -41,7 +41,7 @@ static GColor8 GColorFromHealth(float percentage) {
   return GColorFromRGB((1 - percentage) * 255, percentage * 255, 0);
 }
 
-static void renderExperience(Layer *layer, GContext *ctx) {
+static void renderAllyExperience(Layer *layer, GContext *ctx) {
   renderRect(layer, ctx, ALIGN_RIGHT, GColorBlue, allyPart.ally->experience);
 }
 
@@ -53,6 +53,10 @@ static void renderAllyHealth(Layer *layer, GContext *ctx) {
 static void renderEnemyHealth(Layer *layer, GContext *ctx) {
   float percentage = (float) enemyPart.enemy->health / 100;
   renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(percentage), percentage);
+}
+
+static void renderEnemyExperience(Layer *layer, GContext *ctx) {
+  renderRect(layer, ctx, ALIGN_LEFT, GColorVeryLightBlue, (float) enemyPart.enemy->index_count / 31);
 }
 
 void battlefield_load(Layer *root, Ally *ally, Enemy *enemy) {
@@ -74,14 +78,17 @@ void battlefield_load(Layer *root, Ally *ally, Enemy *enemy) {
   enemyPart.image = bitmap_layer_create(GRect(82, 12, 56, 56));
   enemyPart.level = helper_create_text_layer(GRect(16, 10, 25, 14), FONT_KEY_GOTHIC_14_BOLD, GTextAlignmentCenter);
   enemyPart.health = layer_create(GRect(40, 28, 29, 3));
+  enemyPart.experience = layer_create(GRect(20, 39, 49, 1));
   bitmap_layer_set_alignment(enemyPart.image, GAlignBottom);
   layer_add_child(root, bitmap_layer_get_layer(enemyPart.image));
   layer_add_child(root, text_layer_get_layer(enemyPart.level));
   layer_add_child(root, enemyPart.health);
+  layer_add_child(root, enemyPart.experience);
 
-  layer_set_update_proc(allyPart.experience, renderExperience);
   layer_set_update_proc(allyPart.health, renderAllyHealth);
+  layer_set_update_proc(allyPart.experience, renderAllyExperience);
   layer_set_update_proc(enemyPart.health, renderEnemyHealth);
+  layer_set_update_proc(enemyPart.experience, renderEnemyExperience);
 }
 
 void battlefield_set_enemy_missing(bool missing) {

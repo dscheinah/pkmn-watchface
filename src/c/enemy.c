@@ -1,19 +1,42 @@
 #include <pebble.h>
 #include "enemy.h"
-#define VERSION 1
+#define VERSION 2
 #define VERSION_KEY 200
 #define TYPE_KEY 201
 #define LEVEL_KEY 202
 #define HEALTH_KEY 203
 #define ALIVE_KEY 204
 #define MORPH_KEY 205
+#define INDEX_COUNT_KEY 206
+#define INDEX_0_KEY 207
+#define INDEX_1_KEY 208
 
 static Enemy enemy;
 
-static void createWithMorph(int type, int level) {
+static void updateIndex(int type) {
+  int key = 0;
+  type -= 23;
+  if (type > 31) {
+    key = 1;
+    type -= 32;
+  }
+  int pos = 1 << type;
+  if (!(enemy.index[key] & pos)) {
+    enemy.index[key] = enemy.index[key] | pos;
+    enemy.index_count++;
+  }
+}
+
+static void evolve(int type, int level) {
   enemy.type = type;
   enemy.level_multiplier = level;
   enemy.hours_alive = 0;
+  updateIndex(type);
+}
+
+static void createWithMorph(int type, int level) {
+  evolve(type, level);
+  enemy.health = 100;
   enemy.morph = rand() % 10 == 0;
 }
 
@@ -30,12 +53,14 @@ Enemy* enemy_init() {
     enemy.health = persist_read_int(HEALTH_KEY);
     enemy.hours_alive = persist_read_int(ALIVE_KEY);
     enemy.morph = persist_read_int(MORPH_KEY);
+    enemy.index_count = persist_read_int(INDEX_COUNT_KEY);
+    enemy.index[0] = persist_read_int(INDEX_0_KEY);
+    enemy.index[1] = persist_read_int(INDEX_1_KEY);
   } else {
-    enemy.type = RESOURCE_ID_133;
-    enemy.level_multiplier = 1;
-    enemy.health = 100;
-    enemy.hours_alive = 0;
-    enemy.morph = false;
+    enemy.index_count = 0;
+    enemy.index[0] = 0;
+    enemy.index[1] = 0;
+    createWithMorph(RESOURCE_ID_133, 1);
   }
   enemy.level_final = &level_final;
   return &enemy;
@@ -45,9 +70,9 @@ bool enemy_reset(bool egg, bool ghost) {
   if (enemy.health > 0) {
     return false;
   }
-  enemy.health = 100;
   if (egg) {
     enemy.type = RESOURCE_ID_egg;
+    enemy.health = 100;
     enemy.level_multiplier = 1;
     enemy.hours_alive = 0;
     return true;
@@ -69,18 +94,16 @@ bool enemy_reset(bool egg, bool ghost) {
 }
 
 bool enemy_evolution(Health health, int event) {
-  if (health.restful_sleep_hour) {
+  if (health.restful_sleep_hour || enemy.type == RESOURCE_ID_egg) {
     return false;
   }
   if (event == 4) {
     if (enemy.type == RESOURCE_ID_132) {
-      enemy.type = rand() % 6 + 47;
-      enemy.hours_alive = 0;
+      evolve(rand() % 6 + 47, 1);
       return true;
     }
     if (enemy.morph) {
-      enemy.type = RESOURCE_ID_132;
-      enemy.hours_alive = 0;
+      evolve(RESOURCE_ID_132, 1);
       return true;
     }
   }
@@ -90,20 +113,14 @@ bool enemy_evolution(Health health, int event) {
   }
   switch (enemy.type) {
     case RESOURCE_ID_133:
-      enemy.type += 1 + rand() % 3;
-      enemy.level_multiplier = 2;
-      enemy.hours_alive = 0;
+      evolve(enemy.type + 1 + rand() % 3, 2);
       return true;
     case RESOURCE_ID_86:
-      enemy.type = RESOURCE_ID_87;
-      enemy.level_multiplier = 2;
-      enemy.hours_alive = 0;
+      evolve(RESOURCE_ID_87, 2);
       return true;
     default:
       if (enemy.type >= 23 && enemy.type <= 28) {
-        enemy.type += 3;
-        enemy.level_multiplier++;
-        enemy.hours_alive = 0;
+        evolve(enemy.type + 3, enemy.level_multiplier + 1);
         return true;
       }
   }
@@ -114,15 +131,11 @@ bool enemy_evolution(Health health, int event) {
 bool enemy_night() {
   switch (enemy.type) {
     case RESOURCE_ID_133:
-      enemy.type = RESOURCE_ID_197;
-      enemy.level_multiplier = 2;
-      enemy.hours_alive = 0;
+      evolve(RESOURCE_ID_197, 2);
       return true;
     case RESOURCE_ID_92:
     case RESOURCE_ID_93:
-      enemy.type++;
-      enemy.level_multiplier++;
-      enemy.hours_alive = 0;
+      evolve(enemy.type + 1, enemy.level_multiplier + 1);
       return true;
   }
   return false;
@@ -131,15 +144,11 @@ bool enemy_night() {
 bool enemy_charge() {
   switch (enemy.type) {
     case RESOURCE_ID_133:
-      enemy.type = RESOURCE_ID_135;
-      enemy.level_multiplier = 2;
-      enemy.hours_alive = 0;
+      evolve(RESOURCE_ID_135, 2);
       return true;
     case RESOURCE_ID_25:
-      enemy.type = RESOURCE_ID_26;
-      enemy.level_multiplier = 2;
+      evolve(RESOURCE_ID_26, 2);
       enemy.health = 100;
-      enemy.hours_alive = 0;
       return true;
     case RESOURCE_ID_26:
       if (enemy.health < 100) {
@@ -188,4 +197,7 @@ void enemy_deinit() {
   persist_write_int(HEALTH_KEY, enemy.health);
   persist_write_int(ALIVE_KEY, enemy.hours_alive);
   persist_write_int(MORPH_KEY, enemy.morph);
+  persist_write_int(INDEX_COUNT_KEY, enemy.index_count);
+  persist_write_int(INDEX_0_KEY, enemy.index[0]);
+  persist_write_int(INDEX_1_KEY, enemy.index[1]);
 }

@@ -10,6 +10,8 @@ typedef struct {
   int health;
   int hours_alive;
   bool morph;
+  int index_count;
+  uint index[2];
 } Enemy;
 
 Enemy* enemy_init();
