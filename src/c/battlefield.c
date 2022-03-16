@@ -63,8 +63,8 @@ void battlefield_load(Layer *root, Ally *ally, Enemy *enemy) {
   enemyPart.previous = 0;
 
   allyPart.image = bitmap_layer_create(GRect(10, 68, 48, 48));
-  allyPart.level = helper_create_text_layer(GRect(72, 75, 25, 14), FONT_KEY_GOTHIC_14_BOLD, GTextAlignmentCenter);
-  allyPart.health = layer_create(GRect(96, 93, 37, 4));
+  allyPart.level = helper_create_text_layer(GRect(72, 73, 25, 14), FONT_KEY_GOTHIC_14_BOLD, GTextAlignmentCenter);
+  allyPart.health = layer_create(GRect(96, 91, 37, 4));
   allyPart.experience = layer_create(GRect(76, 111, 61, 2));
   layer_add_child(root, bitmap_layer_get_layer(allyPart.image));
   layer_add_child(root, text_layer_get_layer(allyPart.level));

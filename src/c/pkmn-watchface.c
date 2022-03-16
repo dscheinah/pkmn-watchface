@@ -103,7 +103,7 @@ static void prv_window_load(Window *window) {
 
   templateLayer = bitmap_layer_create(GRect(x, y, 144, 168));
   timeLayer = helper_create_text_layer(GRect(5, 121, 139, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
-  dateLayer = helper_create_text_layer(GRect(73, 96, 60, 14), FONT_KEY_GOTHIC_14, GTextAlignmentRight);
+  dateLayer = helper_create_text_layer(GRect(73, 95, 59, 14), FONT_KEY_GOTHIC_14, GTextAlignmentRight);
 
   Layer *centerLayer = bitmap_layer_get_layer(templateLayer);
   layer_add_child(window_layer, centerLayer);
