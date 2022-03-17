@@ -2,7 +2,7 @@
 #include "ally.h"
 #include "enemy.h"
 
-void test_next_tick(Ally *ally, Enemy *enemy);
+void test_next_tick(Enemy *enemy);
 
 void test_health_refresh();
 

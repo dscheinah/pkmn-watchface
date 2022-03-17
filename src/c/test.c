@@ -17,7 +17,7 @@ static void doKill() {
   restful_sleep = 0;
 }
 
-void test_next_tick(Ally *ally, Enemy *enemy) {
+void test_next_tick(Enemy *enemy) {
   day = false;
   event = 100;
   switch (tick++ % 32) {
@@ -88,9 +88,6 @@ void test_next_tick(Ally *ally, Enemy *enemy) {
       break;
     case 23:
       enemy->morph = true;
-      break;
-    case 31:
-      ally->level_modifier = 20;
       break;
     default:
       event = 4;

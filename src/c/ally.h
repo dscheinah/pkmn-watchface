@@ -13,7 +13,7 @@ typedef struct ally {
 
 Ally* ally_init();
 
-void ally_reset();
+void ally_reset(int shiny_rate);
 
 void ally_evolution();
 

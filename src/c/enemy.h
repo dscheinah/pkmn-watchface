@@ -1,6 +1,7 @@
 #pragma once
 #include <pebble.h>
 #include "health.h"
+#define ENEMY_COUNT 31
 
 typedef struct {
   int type;

@@ -56,7 +56,7 @@ static void renderEnemyHealth(Layer *layer, GContext *ctx) {
 }
 
 static void renderEnemyExperience(Layer *layer, GContext *ctx) {
-  renderRect(layer, ctx, ALIGN_LEFT, GColorVeryLightBlue, (float) enemyPart.enemy->index_count / 31);
+  renderRect(layer, ctx, ALIGN_LEFT, GColorVeryLightBlue, (float) enemyPart.enemy->index_count / ENEMY_COUNT);
 }
 
 void battlefield_load(Layer *root, Ally *ally, Enemy *enemy) {

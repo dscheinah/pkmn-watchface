@@ -27,7 +27,7 @@ static void gameTick(bool loop, bool reset, int event) {
   game_set_enemy_level(enemy, health);
   if (loop) {
     if (reset) {
-      ally_reset();
+      ally_reset(ENEMY_COUNT - enemy->index_count + 10);
       if (enemy_night()) {
         ally->level_modifier++;
       }
@@ -68,9 +68,9 @@ static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
   }
   #if defined(TEST)
     if (!loop || time(NULL) % 5 == 0) {
+      test_next_tick(enemy);
       test_health_refresh();
       gameTick(loop, test_day(), test_event());
-      test_next_tick(ally, enemy);
     }
   #else
     if (units_changed & HOUR_UNIT) {
