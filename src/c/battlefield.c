@@ -4,7 +4,7 @@
 #define ALIGN_LEFT 0
 #define ALIGN_RIGHT 1
 
-struct part {
+typedef struct {
   Ally* ally;
   Enemy* enemy;
   BitmapLayer* image;
@@ -14,10 +14,10 @@ struct part {
   Layer* experience;
   bool missing;
   int previous;
-};
+} Part;
 
-static struct part allyPart;
-static struct part enemyPart;
+static Part allyPart;
+static Part enemyPart;
 
 static void renderRect(Layer *layer, GContext *ctx, int alignment, GColor8 color, float percentage) {
   GRect bounds = layer_get_bounds(layer);
@@ -31,10 +31,14 @@ static void renderRect(Layer *layer, GContext *ctx, int alignment, GColor8 color
   graphics_fill_rect(ctx, GRect(x, 0, w, bounds.size.h), 0, GCornerNone);
 }
 
-static void renderBitmap(BitmapLayer *layer, GBitmap *bitmap, int resource) {
-  gbitmap_destroy(bitmap);
-  bitmap = gbitmap_create_with_resource(resource);
-  bitmap_layer_set_bitmap(layer, bitmap);
+static void renderBitmap(Part *part, int resource) {
+  if (part->previous == resource) {
+    return;
+  }
+  part->previous = resource;
+  gbitmap_destroy(part->bitmap);
+  part->bitmap = gbitmap_create_with_resource(resource);
+  bitmap_layer_set_bitmap(part->image, part->bitmap);
 }
 
 static GColor8 GColorFromHealth(float percentage) {
@@ -99,16 +103,8 @@ void battlefield_set_enemy_missing(bool missing) {
 }
 
 void battlefield_mark_dirty() {
-  int allyToRender = allyPart.ally->shiny ? allyPart.ally->type + 9 : allyPart.ally->type;
-  if (allyPart.previous != allyToRender) {
-    allyPart.previous = allyToRender;
-    renderBitmap(allyPart.image, allyPart.bitmap, allyPart.previous);
-  }
-  int enemyToRender = enemyPart.missing ? RESOURCE_ID_0 : enemyPart.enemy->type;
-  if (enemyPart.previous != enemyToRender) {
-    enemyPart.previous = enemyToRender;
-    renderBitmap(enemyPart.image, enemyPart.bitmap, enemyToRender);
-  }
+  renderBitmap(&allyPart, allyPart.ally->shiny ? allyPart.ally->type + 9 : allyPart.ally->type);
+  renderBitmap(&enemyPart, enemyPart.missing ? RESOURCE_ID_0 : enemyPart.enemy->type);
   static char allyLevelBuffer[5];
   snprintf(allyLevelBuffer, 5, "L%d", allyPart.ally->level_final());
   text_layer_set_text(allyPart.level, allyLevelBuffer);
