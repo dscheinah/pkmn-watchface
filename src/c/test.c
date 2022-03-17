@@ -17,6 +17,12 @@ static void doKill() {
   restful_sleep = 0;
 }
 
+static void prepareHatch(int target) {
+  doKill();
+  event = 0;
+  steps = target;
+}
+
 void test_next_tick(Enemy *enemy) {
   day = false;
   event = 100;
@@ -33,9 +39,7 @@ void test_next_tick(Enemy *enemy) {
       restful_sleep++;
       break;
     case 3:
-      doKill();
-      event = 0;
-      steps = 5000;
+      prepareHatch(5000);
       break;
     case 4:
     case 7:
@@ -45,12 +49,11 @@ void test_next_tick(Enemy *enemy) {
       day = true;
       break;
     case 5:
+    case 16:
       day = true;
       break;
     case 6:
-      doKill();
-      event = 0;
-      steps = 12000;
+      prepareHatch(12000);
       break;
     case 8:
     case 9:
@@ -59,14 +62,10 @@ void test_next_tick(Enemy *enemy) {
       event = -1;
       break;
     case 10:
-      doKill();
-      event = 0;
-      steps = 20000;
+      prepareHatch(20000);
       break;
     case 12:
-      doKill();
-      event = 0;
-      steps = 26000;
+      prepareHatch(26000);
       break;
     case 14:
       doKill();
@@ -77,10 +76,6 @@ void test_next_tick(Enemy *enemy) {
     case 21:
     case 22:
       doKill();
-      break;
-    case 16:
-      day = true;
-      restful_sleep++;
       break;
     case 17:
       enemy->hours_alive = 20;

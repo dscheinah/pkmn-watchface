@@ -101,27 +101,17 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
 void game_set_ally_level(Ally *ally, Health health) {
   float level = 30.0 * health.steps / 10000;
   float experience = (float) health.steps / (health.steps_yesterday ?: 5000);
-  if (level < 1) {
-    level = 1;
-  }
   if (experience > 1) {
     level += 30.0 * (health.steps - health.steps_yesterday) / 10000;
     experience = 1;
   }
-  if (ally->level != level || ally->experience != experience) {
-    ally->level = level;
-    ally->experience = experience;
-  }
+  ally->level = level < 1 ? 1 : level;
+  ally->experience = experience;
 }
 
 void game_set_enemy_level(Enemy *enemy, Health health) {
   float level = 30.0 * (health.sleep + health.restful_sleep) / 47520;
-  if (level < 1) {
-    level = 1;
-  }
-  if (level != enemy->level) {
-    enemy->level = level;
-  }
+  enemy->level = level < 1 ? 1 : level;
 }
 
 bool game_deal_damage(Ally *ally, Enemy *enemy, Health health) {

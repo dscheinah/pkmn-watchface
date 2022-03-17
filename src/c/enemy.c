@@ -13,25 +13,20 @@
 
 static Enemy enemy;
 
-static void updateIndex(int type) {
-  int key = 0;
-  type -= 23;
-  if (type > 31) {
-    key = 1;
-    type -= 32;
-  }
-  int pos = 1 << type;
-  if (!(enemy.index[key] & pos)) {
-    enemy.index[key] = enemy.index[key] | pos;
-    enemy.index_count++;
-  }
-}
-
 static void evolve(int type, int level) {
   enemy.type = type;
   enemy.level_multiplier = level;
   enemy.hours_alive = 0;
-  updateIndex(type);
+  int key = 0, chk = type - 23;
+  if (chk > 31) {
+    key = 1;
+    chk -= 32;
+  }
+  int pos = 1 << chk;
+  if (!(enemy.index[key] & pos)) {
+    enemy.index[key] = enemy.index[key] | pos;
+    enemy.index_count++;
+  }
 }
 
 static void createWithMorph(int type, int level) {

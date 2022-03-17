@@ -79,10 +79,8 @@ static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
 
 static void handleBattery(BatteryChargeState charge_state) {
   ally->health = charge_state.charge_percent;
-  if (charge_state.is_charging) {
-    if (enemy_charge()) {
-      ally->level_modifier++;
-    }
+  if (charge_state.is_charging && enemy_charge()) {
+    ally->level_modifier++;
   }
   battlefield_mark_dirty();
 }

@@ -31,9 +31,7 @@ Ally* ally_init() {
 }
 
 void ally_reset(int shiny_rate) {
-  int current = (ally.type - 1) % 3;
-  int add = rand() % 2 + 1;
-  ally.type = (current + add) % 3 + 1;
+  ally.type = (ally.type + rand() % 2) % 3 + 1;
   ally.shiny = rand() % shiny_rate == 0;
   ally.level_modifier = 0;
 }
