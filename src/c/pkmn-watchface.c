@@ -28,18 +28,15 @@ static void gameTick(bool loop, bool reset, int event) {
   if (loop) {
     if (reset) {
       ally_reset(ENEMY_COUNT - enemy->index_count + 10);
-      if (enemy_night()) {
-        ally->level_modifier++;
-      }
-    }
-    if (enemy_evolution(health, event)) {
-      ally->level_modifier++;
     }
     if (game_deal_damage(ally, enemy, health) && enemy_reset(event == 0, event == 1)) {
       ally->level_modifier += 2;
-    }
-    if (reset && enemy_hatch(health)) {
-      ally->level_modifier++;
+    } else {
+      if (enemy_evolution(health, event)) {
+        ally->level_modifier++;
+      } else if (reset && (enemy_night() || enemy_hatch(health))) {
+        ally->level_modifier++;
+      }
     }
   }
   ally_evolution();
