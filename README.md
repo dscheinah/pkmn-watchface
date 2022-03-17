@@ -1,4 +1,4 @@
-# Pokémon Gamiefied Watchface
+# Pokémon Gamified Watchface
 
 This is a fan art inspired by Pokémon.
 
