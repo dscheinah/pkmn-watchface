@@ -2,9 +2,9 @@
 #include "test.h"
 #include "health.h"
 
-static int tick = 0, event;
-static HealthValue steps, sleep, restful_sleep, active;
-static bool day;
+static int tick = 0, event = 100;
+static HealthValue steps = 0, sleep = 0, restful_sleep = 0, active = 0;
+static bool day = true;
 
 static void doReset() {
   steps = rand() % 7000 + 5000;

@@ -68,9 +68,9 @@ static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
   }
   #if defined(TEST)
     if (!loop || time(NULL) % 5 == 0) {
-      test_next_tick(enemy);
       test_health_refresh();
       gameTick(loop, test_day(), test_event());
+      test_next_tick(enemy);
     }
   #else
     if (units_changed & HOUR_UNIT) {
