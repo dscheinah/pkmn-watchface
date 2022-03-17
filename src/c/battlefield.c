@@ -129,4 +129,5 @@ void battlefield_unload() {
   bitmap_layer_destroy(enemyPart.image);
   text_layer_destroy(enemyPart.level);
   layer_destroy(enemyPart.health);
+  layer_destroy(enemyPart.experience);
 }
