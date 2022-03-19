@@ -76,18 +76,16 @@ void health_set(HealthValue steps, HealthValue sleep, HealthValue restful_sleep,
 
 Health health_get_collected(bool update_relative, bool update_yesterday) {
   if (update_relative) {
-    if (update_yesterday || health.steps < health.steps_last) {
+    if (update_yesterday) {
       health.steps_yesterday = health.steps_last;
-      health.restful_sleep_last = 0;
-      health.active_last = 0;
     }
     health.restful_sleep_hour = health.restful_sleep - health.restful_sleep_last;
     if (health.restful_sleep_hour < 0) {
-      health.restful_sleep_hour = 0;
+      health.restful_sleep_hour = health.restful_sleep;
     }
     health.active_hour = health.active - health.active_last;
     if (health.active_hour < 0) {
-      health.active_hour = 0;
+      health.active_hour = health.active;
     }
     health.steps_last = health.steps;
     health.restful_sleep_last = health.restful_sleep;
