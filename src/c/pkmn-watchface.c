@@ -1,7 +1,9 @@
 #include <pebble.h>
 #include "ally.h"
+#include "const.h"
 #include "battlefield.h"
 #include "enemy.h"
+#include "event.h"
 #include "game.h"
 #include "health.h"
 #include "helper.h"
@@ -20,8 +22,9 @@ static GBitmap *templateBitmap;
 
 static Ally *ally;
 static Enemy *enemy;
+static EventValue *event;
 
-static void gameTick(bool loop, bool reset, int event) {
+static void gameTick(bool loop, bool reset, int identifier) {
   Health health = health_get_collected(loop, reset);
   game_set_ally_level(ally, health);
   game_set_enemy_level(enemy, health);
@@ -29,16 +32,17 @@ static void gameTick(bool loop, bool reset, int event) {
     if (reset) {
       ally_reset(ENEMY_COUNT - enemy->index_count + 10);
     }
-    if (game_deal_damage(ally, enemy, health) && enemy_reset(event == 0, event == 1)) {
+    if (game_deal_damage(ally, enemy, health) && enemy_reset(*event)) {
       ally->level_modifier += 2;
     } else {
-      if (enemy_evolution(health, event)) {
+      if (enemy_evolution(*event)) {
         ally->level_modifier++;
       } else if (reset && (enemy_night() || enemy_hatch(health))) {
         ally->level_modifier++;
       }
     }
   }
+  event_next(enemy, health, identifier);
   ally_evolution();
   battlefield_mark_dirty();
 }
@@ -66,13 +70,13 @@ static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
   #if defined(TEST)
     if (!loop || time(NULL) % 5 == 0) {
       test_health_refresh();
-      gameTick(loop, test_day(), test_event());
-      test_next_tick(enemy);
+      gameTick(loop, test_day(), tick_time->tm_hour);
+      test_next_tick(enemy, event);
     }
   #else
     if (units_changed & HOUR_UNIT) {
       health_refresh(day);
-      gameTick(loop, day, rand() % 5);
+      gameTick(loop, day, tick_time->tm_hour);
     }
   #endif
 }
@@ -108,7 +112,7 @@ static void prv_window_load(Window *window) {
   templateBitmap = gbitmap_create_with_resource(RESOURCE_ID_template);
   bitmap_layer_set_bitmap(templateLayer, templateBitmap);
 
-  battlefield_load(centerLayer, ally, enemy);
+  battlefield_load(centerLayer, ally, enemy, event);
 }
 
 static void prv_window_unload(Window *window) {
@@ -124,6 +128,7 @@ static void prv_window_unload(Window *window) {
 static void prv_init(void) {
   ally = ally_init();
   enemy = enemy_init();
+  event = event_init();
   health_init();
 
   s_window = window_create();
@@ -160,6 +165,7 @@ static void prv_deinit(void) {
 
   ally_deinit();
   enemy_deinit();
+  event_deinit();
   health_deinit();
 }
 

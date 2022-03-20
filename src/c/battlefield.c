@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "battlefield.h"
+#include "const.h"
 #include "helper.h"
 #define ALIGN_LEFT 0
 #define ALIGN_RIGHT 1
@@ -19,6 +20,9 @@ typedef struct {
 static Part allyPart;
 static Part enemyPart;
 
+static EventValue *current;
+static Layer *indicator;
+
 static void renderRect(Layer *layer, GContext *ctx, int alignment, GColor8 color, float percentage) {
   GRect bounds = layer_get_bounds(layer);
   #if defined(PBL_COLOR)
@@ -29,6 +33,15 @@ static void renderRect(Layer *layer, GContext *ctx, int alignment, GColor8 color
   int w = bounds.size.w * percentage;
   int x = alignment == ALIGN_LEFT ? 0 : bounds.size.w - w;
   graphics_fill_rect(ctx, GRect(x, 0, w, bounds.size.h), 0, GCornerNone);
+}
+
+static void renderCircle(GContext *ctx, GColor8 color, int pos) {
+  #if defined(PBL_COLOR)
+    graphics_context_set_stroke_color(ctx, color);
+  #else
+    graphics_context_set_stroke_color(ctx, GColorBlack);
+  #endif
+  graphics_draw_round_rect(ctx, GRect(10 * pos, 0, 7, 4), 4);
 }
 
 static void renderBitmap(Part *part, int resource) {
@@ -63,12 +76,31 @@ static void renderEnemyExperience(Layer *layer, GContext *ctx) {
   renderRect(layer, ctx, ALIGN_LEFT, GColorVeryLightBlue, (float) enemyPart.enemy->index_count / ENEMY_COUNT);
 }
 
-void battlefield_load(Layer *root, Ally *ally, Enemy *enemy) {
+static void renderIndicator(Layer *layer, GContext *ctx) {
+  if (*current & EVENT_SLEEP) {
+    renderCircle(ctx, GColorSunsetOrange, 0);
+  }
+  if (*current & EVENT_EGG) {
+    renderCircle(ctx, GColorMidnightGreen, 1);
+  }
+  if (*current & EVENT_GHOST) {
+    renderCircle(ctx, GColorBlueMoon, 2);
+  }
+  if (*current & EVENT_MORPH) {
+    renderCircle(ctx, GColorPurpureus, 3);
+  }
+  if (*current & EVENT_EVO) {
+    renderCircle(ctx, GColorLiberty, 4);
+  }
+}
+
+void battlefield_load(Layer *root, Ally *ally, Enemy *enemy, EventValue *event) {
   allyPart.ally = ally;
   allyPart.previous = 0;
   enemyPart.enemy = enemy;
   enemyPart.missing = 0;
   enemyPart.previous = 0;
+  current = event;
 
   allyPart.image = bitmap_layer_create(GRect(10, 68, 48, 48));
   allyPart.level = helper_create_text_layer(GRect(72, 73, 25, 14), FONT_KEY_GOTHIC_14_BOLD, GTextAlignmentCenter);
@@ -82,17 +114,21 @@ void battlefield_load(Layer *root, Ally *ally, Enemy *enemy) {
   enemyPart.image = bitmap_layer_create(GRect(82, 12, 56, 56));
   enemyPart.level = helper_create_text_layer(GRect(16, 10, 25, 14), FONT_KEY_GOTHIC_14_BOLD, GTextAlignmentCenter);
   enemyPart.health = layer_create(GRect(40, 28, 29, 3));
-  enemyPart.experience = layer_create(GRect(20, 39, 49, 1));
+  enemyPart.experience = layer_create(GRect(20, 41, 49, 1));
   bitmap_layer_set_alignment(enemyPart.image, GAlignBottom);
   layer_add_child(root, bitmap_layer_get_layer(enemyPart.image));
   layer_add_child(root, text_layer_get_layer(enemyPart.level));
   layer_add_child(root, enemyPart.health);
   layer_add_child(root, enemyPart.experience);
 
+  indicator = layer_create(GRect(21, 35, 47, 4));
+  layer_add_child(root, indicator);
+
   layer_set_update_proc(allyPart.health, renderAllyHealth);
   layer_set_update_proc(allyPart.experience, renderAllyExperience);
   layer_set_update_proc(enemyPart.health, renderEnemyHealth);
   layer_set_update_proc(enemyPart.experience, renderEnemyExperience);
+  layer_set_update_proc(indicator, renderIndicator);
 }
 
 void battlefield_set_enemy_missing(bool missing) {
@@ -126,4 +162,5 @@ void battlefield_unload() {
   text_layer_destroy(enemyPart.level);
   layer_destroy(enemyPart.health);
   layer_destroy(enemyPart.experience);
+  layer_destroy(indicator);
 }

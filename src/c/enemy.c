@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "enemy.h"
+#include "const.h"
 #define VERSION 2
 #define VERSION_KEY 200
 #define TYPE_KEY 201
@@ -61,18 +62,18 @@ Enemy* enemy_init() {
   return &enemy;
 }
 
-bool enemy_reset(bool egg, bool ghost) {
+bool enemy_reset(EventValue event) {
   if (enemy.health > 0) {
     return false;
   }
-  if (egg) {
+  if (event & EVENT_EGG) {
     enemy.type = RESOURCE_ID_egg;
     enemy.health = 100;
     enemy.level_multiplier = 1;
     enemy.hours_alive = 0;
     return true;
   }
-  if (ghost && enemy.level_multiplier > 1) {
+  if (event & EVENT_GHOST) {
     createWithMorph(RESOURCE_ID_92, 1);
     return true;
   }
@@ -88,36 +89,32 @@ bool enemy_reset(bool egg, bool ghost) {
   return true;
 }
 
-bool enemy_evolution(Health health, int event) {
-  if (health.restful_sleep_hour || enemy.type == RESOURCE_ID_egg) {
+bool enemy_evolution(EventValue event) {
+  if (event & EVENT_SLEEP) {
     return false;
   }
-  if (event == 4) {
+  if (event & EVENT_MORPH) {
     if (enemy.type == RESOURCE_ID_132) {
       evolve(rand() % 6 + 47, 1);
       return true;
     }
-    if (enemy.morph) {
-      evolve(RESOURCE_ID_132, 1);
-      return true;
-    }
+    evolve(RESOURCE_ID_132, 1);
+    return true;
   }
-  if (event >= enemy.hours_alive) {
-    enemy.hours_alive++;
-    return false;
-  }
-  switch (enemy.type) {
-    case RESOURCE_ID_133:
-      evolve(enemy.type + 1 + rand() % 3, 2);
-      return true;
-    case RESOURCE_ID_86:
-      evolve(RESOURCE_ID_87, 2);
-      return true;
-    default:
-      if (enemy.type >= 23 && enemy.type <= 28) {
-        evolve(enemy.type + 3, enemy.level_multiplier + 1);
+  if (event & EVENT_EVO) {
+    switch (enemy.type) {
+      case RESOURCE_ID_133:
+        evolve(enemy.type + 1 + rand() % 3, 2);
         return true;
-      }
+      case RESOURCE_ID_86:
+        evolve(RESOURCE_ID_87, 2);
+        return true;
+      default:
+        if (enemy.type >= 23 && enemy.type <= 28) {
+          evolve(enemy.type + 3, enemy.level_multiplier + 1);
+          return true;
+        }
+    }
   }
   enemy.hours_alive++;
   return false;

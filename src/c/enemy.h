@@ -1,7 +1,7 @@
 #pragma once
 #include <pebble.h>
+#include "const.h"
 #include "health.h"
-#define ENEMY_COUNT 31
 
 typedef struct {
   int type;
@@ -17,9 +17,9 @@ typedef struct {
 
 Enemy* enemy_init();
 
-bool enemy_reset(bool egg, bool ghost);
+bool enemy_reset(EventValue event);
 
-bool enemy_evolution(Health health, int event);
+bool enemy_evolution(EventValue event);
 
 bool enemy_night();
 

@@ -1,8 +1,9 @@
 #include <pebble.h>
 #include "test.h"
+#include "const.h"
 #include "health.h"
 
-static int tick = 0, event = 100;
+static int tick = 0;
 static HealthValue steps = 0, sleep = 0, restful_sleep = 0, active = 0;
 static bool day = true;
 
@@ -17,15 +18,15 @@ static void doKill() {
   restful_sleep = 0;
 }
 
-static void prepareHatch(int target) {
+static void prepareHatch(EventValue *event, int target) {
   doKill();
-  event = 0;
+  *event = EVENT_EGG;
   steps = target;
 }
 
-void test_next_tick(Enemy *enemy) {
+void test_next_tick(Enemy *enemy, EventValue *event) {
   day = false;
-  event = 100;
+  *event = EVENT_NONE;
   switch (tick++ % 32) {
     case 0:
       steps = 0, sleep = 0, restful_sleep = 0, active = 0;
@@ -36,10 +37,11 @@ void test_next_tick(Enemy *enemy) {
     case 2:
       steps += 6000;
       sleep += 25000;
+      *event = EVENT_SLEEP;
       restful_sleep++;
       break;
     case 3:
-      prepareHatch(5000);
+      prepareHatch(event, 5000);
       break;
     case 4:
     case 7:
@@ -53,23 +55,23 @@ void test_next_tick(Enemy *enemy) {
       day = true;
       break;
     case 6:
-      prepareHatch(12000);
+      prepareHatch(event, 12000);
       break;
     case 8:
     case 9:
     case 18:
     case 20:
-      event = -1;
+      *event = EVENT_EVO;
       break;
     case 10:
-      prepareHatch(20000);
+      prepareHatch(event, 20000);
       break;
     case 12:
-      prepareHatch(26000);
+      prepareHatch(event, 26000);
       break;
     case 14:
       doKill();
-      event = 1;
+      *event = EVENT_GHOST;
       break;
     case 15:
     case 19:
@@ -85,7 +87,9 @@ void test_next_tick(Enemy *enemy) {
       enemy->morph = true;
       break;
     default:
-      event = 4;
+      if (enemy->morph) {
+        *event = EVENT_MORPH;
+      }
       active += rand() % 900;
       break;
   }
@@ -97,8 +101,4 @@ void test_health_refresh() {
 
 bool test_day() {
   return day;
-}
-
-int test_event() {
-  return event;
 }
