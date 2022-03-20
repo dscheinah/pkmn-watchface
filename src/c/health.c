@@ -77,7 +77,7 @@ void health_set(HealthValue steps, HealthValue sleep, HealthValue restful_sleep,
 Health health_get_collected(bool update_relative, bool update_yesterday) {
   if (update_relative) {
     if (update_yesterday) {
-      health.steps_yesterday = health.steps_last;
+      health.steps_yesterday = health.steps > health.steps_last ? health.steps : health.steps_last;
     }
     health.restful_sleep_hour = health.restful_sleep - health.restful_sleep_last;
     if (health.restful_sleep_hour < 0) {
