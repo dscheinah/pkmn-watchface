@@ -165,7 +165,6 @@ bool enemy_hatch(Health health) {
   if (enemy.type != RESOURCE_ID_egg) {
     return false;
   }
-  enemy.health = 100;
   if (health.steps_yesterday > 24000) {
     createWithMorph(RESOURCE_ID_251, 4);
     return true;
