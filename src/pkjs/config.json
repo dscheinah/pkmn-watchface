@@ -1,0 +1,63 @@
+[
+	{
+		"type": "heading",
+		"defaultValue": "Pokémon Gamified Watchface"
+	},
+	{
+		"type": "section",
+		"items": [
+			{
+				"type": "heading",
+				"defaultValue": "Date and Time"
+			},
+			{
+				"type": "toggle",
+				"messageKey": "dow",
+				"label": "Show day of week",
+				"defaultValue": true
+			},
+			{
+				"type": "toggle",
+				"messageKey": "week_number",
+				"label": "Show week number",
+				"defaultValue": true
+			},
+			{
+				"type": "toggle",
+				"messageKey": "year",
+				"label": "Show year"
+			},
+			{
+				"type": "toggle",
+				"messageKey": "seconds",
+				"label": "Render seconds",
+				"description": "Will be applied the next time the watchface reloads."
+			},
+			{
+				"type": "toggle",
+				"messageKey": "date_format",
+				"label": "Swap month and day"
+			}
+		]
+	},
+	{
+		"type": "section",
+		"items": [
+			{
+				"type": "heading",
+				"defaultValue": "Connectivity"
+			},
+			{
+				"type": "toggle",
+				"messageKey": "bluetooth",
+				"label": "Check for bluetooth connection",
+				"description": "Will be applied the next time the watchface reloads.",
+				"defaultValue": true
+			}
+		]
+	},
+	{
+		"type": "submit",
+		"defaultValue": "SAVE"
+	}
+]

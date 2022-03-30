@@ -7,6 +7,7 @@
 #include "game.h"
 #include "health.h"
 #include "helper.h"
+#include "watch.h"
 #if defined(TEST)
   #include "test.h"
 #endif
@@ -15,9 +16,6 @@
 static Window *s_window;
 
 static BitmapLayer *templateLayer;
-static TextLayer *timeLayer;
-static TextLayer *dateLayer;
-
 static GBitmap *templateBitmap;
 
 static Ally *ally;
@@ -47,25 +45,13 @@ static void gameTick(bool loop, bool reset, int identifier) {
   battlefield_mark_dirty();
 }
 
-static void renderTime(struct tm *tick_time) {
-  static char timeBuffer[6];
-  strftime(timeBuffer, 6, clock_is_24h_style() ? "%H:%M" : "%I:%M", tick_time);
-  text_layer_set_text(timeLayer, timeBuffer);
-}
-
-static void renderDate(struct tm *tick_time) {
-  static char dateBuffer[8];
-  strftime(dateBuffer, 8, "%m / %d", tick_time);
-  text_layer_set_text(dateLayer, dateBuffer);
-}
-
 static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
-  if (units_changed & MINUTE_UNIT) {
-    renderTime(tick_time);
+  if (units_changed & (MINUTE_UNIT | SECOND_UNIT)) {
+    watch_render_time(tick_time);
   }
   bool day = units_changed & DAY_UNIT, loop = !(units_changed & INIT_UNIT);
   if (day) {
-    renderDate(tick_time);
+    watch_render_date(tick_time);
   }
   #if defined(TEST)
     if (!loop || time(NULL) % 5 == 0) {
@@ -93,6 +79,36 @@ static void handleConnection(bool connected) {
   battlefield_set_enemy_missing(!connected);
 }
 
+static void handleInbox(DictionaryIterator *iter, void *context) {
+  int flags = 0;
+  Tuple *tuple;
+  tuple = dict_find(iter, MESSAGE_KEY_date_format);
+  if (tuple && (bool) tuple->value->int8) {
+    flags |= WATCH_DATE_FORMAT;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_seconds);
+  if (tuple && (bool) tuple->value->int8) {
+    flags |= WATCH_SECONDS;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_dow);
+  if (tuple && (bool) tuple->value->int8) {
+    flags |= WATCH_DOW;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_week_number);
+  if (tuple && (bool) tuple->value->int8) {
+    flags |= WATCH_WEEK_NUMBER;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_year);
+  if (tuple && (bool) tuple->value->int8) {
+    flags |= WATCH_YEAR;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_bluetooth);
+  if (tuple && (bool) tuple->value->int8) {
+    flags |= WATCH_BLUETOOTH;
+  }
+  watch_set_settings(flags, bitmap_layer_get_layer(templateLayer));
+}
+
 static void prv_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
@@ -101,31 +117,28 @@ static void prv_window_load(Window *window) {
   int y = (bounds.size.h - 168) / 2;
 
   templateLayer = bitmap_layer_create(GRect(x, y, 144, 168));
-  timeLayer = helper_create_text_layer(GRect(5, 121, 139, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
-  dateLayer = helper_create_text_layer(GRect(73, 95, 59, 14), FONT_KEY_GOTHIC_14, GTextAlignmentRight);
 
   Layer *centerLayer = bitmap_layer_get_layer(templateLayer);
   layer_add_child(window_layer, centerLayer);
-  layer_add_child(centerLayer, text_layer_get_layer(timeLayer));
-  layer_add_child(centerLayer, text_layer_get_layer(dateLayer));
 
   templateBitmap = gbitmap_create_with_resource(RESOURCE_ID_template);
   bitmap_layer_set_bitmap(templateLayer, templateBitmap);
 
+  watch_load(centerLayer);
   battlefield_load(centerLayer, ally, enemy, event);
 }
 
 static void prv_window_unload(Window *window) {
+  watch_unload();
   battlefield_unload();
 
   gbitmap_destroy(templateBitmap);
 
   bitmap_layer_destroy(templateLayer);
-  text_layer_destroy(timeLayer);
-  text_layer_destroy(dateLayer);
 }
 
 static void prv_init(void) {
+  watch_init();
   ally = ally_init();
   enemy = enemy_init();
   event = event_init();
@@ -139,21 +152,26 @@ static void prv_init(void) {
   const bool animated = false;
   window_stack_push(s_window, animated);
 
-  time_t now = time(NULL);
   #if defined(TEST)
     tick_timer_service_subscribe(SECOND_UNIT, handleTime);
   #else
-    tick_timer_service_subscribe(MINUTE_UNIT, handleTime);
+    tick_timer_service_subscribe(watch_has_seconds() ? SECOND_UNIT : MINUTE_UNIT, handleTime);
   #endif
-  handleTime(localtime(&now), MINUTE_UNIT | HOUR_UNIT | DAY_UNIT | INIT_UNIT);
+  time_t now = time(NULL);
+  handleTime(localtime(&now), SECOND_UNIT | MINUTE_UNIT | HOUR_UNIT | DAY_UNIT | INIT_UNIT);
 
   battery_state_service_subscribe(handleBattery);
   handleBattery(battery_state_service_peek());
 
-  connection_service_subscribe((ConnectionHandlers) {
-    .pebble_app_connection_handler = handleConnection,
-  });
-  handleConnection(connection_service_peek_pebble_app_connection());
+  if (watch_has_bluetooth()) {
+    connection_service_subscribe((ConnectionHandlers) {
+      .pebble_app_connection_handler = handleConnection,
+    });
+    handleConnection(connection_service_peek_pebble_app_connection());
+  }
+
+  app_message_register_inbox_received(handleInbox);
+  app_message_open(dict_calc_buffer_size(6, 6), 0);
 }
 
 static void prv_deinit(void) {
@@ -163,10 +181,13 @@ static void prv_deinit(void) {
 
   window_destroy(s_window);
 
+  watch_deinit();
   ally_deinit();
   enemy_deinit();
   event_deinit();
   health_deinit();
+
+  app_message_deregister_callbacks();
 }
 
 int main(void) {

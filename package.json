@@ -6,7 +6,9 @@
     "pebble-app"
   ],
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "pebble-clay": "^1.0.4"
+  },
   "pebble": {
     "displayName": "Pokemon Gamified Watchface",
     "uuid": "9e0d715c-cc1c-47d5-b409-4a404714b408",
@@ -23,7 +25,16 @@
       "watchface": true
     },
     "capabilities": [
-      "health"
+      "health",
+      "configurable"
+    ],
+    "messageKeys": [
+      "date_format",
+      "seconds",
+      "dow",
+      "week_number",
+      "year",
+      "bluetooth"
     ],
     "resources": {
       "media": [
