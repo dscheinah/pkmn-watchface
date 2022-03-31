@@ -5,9 +5,9 @@
 #define VERSION_KEY 500
 #define FLAGS_KEY 501
 
-static int current = WATCH_DOW | WATCH_WEEK_NUMBER | WATCH_BLUETOOTH;
+static int current = WATCH_DOW | WATCH_BLUETOOTH;
 
-static TextLayer *timeLayer, *dateLayer, *secondsLayer;
+static TextLayer *timeLayer, *dateLayer, *secondsLayer, *statusLayer;
 static char *timeFormat, *dateFormat;
 
 static void updateTimeFormat() {
@@ -29,9 +29,9 @@ void watch_init() {
 
 void watch_load(Layer *root) {
   if (watch_has_seconds()) {
-    secondsLayer = helper_create_text_layer(GRect(109, 133, 35, 20), FONT_KEY_LECO_20_BOLD_NUMBERS, GTextAlignmentLeft);
+    secondsLayer = helper_create_text_layer(GRect(110, 133, 28, 20), FONT_KEY_LECO_20_BOLD_NUMBERS, GTextAlignmentLeft);
     layer_add_child(root, text_layer_get_layer(secondsLayer));
-    timeLayer = helper_create_text_layer(GRect(5, 121, 109, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
+    timeLayer = helper_create_text_layer(GRect(5, 121, 105, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
   } else {
     timeLayer = helper_create_text_layer(GRect(5, 121, 139, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
   }
@@ -39,6 +39,10 @@ void watch_load(Layer *root) {
   layer_add_child(root, text_layer_get_layer(timeLayer));
   layer_add_child(root, text_layer_get_layer(dateLayer));
 
+  if (current & WATCH_DOW) {
+    statusLayer = helper_create_text_layer(GRect(101, 73, 35, 14), FONT_KEY_GOTHIC_14, GTextAlignmentRight);
+    layer_add_child(root, text_layer_get_layer(statusLayer));
+  }
 }
 
 void watch_render_time(struct tm *tick_time) {
@@ -53,12 +57,19 @@ void watch_render_time(struct tm *tick_time) {
 }
 
 void watch_render_date(struct tm *tick_time) {
-  static char dateBuffer[8];
-  strftime(dateBuffer, 8, dateFormat, tick_time);
+  static char dateBuffer[13];
+  strftime(dateBuffer, 13, dateFormat, tick_time);
   text_layer_set_text(dateLayer, dateBuffer);
+  if (statusLayer) {
+    static char statusBuffer[4];
+    strftime(statusBuffer, 4, "%a", tick_time);
+    statusBuffer[1] -= 32;
+    statusBuffer[2] -= 32;
+    text_layer_set_text(statusLayer, statusBuffer);
+  }
 }
 
-void watch_set_settings(int flags, Layer *root) {
+void watch_set_settings(int flags) {
   current = flags;
   updateTimeFormat();
   time_t now = time(NULL);
@@ -77,7 +88,9 @@ void watch_unload() {
   text_layer_destroy(timeLayer);
   text_layer_destroy(dateLayer);
   text_layer_destroy(secondsLayer);
+  text_layer_destroy(statusLayer);
   secondsLayer = NULL;
+  statusLayer = NULL;
 }
 
 void watch_deinit() {

@@ -94,19 +94,11 @@ static void handleInbox(DictionaryIterator *iter, void *context) {
   if (tuple && (bool) tuple->value->int8) {
     flags |= WATCH_DOW;
   }
-  tuple = dict_find(iter, MESSAGE_KEY_week_number);
-  if (tuple && (bool) tuple->value->int8) {
-    flags |= WATCH_WEEK_NUMBER;
-  }
-  tuple = dict_find(iter, MESSAGE_KEY_year);
-  if (tuple && (bool) tuple->value->int8) {
-    flags |= WATCH_YEAR;
-  }
   tuple = dict_find(iter, MESSAGE_KEY_bluetooth);
   if (tuple && (bool) tuple->value->int8) {
     flags |= WATCH_BLUETOOTH;
   }
-  watch_set_settings(flags, bitmap_layer_get_layer(templateLayer));
+  watch_set_settings(flags);
 }
 
 static void prv_window_load(Window *window) {
@@ -171,7 +163,7 @@ static void prv_init(void) {
   }
 
   app_message_register_inbox_received(handleInbox);
-  app_message_open(dict_calc_buffer_size(6, 6), 0);
+  app_message_open(dict_calc_buffer_size(4, 4), 0);
 }
 
 static void prv_deinit(void) {

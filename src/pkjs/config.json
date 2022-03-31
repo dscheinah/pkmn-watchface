@@ -4,6 +4,10 @@
 		"defaultValue": "Pokémon Gamified Watchface"
 	},
 	{
+		"type": "text",
+		"defaultValue": "Most of the options below will be applied the next time the watchface reloads."
+	},
+	{
 		"type": "section",
 		"items": [
 			{
@@ -18,20 +22,8 @@
 			},
 			{
 				"type": "toggle",
-				"messageKey": "week_number",
-				"label": "Show week number",
-				"defaultValue": true
-			},
-			{
-				"type": "toggle",
-				"messageKey": "year",
-				"label": "Show year"
-			},
-			{
-				"type": "toggle",
 				"messageKey": "seconds",
-				"label": "Render seconds",
-				"description": "Will be applied the next time the watchface reloads."
+				"label": "Render seconds"
 			},
 			{
 				"type": "toggle",
@@ -51,7 +43,6 @@
 				"type": "toggle",
 				"messageKey": "bluetooth",
 				"label": "Check for bluetooth connection",
-				"description": "Will be applied the next time the watchface reloads.",
 				"defaultValue": true
 			}
 		]
