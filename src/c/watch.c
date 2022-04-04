@@ -5,7 +5,7 @@
 #define VERSION_KEY 500
 #define FLAGS_KEY 501
 
-static int current = WATCH_DOW | WATCH_BLUETOOTH;
+static uint current = WATCH_DOW | WATCH_BLUETOOTH;
 
 static TextLayer *timeLayer, *dateLayer, *secondsLayer, *statusLayer;
 static char *timeFormat, *dateFormat;
@@ -69,7 +69,7 @@ void watch_render_date(struct tm *tick_time) {
   }
 }
 
-void watch_set_settings(int flags) {
+void watch_set_settings(uint flags) {
   current = flags;
   updateTimeFormat();
   time_t now = time(NULL);
