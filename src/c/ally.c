@@ -19,7 +19,7 @@ Ally* ally_init() {
   ally.experience = 0;
   if (persist_exists(VERSION_KEY) && persist_read_int(VERSION_KEY) == VERSION) {
     ally.type = persist_read_int(TYPE_KEY);
-    ally.shiny = persist_read_int(SHINY_KEY);
+    ally.shiny = persist_read_bool(SHINY_KEY);
     ally.level_modifier = persist_read_int(LEVEL_KEY);
   } else {
     ally.type = rand() % 3 + 1;
@@ -49,6 +49,6 @@ void ally_evolution() {
 void ally_deinit() {
   persist_write_int(VERSION_KEY, VERSION);
   persist_write_int(TYPE_KEY, ally.type);
-  persist_write_int(SHINY_KEY, ally.shiny);
+  persist_write_bool(SHINY_KEY, ally.shiny);
   persist_write_int(LEVEL_KEY, ally.level_modifier);
 }

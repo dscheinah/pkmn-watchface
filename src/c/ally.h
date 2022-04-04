@@ -3,7 +3,7 @@
 
 typedef struct ally {
  int type;
- int shiny;
+ bool shiny;
  int level;
  int level_modifier;
  int (*level_final)();

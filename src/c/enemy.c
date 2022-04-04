@@ -50,7 +50,7 @@ Enemy* enemy_init() {
     enemy.level_multiplier = persist_read_int(LEVEL_KEY);
     enemy.health = persist_read_int(HEALTH_KEY);
     enemy.hours_alive = persist_read_int(ALIVE_KEY);
-    enemy.morph = persist_read_int(MORPH_KEY);
+    enemy.morph = persist_read_bool(MORPH_KEY);
     enemy.index_count = persist_read_int(INDEX_COUNT_KEY);
     enemy.index[0] = persist_read_int(INDEX_0_KEY);
     enemy.index[1] = persist_read_int(INDEX_1_KEY);
@@ -203,7 +203,7 @@ void enemy_deinit() {
   persist_write_int(LEVEL_KEY, enemy.level_multiplier);
   persist_write_int(HEALTH_KEY, enemy.health);
   persist_write_int(ALIVE_KEY, enemy.hours_alive);
-  persist_write_int(MORPH_KEY, enemy.morph);
+  persist_write_bool(MORPH_KEY, enemy.morph);
   persist_write_int(INDEX_COUNT_KEY, enemy.index_count);
   persist_write_int(INDEX_0_KEY, enemy.index[0]);
   persist_write_int(INDEX_1_KEY, enemy.index[1]);
