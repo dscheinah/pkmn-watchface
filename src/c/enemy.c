@@ -14,10 +14,12 @@
 
 static Enemy enemy;
 
-static void evolve(int type, int level) {
+static void evolve(int type, int level, bool hasNext) {
   enemy.type = type;
   enemy.level_multiplier = level;
-  enemy.hours_alive = 0;
+  if (hasNext) {
+    enemy.hours_alive = 0;
+  }
   int key = 0, chk = type - 23;
   if (chk > 31) {
     key = 1;
@@ -31,9 +33,9 @@ static void evolve(int type, int level) {
 }
 
 static void createWithMorph(int type, int level) {
-  evolve(type, level);
+  evolve(type, level, true);
   enemy.health = 100;
-  enemy.morph = rand() % 10 == 0;
+  enemy.morph = rand() % 8 == 0;
 }
 
 static int level_final() {
@@ -62,14 +64,14 @@ Enemy* enemy_init() {
   if (quiet_time_is_active()) {
     switch (enemy.type) {
       case RESOURCE_ID_egg:
-        evolve(RESOURCE_ID_175, 1);
+        createWithMorph(RESOURCE_ID_175, 1);
         break;
       case RESOURCE_ID_25:
-        evolve(RESOURCE_ID_172, 1);
+        evolve(RESOURCE_ID_172, 1, false);
         break;
     }
   } else if (enemy.type == RESOURCE_ID_175) {
-    evolve(RESOURCE_ID_176, 2);
+    evolve(RESOURCE_ID_176, 2, false);
   }
   return &enemy;
 }
@@ -89,7 +91,7 @@ bool enemy_reset(EventValue event) {
     createWithMorph(RESOURCE_ID_92, 1);
     return true;
   }
-  if (enemy.hours_alive > 10) {
+  if (enemy.hours_alive > 9) {
     createWithMorph(RESOURCE_ID_86, 1);
     return true;
   }
@@ -107,23 +109,23 @@ bool enemy_evolution(EventValue event) {
   }
   if (event & EVENT_MORPH) {
     if (enemy.type == RESOURCE_ID_132) {
-      evolve(rand() % 6 + 47, 1);
+      evolve(rand() % 6 + 47, 1, true);
       return true;
     }
-    evolve(RESOURCE_ID_132, 1);
+    evolve(RESOURCE_ID_132, 1, true);
     return true;
   }
   if (event & EVENT_EVO) {
     switch (enemy.type) {
       case RESOURCE_ID_133:
-        evolve(enemy.type + 1 + rand() % 3, 2);
+        evolve(enemy.type + 1 + rand() % 3, 2, false);
         return true;
       case RESOURCE_ID_86:
-        evolve(RESOURCE_ID_87, 2);
+        evolve(RESOURCE_ID_87, 2, false);
         return true;
       default:
         if (enemy.type >= 23 && enemy.type <= 28) {
-          evolve(enemy.type + 3, enemy.level_multiplier + 1);
+          evolve(enemy.type + 3, enemy.level_multiplier + 1, enemy.type < 26);
           return true;
         }
     }
@@ -135,11 +137,13 @@ bool enemy_evolution(EventValue event) {
 bool enemy_night() {
   switch (enemy.type) {
     case RESOURCE_ID_133:
-      evolve(RESOURCE_ID_197, 2);
+      evolve(RESOURCE_ID_197, 2, false);
       return true;
     case RESOURCE_ID_92:
+      evolve(enemy.type + 1, enemy.level_multiplier + 1, true);
+      return true;
     case RESOURCE_ID_93:
-      evolve(enemy.type + 1, enemy.level_multiplier + 1);
+      evolve(enemy.type + 1, enemy.level_multiplier + 1, false);
       return true;
   }
   return false;
@@ -148,10 +152,10 @@ bool enemy_night() {
 bool enemy_charge() {
   switch (enemy.type) {
     case RESOURCE_ID_133:
-      evolve(RESOURCE_ID_135, 2);
+      evolve(RESOURCE_ID_135, 2, false);
       return true;
     case RESOURCE_ID_25:
-      evolve(RESOURCE_ID_26, 2);
+      evolve(RESOURCE_ID_26, 2, false);
       enemy.health = 100;
       return true;
     case RESOURCE_ID_26:
