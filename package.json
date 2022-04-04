@@ -355,6 +355,24 @@
           "spaceOptimization": "memory"
         },
         {
+          "file": "pokemon/main-sprites/gold/172.png",
+          "name": "172",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/175.png",
+          "name": "175",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/176.png",
+          "name": "176",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
           "file": "pokemon/main-sprites/gold/back/152.png",
           "name": "a152",
           "type": "bitmap",

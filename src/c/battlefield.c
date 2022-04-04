@@ -139,7 +139,7 @@ void battlefield_set_enemy_missing(bool missing) {
 }
 
 void battlefield_mark_dirty() {
-  int type = quiet_time_is_active() ? allyPart.ally->type + 53 : allyPart.ally->type;
+  int type = quiet_time_is_active() ? allyPart.ally->type + ENEMY_COUNT + 22 : allyPart.ally->type;
   renderBitmap(&allyPart, allyPart.ally->shiny ? type + 9 : type);
   renderBitmap(&enemyPart, enemyPart.missing ? RESOURCE_ID_0 : enemyPart.enemy->type);
   static char allyLevelBuffer[5];

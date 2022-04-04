@@ -59,6 +59,18 @@ Enemy* enemy_init() {
     createWithMorph(RESOURCE_ID_133, 1);
   }
   enemy.level_final = &level_final;
+  if (quiet_time_is_active()) {
+    switch (enemy.type) {
+      case RESOURCE_ID_egg:
+        evolve(RESOURCE_ID_175, 1);
+        break;
+      case RESOURCE_ID_25:
+        evolve(RESOURCE_ID_172, 1);
+        break;
+    }
+  } else if (enemy.type == RESOURCE_ID_175) {
+    evolve(RESOURCE_ID_176, 2);
+  }
   return &enemy;
 }
 
