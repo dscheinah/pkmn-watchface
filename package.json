@@ -353,6 +353,114 @@
           "name": "251",
           "type": "bitmap",
           "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/152.png",
+          "name": "a152",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/155.png",
+          "name": "a155",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/158.png",
+          "name": "a158",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/153.png",
+          "name": "a153",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/156.png",
+          "name": "a156",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/159.png",
+          "name": "a159",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/154.png",
+          "name": "a154",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/157.png",
+          "name": "a157",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/160.png",
+          "name": "a160",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/152.png",
+          "name": "b152",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/155.png",
+          "name": "b155",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/158.png",
+          "name": "b158",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/153.png",
+          "name": "b153",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/156.png",
+          "name": "b156",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/159.png",
+          "name": "b159",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/154.png",
+          "name": "b154",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/157.png",
+          "name": "b157",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/160.png",
+          "name": "b160",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
         }
       ]
     }
