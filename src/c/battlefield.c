@@ -17,8 +17,8 @@ typedef struct {
   int previous;
 } Part;
 
-static Part allyPart;
-static Part enemyPart;
+static Part allyPart = {.previous = 0};
+static Part enemyPart = {.previous = 0, .missing = 0};
 
 static EventValue *current;
 static Layer *indicator;
@@ -96,10 +96,7 @@ static void renderIndicator(Layer *layer, GContext *ctx) {
 
 void battlefield_load(Layer *root, Ally *ally, Enemy *enemy, EventValue *event) {
   allyPart.ally = ally;
-  allyPart.previous = 0;
   enemyPart.enemy = enemy;
-  enemyPart.missing = 0;
-  enemyPart.previous = 0;
   current = event;
 
   allyPart.image = bitmap_layer_create(GRect(10, 68, 48, 48));

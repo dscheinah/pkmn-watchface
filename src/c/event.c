@@ -6,16 +6,13 @@
 #define VALUE_KEY 401
 #define ID_KEY 402
 
-static EventValue event;
-static int id;
+static EventValue event = EVENT_NONE;
+static int id = -1;
 
 EventValue* event_init() {
   if (persist_exists(VERSION_KEY) && persist_read_int(VERSION_KEY) == VERSION) {
     event = persist_read_int(VALUE_KEY);
     id = persist_read_int(ID_KEY);
-  } else {
-    event = EVENT_NONE;
-    id = -1;
   }
   return &event;
 }

@@ -9,7 +9,18 @@
 #define HOUR_RESTFUL_KEY 305
 #define HOUR_ACTIVE_KEY 306
 
-static Health health;
+static Health health =  {
+  .steps = 0,
+  .steps_yesterday = 0,
+  .steps_last = 0,
+  .sleep = 0,
+  .restful_sleep = 0,
+  .restful_sleep_hour = 0,
+  .restful_sleep_last = 0,
+  .active = 0,
+  .active_hour = 0,
+  .active_last = 0,
+};
 static int demo = 0;
 
 void health_init() {
@@ -30,18 +41,7 @@ void health_init() {
     health.active_last = persist_read_int(LAST_ACTIVE_KEY);
     health.restful_sleep_hour = persist_read_int(HOUR_RESTFUL_KEY);
     health.active_hour = persist_read_int(HOUR_ACTIVE_KEY);
-  } else {
-    health.steps_yesterday = 0;
-    health.steps_last = 0;
-    health.restful_sleep_last = 0;
-    health.active_last = 0;
-    health.restful_sleep_hour = 0;
-    health.active_hour = 0;
   }
-  health.steps = 0;
-  health.sleep = 0;
-  health.restful_sleep = 0;
-  health.active = 0;
 }
 
 void health_refresh(bool update_yesterday) {

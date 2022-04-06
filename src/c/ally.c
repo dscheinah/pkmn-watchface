@@ -6,7 +6,7 @@
 #define LEVEL_KEY 102
 #define SHINY_KEY 103
 
-static Ally ally;
+static Ally ally = {.level = 1, .health = 100, .experience = 0};
 
 static int level_final() {
   int level = ally.level + ally.level_modifier;
@@ -14,9 +14,6 @@ static int level_final() {
 }
 
 Ally* ally_init() {
-  ally.level = 1;
-  ally.health = 100;
-  ally.experience = 0;
   if (persist_exists(VERSION_KEY) && persist_read_int(VERSION_KEY) == VERSION) {
     ally.type = persist_read_int(TYPE_KEY);
     ally.shiny = persist_read_bool(SHINY_KEY);
