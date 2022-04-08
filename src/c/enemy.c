@@ -90,7 +90,7 @@ bool enemy_reset(EventValue event) {
     evolve(RESOURCE_ID_86, 1, true);
     return true;
   }
-  if (enemy.hours_alive < 3 && (enemy.type == RESOURCE_ID_92 || enemy.type == RESOURCE_ID_93)) {
+  if (enemy.hours_alive <= 3 && (enemy.type == RESOURCE_ID_92 || enemy.type == RESOURCE_ID_93)) {
     evolve(enemy.type + 1, enemy.level_multiplier + 1, true);
     return true;
   }
