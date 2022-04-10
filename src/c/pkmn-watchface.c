@@ -39,6 +39,8 @@ static void gameTick(bool loop, bool reset, int identifier) {
         ally->level_modifier++;
       }
     }
+  } else if (enemy_quiet(quiet_time_is_active(), health)) {
+    ally->level_modifier++;
   }
   event_next(enemy, health, identifier);
   ally_evolution();

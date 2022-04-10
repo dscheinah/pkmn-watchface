@@ -27,4 +27,6 @@ bool enemy_charge();
 
 bool enemy_hatch(Health health);
 
+bool enemy_quiet(bool quiet, Health health);
+
 void enemy_deinit();

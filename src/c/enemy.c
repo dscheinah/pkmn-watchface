@@ -55,18 +55,6 @@ Enemy* enemy_init() {
     enemy.index[1] = 0;
     evolve(RESOURCE_ID_133, 1, true);
   }
-  if (quiet_time_is_active()) {
-    switch (enemy.type) {
-      case RESOURCE_ID_egg:
-        evolve(RESOURCE_ID_175, 1, true);
-        break;
-      case RESOURCE_ID_25:
-        evolve(RESOURCE_ID_172, 1, false);
-        break;
-    }
-  } else if (enemy.type == RESOURCE_ID_175) {
-    evolve(RESOURCE_ID_176, 2, false);
-  }
   enemy.level_final = &level_final;
   return &enemy;
 }
@@ -184,6 +172,26 @@ bool enemy_hatch(Health health) {
   }
   evolve(RESOURCE_ID_133, 1, true);
   return true;
+}
+
+bool enemy_quiet(bool quiet, Health health) {
+  if (quiet) {
+    switch (enemy.type) {
+      case RESOURCE_ID_egg:
+        if (health.steps <= 10000) {
+          evolve(RESOURCE_ID_175, 1, true);
+          return true;
+        }
+        break;
+      case RESOURCE_ID_25:
+        evolve(RESOURCE_ID_172, 1, false);
+        return true;
+    }
+  } else if (enemy.type == RESOURCE_ID_175) {
+    evolve(RESOURCE_ID_176, 2, false);
+    return true;
+  }
+  return false;
 }
 
 void enemy_deinit() {
