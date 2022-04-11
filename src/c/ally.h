@@ -8,7 +8,7 @@ typedef struct ally {
  int level_modifier;
  int (*level_final)();
  int health;
- float experience;
+ int experience;
 } Ally;
 
 Ally* ally_init();

@@ -95,18 +95,18 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
 }
 
 void game_set_ally_level(Ally *ally, Health health) {
-  float level = 30.0 * health.steps / 10000;
-  float experience = (float) health.steps / (health.steps_yesterday ?: 5000);
-  if (experience > 1) {
-    level += 30.0 * (health.steps - health.steps_yesterday) / 10000;
-    experience = 1;
+  int level = 30 * health.steps / 10000;
+  int experience = 100 * health.steps / (health.steps_yesterday ?: 5000);
+  if (experience > 100) {
+    level += 30 * (health.steps - health.steps_yesterday) / 10000;
+    experience = 100;
   }
   ally->level = level < 1 ? 1 : level;
   ally->experience = experience;
 }
 
 void game_set_enemy_level(Enemy *enemy, Health health) {
-  float level = 30.0 * (health.sleep + health.restful_sleep) / 47520;
+  int level = 30 * (health.sleep + health.restful_sleep) / 47520;
   enemy->level = level < 1 ? 1 : level;
 }
 

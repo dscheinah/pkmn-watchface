@@ -23,14 +23,14 @@ static Part enemyPart = {.previous = 0, .missing = 0};
 static EventValue *current;
 static Layer *indicator;
 
-static void renderRect(Layer *layer, GContext *ctx, int alignment, GColor8 color, float percentage) {
+static void renderRect(Layer *layer, GContext *ctx, int alignment, GColor8 color, int percentage) {
   GRect bounds = layer_get_bounds(layer);
   #if defined(PBL_COLOR)
     graphics_context_set_fill_color(ctx, color);
   #else
     graphics_context_set_fill_color(ctx, GColorLightGray);
   #endif
-  int w = bounds.size.w * percentage;
+  int w = bounds.size.w * percentage / 100;
   int x = alignment == ALIGN_LEFT ? 0 : bounds.size.w - w;
   graphics_fill_rect(ctx, GRect(x, 0, w, bounds.size.h), 0, GCornerNone);
 }
@@ -54,8 +54,8 @@ static void renderBitmap(Part *part, int resource) {
   bitmap_layer_set_bitmap(part->image, part->bitmap);
 }
 
-static GColor8 GColorFromHealth(float percentage) {
-  return GColorFromRGB((1 - percentage) * 255, percentage * 255, 0);
+static GColor8 GColorFromHealth(int percentage) {
+  return GColorFromRGB((100 - percentage) * 255 / 100, percentage * 255 / 100, 0);
 }
 
 static void renderAllyExperience(Layer *layer, GContext *ctx) {
@@ -63,17 +63,15 @@ static void renderAllyExperience(Layer *layer, GContext *ctx) {
 }
 
 static void renderAllyHealth(Layer *layer, GContext *ctx) {
-  float percentage = (float) allyPart.ally->health / 100;
-  renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(percentage), percentage);
+  renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(allyPart.ally->health), allyPart.ally->health);
 }
 
 static void renderEnemyHealth(Layer *layer, GContext *ctx) {
-  float percentage = (float) enemyPart.enemy->health / 100;
-  renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(percentage), percentage);
+  renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(enemyPart.enemy->health), enemyPart.enemy->health);
 }
 
 static void renderEnemyExperience(Layer *layer, GContext *ctx) {
-  renderRect(layer, ctx, ALIGN_LEFT, GColorVeryLightBlue, (float) enemyPart.enemy->index_count / ENEMY_COUNT);
+  renderRect(layer, ctx, ALIGN_LEFT, GColorVeryLightBlue, 100 * enemyPart.enemy->index_count / ENEMY_COUNT);
 }
 
 static void renderIndicator(Layer *layer, GContext *ctx) {
