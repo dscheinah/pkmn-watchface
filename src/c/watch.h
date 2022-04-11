@@ -14,6 +14,8 @@ void watch_render_time(struct tm *tick_time);
 
 void watch_render_date(struct tm *tick_time);
 
+void watch_render_seconds(struct tm *tick_time);
+
 void watch_set_settings(uint flags);
 
 bool watch_has_seconds();

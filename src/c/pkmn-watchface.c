@@ -48,8 +48,11 @@ static void gameTick(bool loop, bool reset, int identifier) {
 }
 
 static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
-  if (units_changed & (MINUTE_UNIT | SECOND_UNIT)) {
+  if (units_changed & MINUTE_UNIT) {
     watch_render_time(tick_time);
+  }
+  if (units_changed & SECOND_UNIT) {
+    watch_render_seconds(tick_time);
   }
   bool day = units_changed & DAY_UNIT, loop = !(units_changed & INIT_UNIT);
   if (day) {

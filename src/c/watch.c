@@ -49,11 +49,6 @@ void watch_render_time(struct tm *tick_time) {
   static char timeBuffer[6];
   strftime(timeBuffer, 6, timeFormat, tick_time);
   text_layer_set_text(timeLayer, timeBuffer);
-  if (secondsLayer) {
-    static char secondsBuffer[3];
-    strftime(secondsBuffer, 3, "%S", tick_time);
-    text_layer_set_text(secondsLayer, secondsBuffer);
-  }
 }
 
 void watch_render_date(struct tm *tick_time) {
@@ -67,6 +62,15 @@ void watch_render_date(struct tm *tick_time) {
     statusBuffer[2] -= 32;
     text_layer_set_text(statusLayer, statusBuffer);
   }
+}
+
+void watch_render_seconds(struct tm *tick_time) {
+  if (!secondsLayer) {
+    return;
+  }
+  static char secondsBuffer[3];
+  strftime(secondsBuffer, 3, "%S", tick_time);
+  text_layer_set_text(secondsLayer, secondsBuffer);
 }
 
 void watch_set_settings(uint flags) {
