@@ -31,11 +31,12 @@ void watch_load(Layer *root) {
   if (watch_has_seconds()) {
     secondsLayer = helper_create_text_layer(GRect(110, 133, 28, 20), FONT_KEY_LECO_20_BOLD_NUMBERS, GTextAlignmentLeft);
     layer_add_child(root, text_layer_get_layer(secondsLayer));
-    timeLayer = helper_create_text_layer(GRect(5, 121, 105, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
+    timeLayer = helper_create_text_layer(GRect(9, 121, 101, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
   } else {
-    timeLayer = helper_create_text_layer(GRect(5, 121, 139, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
+    timeLayer = helper_create_text_layer(GRect(9, 121, 129, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
   }
   dateLayer = helper_create_text_layer(GRect(73, 95, 59, 14), FONT_KEY_GOTHIC_14, GTextAlignmentRight);
+  text_layer_set_background_color(dateLayer, GColorClear);
   layer_add_child(root, text_layer_get_layer(timeLayer));
   layer_add_child(root, text_layer_get_layer(dateLayer));
 
