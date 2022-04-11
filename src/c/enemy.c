@@ -16,6 +16,9 @@ static Enemy enemy = {.level = 1};
 
 static int level_final() {
   int level = enemy.level * enemy.level_multiplier;
+  if (level < 1) {
+    return 1;
+  }
   return level > 999 ? 999 : level;
 }
 
@@ -184,7 +187,7 @@ bool enemy_quiet(bool quiet, Health health) {
         }
         break;
       case RESOURCE_ID_25:
-        evolve(RESOURCE_ID_172, 1, false);
+        evolve(RESOURCE_ID_172, 0, false);
         return true;
     }
   } else if (enemy.type == RESOURCE_ID_175) {
