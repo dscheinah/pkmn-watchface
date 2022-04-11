@@ -4,10 +4,10 @@
 static float levelModifier(float diff, int type) {
   float level = 1.0 + (diff / 100);
   if (type > 3) {
-    level += 0.2;
+    level += 0.15;
   }
   if (type > 6) {
-    level += 0.2;
+    level += 0.15;
   }
   if (level < 0.25) {
     return 0.25;
