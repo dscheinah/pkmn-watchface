@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "battlefield.h"
+#include "cache.h"
 #include "const.h"
 #include "helper.h"
 #define ALIGN_LEFT 0
@@ -134,6 +135,8 @@ void battlefield_set_enemy_missing(bool missing) {
 }
 
 void battlefield_mark_dirty() {
+  cache_layer_mark_dirty();
+
   int type = quiet_time_is_active() ? allyPart.ally->type + ENEMY_COUNT + 22 : allyPart.ally->type;
   renderBitmap(&allyPart, allyPart.ally->shiny ? type + 9 : type);
   renderBitmap(&enemyPart, enemyPart.missing ? RESOURCE_ID_0 : enemyPart.enemy->type);

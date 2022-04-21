@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "ally.h"
+#include "cache.h"
 #include "const.h"
 #include "battlefield.h"
 #include "enemy.h"
@@ -15,6 +16,7 @@
 
 static Window *s_window;
 
+static Layer *watchLayer;
 static BitmapLayer *templateLayer;
 static GBitmap *templateBitmap;
 
@@ -112,26 +114,28 @@ static void prv_window_load(Window *window) {
 
   int x = (bounds.size.w - 144) / 2;
   int y = (bounds.size.h - 168) / 2;
+  GRect coords = GRect(x, y, 144, 168);
 
-  templateLayer = bitmap_layer_create(GRect(x, y, 144, 168));
-
-  Layer *centerLayer = bitmap_layer_get_layer(templateLayer);
-  layer_add_child(window_layer, centerLayer);
-
+  templateLayer = bitmap_layer_create(coords);
   templateBitmap = gbitmap_create_with_resource(RESOURCE_ID_template);
   bitmap_layer_set_bitmap(templateLayer, templateBitmap);
 
-  watch_load(centerLayer);
-  battlefield_load(centerLayer, ally, enemy, event);
+  Layer *battlefieldLayer = bitmap_layer_get_layer(templateLayer);
+  battlefield_load(battlefieldLayer, ally, enemy, event);
+  cache_layer_create(window_layer, battlefieldLayer);
+
+  watchLayer = layer_create(coords);
+  layer_add_child(window_layer, watchLayer);
+  watch_load(watchLayer);
 }
 
 static void prv_window_unload(Window *window) {
   watch_unload();
   battlefield_unload();
-
+  cache_layer_destroy();
   gbitmap_destroy(templateBitmap);
-
   bitmap_layer_destroy(templateLayer);
+  layer_destroy(watchLayer);
 }
 
 static void prv_init(void) {
