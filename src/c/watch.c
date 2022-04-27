@@ -27,7 +27,7 @@ void watch_init() {
   updateTimeFormat();
 }
 
-void watch_load(Layer *root) {
+void watch_load(Layer *root, Layer *cachedRoot) {
   if (watch_has_seconds()) {
     secondsLayer = helper_create_text_layer(GRect(110, 133, 28, 20), FONT_KEY_LECO_20_BOLD_NUMBERS, GTextAlignmentLeft);
     layer_add_child(root, text_layer_get_layer(secondsLayer));
@@ -38,11 +38,11 @@ void watch_load(Layer *root) {
   dateLayer = helper_create_text_layer(GRect(73, 95, 59, 14), FONT_KEY_GOTHIC_14, GTextAlignmentRight);
   text_layer_set_background_color(dateLayer, GColorClear);
   layer_add_child(root, text_layer_get_layer(timeLayer));
-  layer_add_child(root, text_layer_get_layer(dateLayer));
+  layer_add_child(cachedRoot, text_layer_get_layer(dateLayer));
 
   if (current & WATCH_DOW) {
     statusLayer = helper_create_text_layer(GRect(101, 73, 35, 14), FONT_KEY_GOTHIC_14, GTextAlignmentRight);
-    layer_add_child(root, text_layer_get_layer(statusLayer));
+    layer_add_child(cachedRoot, text_layer_get_layer(statusLayer));
   }
 }
 

@@ -8,7 +8,7 @@
 
 void watch_init();
 
-void watch_load(Layer *root);
+void watch_load(Layer *root, Layer *cachedRoot);
 
 void watch_render_time(struct tm *tick_time);
 

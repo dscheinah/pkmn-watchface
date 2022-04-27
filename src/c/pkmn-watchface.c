@@ -126,7 +126,7 @@ static void prv_window_load(Window *window) {
 
   watchLayer = layer_create(coords);
   layer_add_child(window_layer, watchLayer);
-  watch_load(watchLayer);
+  watch_load(watchLayer, battlefieldLayer);
 }
 
 static void prv_window_unload(Window *window) {
