@@ -27,6 +27,12 @@
 			},
 			{
 				"type": "toggle",
+				"messageKey": "taps",
+				"label": "Use taps to show seconds",
+				"description": "Only update seconds after a tap and until the next minute. If used without render seconds, the time will be replaced."
+			},
+			{
+				"type": "toggle",
 				"messageKey": "date_format",
 				"label": "Swap month and day"
 			}

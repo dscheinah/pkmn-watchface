@@ -5,6 +5,7 @@
 #define WATCH_DATE_FORMAT 4
 #define WATCH_SECONDS 8
 #define WATCH_DOW 16
+#define WATCH_TAPS 32
 
 void watch_init();
 
@@ -21,6 +22,8 @@ void watch_set_settings(uint flags);
 bool watch_has_seconds();
 
 bool watch_has_bluetooth();
+
+bool watch_has_taps();
 
 void watch_unload();
 

@@ -32,7 +32,8 @@
       "date_format",
       "seconds",
       "dow",
-      "bluetooth"
+      "bluetooth",
+      "taps"
     ],
     "resources": {
       "media": [

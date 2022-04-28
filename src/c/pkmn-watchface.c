@@ -24,6 +24,8 @@ static Ally *ally;
 static Enemy *enemy;
 static EventValue *event;
 
+bool tapActive = false;
+
 static void gameTick(bool loop, bool reset, int identifier) {
   Health health = health_get_collected(loop, reset);
   game_set_ally_level(ally, health);
@@ -50,11 +52,17 @@ static void gameTick(bool loop, bool reset, int identifier) {
 }
 
 static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
-  if (units_changed & MINUTE_UNIT) {
-    watch_render_time(tick_time);
-  }
   if (units_changed & SECOND_UNIT) {
     watch_render_seconds(tick_time);
+  }
+  if (units_changed & MINUTE_UNIT) {
+    #if !defined(TEST)
+      if (tapActive) {
+        tapActive = false;
+        tick_timer_service_subscribe(watch_has_seconds() ? SECOND_UNIT : MINUTE_UNIT, handleTime);
+      }
+    #endif
+    watch_render_time(tick_time);
   }
   bool day = units_changed & DAY_UNIT, loop = !(units_changed & INIT_UNIT);
   if (day) {
@@ -86,6 +94,13 @@ static void handleConnection(bool connected) {
   battlefield_set_enemy_missing(!connected);
 }
 
+static void handleTap(AccelAxisType axis, int32_t direction) {
+  if (axis == ACCEL_AXIS_Z && direction > 0) {
+    tapActive = true;
+    tick_timer_service_subscribe(SECOND_UNIT, handleTime);
+  }
+}
+
 static void handleInbox(DictionaryIterator *iter, void *context) {
   int flags = 0;
   Tuple *tuple;
@@ -104,6 +119,10 @@ static void handleInbox(DictionaryIterator *iter, void *context) {
   tuple = dict_find(iter, MESSAGE_KEY_bluetooth);
   if (tuple && (bool) tuple->value->int8) {
     flags |= WATCH_BLUETOOTH;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_taps);
+  if (tuple && (bool) tuple->value->int8) {
+    flags |= WATCH_TAPS;
   }
   watch_set_settings(flags);
 }
@@ -171,14 +190,19 @@ static void prv_init(void) {
     handleConnection(connection_service_peek_pebble_app_connection());
   }
 
+  if (watch_has_taps()) {
+    accel_tap_service_subscribe(handleTap);
+  }
+
   app_message_register_inbox_received(handleInbox);
-  app_message_open(dict_calc_buffer_size(4, 4), 0);
+  app_message_open(dict_calc_buffer_size(5, 5), 0);
 }
 
 static void prv_deinit(void) {
   tick_timer_service_unsubscribe();
   battery_state_service_unsubscribe();
   connection_service_unsubscribe();
+  accel_tap_service_unsubscribe();
 
   window_destroy(s_window);
 

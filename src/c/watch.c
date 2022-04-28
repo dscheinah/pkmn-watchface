@@ -28,7 +28,7 @@ void watch_init() {
 }
 
 void watch_load(Layer *root, Layer *cachedRoot) {
-  if (watch_has_seconds()) {
+  if (current & WATCH_SECONDS) {
     secondsLayer = helper_create_text_layer(GRect(110, 133, 28, 20), FONT_KEY_LECO_20_BOLD_NUMBERS, GTextAlignmentLeft);
     layer_add_child(root, text_layer_get_layer(secondsLayer));
     timeLayer = helper_create_text_layer(GRect(9, 121, 101, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
@@ -66,12 +66,13 @@ void watch_render_date(struct tm *tick_time) {
 }
 
 void watch_render_seconds(struct tm *tick_time) {
-  if (!secondsLayer) {
-    return;
-  }
   static char secondsBuffer[3];
   strftime(secondsBuffer, 3, "%S", tick_time);
-  text_layer_set_text(secondsLayer, secondsBuffer);
+  if (secondsLayer) {
+    text_layer_set_text(secondsLayer, secondsBuffer);
+  } else if (current & WATCH_TAPS) {
+    text_layer_set_text(timeLayer, secondsBuffer);
+  }
 }
 
 void watch_set_settings(uint flags) {
@@ -82,11 +83,18 @@ void watch_set_settings(uint flags) {
 }
 
 bool watch_has_seconds() {
+  if (current & WATCH_TAPS) {
+    return false;
+  }
   return current & WATCH_SECONDS;
 }
 
 bool watch_has_bluetooth() {
   return current & WATCH_BLUETOOTH;
+}
+
+bool watch_has_taps() {
+  return current & WATCH_TAPS;
 }
 
 void watch_unload() {
