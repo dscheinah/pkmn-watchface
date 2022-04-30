@@ -59,7 +59,7 @@ static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
     #if !defined(TEST)
       if (tapActive) {
         tapActive = false;
-        tick_timer_service_subscribe(watch_has_seconds() ? SECOND_UNIT : MINUTE_UNIT, handleTime);
+        tick_timer_service_subscribe(MINUTE_UNIT, handleTime);
       }
     #endif
     watch_render_time(tick_time);
@@ -191,6 +191,7 @@ static void prv_init(void) {
   }
 
   if (watch_has_taps()) {
+    tapActive = true;
     accel_tap_service_subscribe(handleTap);
   }
 

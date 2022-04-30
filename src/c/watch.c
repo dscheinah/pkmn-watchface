@@ -83,9 +83,6 @@ void watch_set_settings(uint flags) {
 }
 
 bool watch_has_seconds() {
-  if (current & WATCH_TAPS) {
-    return false;
-  }
   return current & WATCH_SECONDS;
 }
 
