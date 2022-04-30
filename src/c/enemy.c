@@ -197,6 +197,66 @@ bool enemy_quiet(bool quiet, Health health) {
   return false;
 }
 
+static int checkBird(Ally *ally) {
+  int bird144 = enemy.type == RESOURCE_ID_86 || enemy.type == RESOURCE_ID_87 ? 10 : enemy.hours_alive;
+  int bird145 = ally->health / 10;
+  int bird146 = ally->level_final() / 10;
+  int bird249 = level_final() / 10;
+  if (bird144 > 10) {
+    bird144 = 10;
+  }
+  if (bird145 > 10) {
+    bird145 = 10;
+  }
+  if (bird146 > 10) {
+    bird146 = 10;
+  }
+  if (bird249 > 10) {
+    bird249 = 10;
+  }
+  int bird250 = (bird144 + bird145 + bird146 + bird249) / 4;
+  int selected = rand() % (bird250 * 60);
+  if (selected < bird144) {
+    return RESOURCE_ID_144;
+  }
+  selected -= bird144;
+  if (selected < bird145) {
+    return RESOURCE_ID_145;
+  }
+  selected -= bird145;
+  if (selected < bird146) {
+    return RESOURCE_ID_146;
+  }
+  selected -= bird146;
+  if (selected < bird249) {
+    return RESOURCE_ID_249;
+  }
+  selected -= bird249;
+  if (selected < bird250) {
+    return RESOURCE_ID_250;
+  }
+  return 0;
+}
+
+bool enemy_bird(Ally *ally, bool reset) {
+  int bird = checkBird(ally);
+  if (!bird) {
+    return false;
+  }
+  if (reset) {
+    if (bird == RESOURCE_ID_250) {
+      return false;
+    }
+    evolve(bird, 3, true);
+    return true;
+  }
+  if (bird != RESOURCE_ID_250 || enemy.type != RESOURCE_ID_egg) {
+    return false;
+  }
+  evolve(bird, 3, true);
+  return true;
+}
+
 void enemy_deinit() {
   persist_write_int(VERSION_KEY, VERSION);
   persist_write_int(TYPE_KEY, enemy.type);
