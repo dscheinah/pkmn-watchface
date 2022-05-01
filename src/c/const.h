@@ -1,5 +1,5 @@
 #pragma once
-#define ENEMY_COUNT 34
+#define ENEMY_COUNT 39
 #define EVENT_NONE 0
 #define EVENT_SLEEP 1
 #define EVENT_EVO 2

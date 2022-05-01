@@ -1,5 +1,6 @@
 #pragma once
 #include <pebble.h>
+#include "ally.h"
 #include "const.h"
 #include "health.h"
 
@@ -28,5 +29,7 @@ bool enemy_charge();
 bool enemy_hatch(Health health);
 
 bool enemy_quiet(bool quiet, Health health);
+
+bool enemy_bird(Ally *ally, bool reset);
 
 void enemy_deinit();
