@@ -8,6 +8,8 @@
 #define LAST_ACTIVE_KEY 304
 #define HOUR_RESTFUL_KEY 305
 #define HOUR_ACTIVE_KEY 306
+#define DEMO 1
+#define DEMO_SLEEP 2
 
 static Health health =  {
   .steps = 0,
@@ -21,20 +23,24 @@ static Health health =  {
   .active_hour = 0,
   .active_last = 0,
 };
-static int demo = 0;
+static int mode = 0;
 
 void health_init() {
   time_t start = time_start_of_today();
   time_t end = time(NULL);
   int available = HealthServiceAccessibilityMaskAvailable
     & health_service_metric_accessible(HealthMetricStepCount, start, end)
-    & health_service_metric_accessible(HealthMetricSleepSeconds, start, end)
-    & health_service_metric_accessible(HealthMetricSleepRestfulSeconds, start, end)
     & health_service_metric_accessible(HealthMetricActiveSeconds, start, end);
   if (!available) {
-    demo = 1000;
+    mode |= DEMO;
   }
-  if (persist_exists(VERSION_KEY) && persist_read_int(VERSION_KEY) == VERSION + demo) {
+  int sleepAvailable = HealthServiceAccessibilityMaskAvailable
+    & health_service_metric_accessible(HealthMetricSleepSeconds, start, end)
+    & health_service_metric_accessible(HealthMetricSleepRestfulSeconds, start, end);
+  if (!sleepAvailable) {
+    mode |= DEMO_SLEEP;
+  }
+  if (persist_exists(VERSION_KEY) && persist_read_int(VERSION_KEY) == VERSION) {
     health.steps_yesterday = persist_read_int(DAY_KEY);
     health.steps_last = persist_read_int(LAST_STEPS_KEY);
     health.restful_sleep_last = persist_read_int(LAST_RESTFUL_KEY);
@@ -45,26 +51,31 @@ void health_init() {
 }
 
 void health_refresh(bool update_yesterday) {
-  if (demo) {
-    HealthValue steps = rand() % 1000, sleep, restful, active = rand() % 900;
+  HealthValue steps, sleep, restful, active;
+  if (mode & DEMO) {
+    steps = rand() % 1500;
+    active = rand() % 900;
+    if (!update_yesterday) {
+      steps += health.steps;
+      active += health.active;
+    }
+  } else {
+    steps = health_service_sum_today(HealthMetricStepCount);
+    active = health_service_sum_today(HealthMetricActiveSeconds);
+  }
+  if (mode & DEMO_SLEEP) {
     if (update_yesterday) {
       sleep = rand() % 30000;
       restful = rand() % 20000;
     } else {
-      steps += health.steps;
       sleep = health.sleep;
       restful = health.restful_sleep;
-      active += health.active;
     }
-    health_set(steps, sleep, restful, active);
-    return;
+  } else {
+    sleep = health_service_sum_today(HealthMetricSleepSeconds);
+    restful = health_service_sum_today(HealthMetricSleepRestfulSeconds);
   }
-  health_set(
-    health_service_sum_today(HealthMetricStepCount),
-    health_service_sum_today(HealthMetricSleepSeconds),
-    health_service_sum_today(HealthMetricSleepRestfulSeconds),
-    health_service_sum_today(HealthMetricActiveSeconds)
-  );
+  health_set(steps, sleep, restful, active);
 }
 
 void health_set(HealthValue steps, HealthValue sleep, HealthValue restful_sleep, HealthValue active) {
@@ -95,7 +106,7 @@ Health health_get_collected(bool update_relative, bool update_yesterday) {
 }
 
 void health_deinit() {
-  persist_write_int(VERSION_KEY, VERSION + demo);
+  persist_write_int(VERSION_KEY, VERSION);
   persist_write_int(DAY_KEY, health.steps_yesterday);
   persist_write_int(LAST_STEPS_KEY, health.steps_last);
   persist_write_int(LAST_RESTFUL_KEY, health.restful_sleep_last);
