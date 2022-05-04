@@ -198,7 +198,7 @@ bool enemy_quiet(bool quiet, Health health) {
 }
 
 static int checkBird(Ally *ally) {
-  int bird144 = enemy.hours_alive * (enemy.type == RESOURCE_ID_86 || enemy.type == RESOURCE_ID_87 ? 10 : 1) / 2;
+  int bird144 = enemy.hours_alive * (enemy.type == RESOURCE_ID_86 || enemy.type == RESOURCE_ID_87 ? 20 : 1) / 4;
   int bird145 = ally->health / 15;
   int bird146 = ally->level / 10;
   int bird249 = enemy.level / 10;
