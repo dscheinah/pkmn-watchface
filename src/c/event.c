@@ -18,20 +18,22 @@ EventValue* event_init() {
 }
 
 void event_next(Enemy *enemy, Health health, int identifier) {
-  if (health.restful_sleep_hour) {
-    event = EVENT_SLEEP;
-    return;
-  }
-  if (enemy->type == RESOURCE_ID_egg) {
-    event = EVENT_NONE;
-    return;
-  }
   if (identifier == id) {
     return;
   }
   id = identifier;
-  event = EVENT_NONE;
   int check = rand() % 5;
+  if (health.restful_sleep_hour) {
+    event = EVENT_SLEEP;
+    if (enemy->morph && enemy->type != RESOURCE_ID_132 && check == 4) {
+      event |= EVENT_MORPH;
+    }
+    return;
+  }
+  event = EVENT_NONE;
+  if (enemy->type == RESOURCE_ID_egg) {
+    return;
+  }
   switch (check) {
     case 0:
       event |= EVENT_EGG;

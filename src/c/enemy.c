@@ -90,12 +90,12 @@ bool enemy_reset(EventValue event) {
 }
 
 bool enemy_evolution(EventValue event) {
+  if (event & EVENT_MORPH) {
+    evolve(enemy.type == RESOURCE_ID_132 ? rand() % 6 + 47 : RESOURCE_ID_132, enemy.level_multiplier, false);
+    return true;
+  }
   if (event & EVENT_SLEEP) {
     return false;
-  }
-  if (event & EVENT_MORPH) {
-    evolve(enemy.type == RESOURCE_ID_132 ? rand() % 6 + 47 : RESOURCE_ID_132, 1, false);
-    return true;
   }
   if (event & EVENT_EVO) {
     switch (enemy.type) {
