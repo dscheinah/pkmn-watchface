@@ -29,9 +29,13 @@ void watch_init() {
 
 void watch_load(Layer *root, Layer *cachedRoot) {
   if (current & WATCH_SECONDS) {
-    secondsLayer = helper_create_text_layer(GRect(110, 133, 28, 20), FONT_KEY_LECO_20_BOLD_NUMBERS, GTextAlignmentLeft);
+    #if defined(PBL_ROUND)
+      secondsLayer = helper_create_text_layer(GRect(110, 125, 28, 20), FONT_KEY_LECO_20_BOLD_NUMBERS, GTextAlignmentLeft);
+    #else
+      secondsLayer = helper_create_text_layer(GRect(110, 133, 28, 20), FONT_KEY_LECO_20_BOLD_NUMBERS, GTextAlignmentLeft);
+    #endif
     layer_add_child(root, text_layer_get_layer(secondsLayer));
-    timeLayer = helper_create_text_layer(GRect(9, 121, 101, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
+    timeLayer = helper_create_text_layer(GRect(13, 121, 97, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
   } else {
     timeLayer = helper_create_text_layer(GRect(9, 121, 129, 32), FONT_KEY_LECO_32_BOLD_NUMBERS, GTextAlignmentCenter);
   }
