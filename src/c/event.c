@@ -30,7 +30,11 @@ void event_next(Enemy *enemy, Health health, int identifier) {
     }
     return;
   }
-  event = EVENT_NONE;
+  if (enemy->index_count >= ENEMY_COUNT - 1 && rand() % 20 == 0) {
+    event = EVENT_BOSS;
+  } else {
+    event = EVENT_NONE;
+  }
   if (enemy->type == RESOURCE_ID_egg) {
     return;
   }

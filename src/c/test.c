@@ -86,6 +86,10 @@ void test_next_tick(Enemy *enemy, EventValue *event) {
     case 23:
       enemy->morph = true;
       break;
+    case 31:
+      doKill();
+      *event = EVENT_BOSS;
+      break;
     default:
       if (enemy->morph) {
         *event = EVENT_MORPH;

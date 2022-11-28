@@ -66,6 +66,14 @@ bool enemy_reset(EventValue event) {
   if (enemy.health > 0) {
     return false;
   }
+  if (enemy.type == RESOURCE_ID_150) {
+    enemy.index_count = 0;
+    enemy.index[0] = 0;
+    enemy.index[1] = 0;
+  } else if (event & EVENT_BOSS) {
+    evolve(RESOURCE_ID_150, 4, true);
+    return true;
+  }
   if (event & EVENT_EGG) {
     enemy.type = RESOURCE_ID_egg;
     enemy.health = 100;
