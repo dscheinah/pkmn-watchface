@@ -206,10 +206,22 @@ bool enemy_quiet(bool quiet, Health health) {
 }
 
 static int checkBird(Ally *ally) {
-  int bird144 = enemy.hours_alive * (enemy.type == RESOURCE_ID_86 || enemy.type == RESOURCE_ID_87 ? 20 : 1) / 4;
-  int bird145 = ally->health / 15;
-  int bird146 = ally->level / 10;
-  int bird249 = enemy.level / 10;
+  int bird144 = 0;
+  int bird145 = 0;
+  int bird146 = 0;
+  int bird249 = 0;
+  if (enemy.type == RESOURCE_ID_86 || enemy.type == RESOURCE_ID_87) {
+    bird144 = enemy.hours_alive * 5;
+  }
+  if (ally->health >= 50) {
+    bird145 = ally->health / 10;
+  }
+  if (ally->level >= 25) {
+    bird146 = ally->level / 10;
+  }
+  if (enemy.level >= 25) {
+    bird249 = enemy.level / 10;
+  }
   if (rand() % 100 < bird144) {
     return RESOURCE_ID_144;
   }
