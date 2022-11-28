@@ -38,7 +38,7 @@ void ally_evolution() {
   if (ally.type < 4 && level > 15) {
     ally.type += 3;
   }
-  if (ally.type < 7 && level > 35) {
+  if ((ally.type == RESOURCE_ID_a2 && level > 31) || (ally.type < 7 && level > 35)) {
     ally.type += 3;
   }
 }
