@@ -61,6 +61,7 @@ void test_next_tick(Enemy *enemy, EventValue *event) {
     case 9:
     case 18:
     case 20:
+      enemy->hours_alive = rand() % 10;
       *event = EVENT_EVO;
       break;
     case 10:

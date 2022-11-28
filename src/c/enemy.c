@@ -108,7 +108,11 @@ bool enemy_evolution(EventValue event) {
   if (event & EVENT_EVO) {
     switch (enemy.type) {
       case RESOURCE_ID_133:
-        evolve(enemy.type + 1 + rand() % 3, 2, false);
+        if (enemy.hours_alive > 4 || (enemy.hours_alive > 3 && rand() % 2 == 0)) {
+          evolve(enemy.type + 3, 2, false);
+        } else {
+          evolve(enemy.type + 1 + rand() % 2, 2, false);
+        }
         return true;
       case RESOURCE_ID_86:
         evolve(RESOURCE_ID_87, 2, false);
