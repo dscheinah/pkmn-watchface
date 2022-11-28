@@ -91,6 +91,8 @@ void test_next_tick(Enemy *enemy, EventValue *event) {
       doKill();
       *event = EVENT_BOSS;
       break;
+    case 30:
+      steps = 30000;
     default:
       if (enemy->morph) {
         *event = EVENT_MORPH;

@@ -25,7 +25,7 @@ static int level_final() {
 static void evolve(int type, int level, bool reset) {
   enemy.type = type;
   enemy.level_multiplier = level;
-  int key = 0, chk = type - 23;
+  int key = 0, chk = type - 25;
   if (chk > 31) {
     key = 1;
     chk -= 32;

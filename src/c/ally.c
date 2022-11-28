@@ -35,6 +35,10 @@ void ally_reset(int shiny_rate) {
 
 void ally_evolution() {
   int level = level_final();
+  if (level > 100) {
+    ally.type = RESOURCE_ID_a142;
+    return;
+  }
   if (ally.type < 4 && level > 15) {
     ally.type += 3;
   }

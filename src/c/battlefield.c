@@ -137,12 +137,15 @@ void battlefield_set_enemy_missing(bool missing) {
 void battlefield_mark_dirty() {
   cache_layer_mark_dirty();
 
-  int type = quiet_time_is_active() ? allyPart.ally->type + ENEMY_COUNT + 22 : allyPart.ally->type;
-  renderBitmap(&allyPart, allyPart.ally->shiny ? type + 9 : type);
+  int type = quiet_time_is_active() ? allyPart.ally->type + ENEMY_COUNT + 24 : allyPart.ally->type;
+  renderBitmap(&allyPart, allyPart.ally->shiny ? type + 10 : type);
   renderBitmap(&enemyPart, enemyPart.missing ? RESOURCE_ID_0 : enemyPart.enemy->type);
+
   static char allyLevelBuffer[5];
-  snprintf(allyLevelBuffer, 5, "L%d", allyPart.ally->level_final());
+  int level = allyPart.ally->level_final();
+  snprintf(allyLevelBuffer, 5, "L%d", level > 100 ? level - 100 : level);
   text_layer_set_text(allyPart.level, allyLevelBuffer);
+
   static char enemyLevelBuffer[5];
   snprintf(enemyLevelBuffer, 5, "L%d", enemyPart.enemy->level_final());
   text_layer_set_text(enemyPart.level, enemyLevelBuffer);

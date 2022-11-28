@@ -19,6 +19,25 @@ static float levelModifier(float diff, int type) {
 }
 
 static float effectiveModifier(Ally *ally, Enemy *enemy) {
+  if (ally->type == RESOURCE_ID_a142) {
+    switch (enemy->type) {
+      case RESOURCE_ID_4:
+      case RESOURCE_ID_5:
+      case RESOURCE_ID_6:
+      case RESOURCE_ID_136:
+      case RESOURCE_ID_146:
+      case RESOURCE_ID_250:
+      case RESOURCE_ID_86:
+      case RESOURCE_ID_87:
+      case RESOURCE_ID_144:
+      case RESOURCE_ID_225:
+      case RESOURCE_ID_145:
+      case RESOURCE_ID_249:
+      case RESOURCE_ID_213:
+        return 2;
+    }
+    return 1;
+  }
   switch (enemy->type) {
     case RESOURCE_ID_1:
     case RESOURCE_ID_2:
