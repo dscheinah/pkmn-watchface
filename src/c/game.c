@@ -21,8 +21,8 @@ static float levelModifier(float diff, int type) {
 static float effectiveModifier(Ally *ally, Enemy *enemy) {
   switch (enemy->type) {
     case RESOURCE_ID_1:
-    case RESOURCE_ID_4:
-    case RESOURCE_ID_7:
+    case RESOURCE_ID_2:
+    case RESOURCE_ID_3:
       switch (ally->type % 3) {
         case 0:
         case 1:
@@ -31,9 +31,9 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
           return 2;
       }
       break;
-    case RESOURCE_ID_2:
+    case RESOURCE_ID_4:
     case RESOURCE_ID_5:
-    case RESOURCE_ID_8:
+    case RESOURCE_ID_6:
     case RESOURCE_ID_136:
     case RESOURCE_ID_146:
     case RESOURCE_ID_250:
@@ -45,8 +45,8 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
           return 0.5;
       }
       break;
-    case RESOURCE_ID_3:
-    case RESOURCE_ID_6:
+    case RESOURCE_ID_7:
+    case RESOURCE_ID_8:
     case RESOURCE_ID_9:
     case RESOURCE_ID_134:
       switch (ally->type % 3) {
