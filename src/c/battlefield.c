@@ -76,6 +76,7 @@ static void renderEnemyExperience(Layer *layer, GContext *ctx) {
 }
 
 static void renderIndicator(Layer *layer, GContext *ctx) {
+  graphics_context_set_antialiased(ctx, false);
   if (*current & EVENT_SLEEP) {
     renderCircle(ctx, GColorSunsetOrange, 0);
   }
