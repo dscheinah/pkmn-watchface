@@ -19,7 +19,7 @@ static void copy(GBitmap *source, GBitmap *destination) {
 }
 
 static void update(Layer *layer, GContext *ctx) {
-  if (layer_get_hidden(replacementLayer)) {
+  if (layer_get_hidden(replacementLayer) && !graphics_frame_buffer_is_captured(ctx)) {
     GBitmap *buffer = graphics_capture_frame_buffer(ctx);
     copy(cacheBitmap, buffer);
     graphics_release_frame_buffer(ctx, buffer);
@@ -27,6 +27,9 @@ static void update(Layer *layer, GContext *ctx) {
 }
 
 static void capture(Layer *layer, GContext *ctx) {
+  if (graphics_frame_buffer_is_captured(ctx)) {
+    return;
+  }
   GBitmap *buffer = graphics_capture_frame_buffer(ctx);
   copy(buffer, cacheBitmap);
   graphics_release_frame_buffer(ctx, buffer);
