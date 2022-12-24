@@ -161,6 +161,12 @@ bool enemy_charge() {
     case RESOURCE_ID_86:
     case RESOURCE_ID_87:
     case RESOURCE_ID_134:
+    case RESOURCE_ID_144:
+    case RESOURCE_ID_146:
+    case RESOURCE_ID_176:
+    case RESOURCE_ID_225:
+    case RESOURCE_ID_249:
+    case RESOURCE_ID_250:
       if (enemy.health > 50) {
         enemy.health = 50;
       }
