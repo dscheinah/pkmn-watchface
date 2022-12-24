@@ -9,6 +9,9 @@ static float levelModifier(float diff, int type) {
   if (type > 6) {
     level += 0.15;
   }
+  if (type > 9) {
+    level -= 1;
+  }
   if (level < 0.25) {
     return 0.25;
   }
