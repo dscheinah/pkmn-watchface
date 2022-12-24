@@ -253,13 +253,13 @@ bool enemy_bird(Ally *ally, bool reset) {
     if (bird == RESOURCE_ID_250 || enemy.health > 0) {
       return false;
     }
-    evolve(bird, 3, true);
+    evolve(bird, bird == RESOURCE_ID_249 ? 3 : 2, true);
     return true;
   }
   if (bird != RESOURCE_ID_250 || enemy.type != RESOURCE_ID_egg) {
     return false;
   }
-  evolve(bird, 3, true);
+  evolve(RESOURCE_ID_250, 3, true);
   return true;
 }
 
