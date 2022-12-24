@@ -217,34 +217,32 @@ bool enemy_quiet(bool quiet, Health health) {
 
 static int checkBird(Ally *ally) {
   int bird144 = 0;
-  int bird145 = 0;
-  int bird146 = 0;
-  int bird249 = 0;
-  if (enemy.type == RESOURCE_ID_86 || enemy.type == RESOURCE_ID_87) {
-    bird144 = enemy.hours_alive * 5;
-  }
-  if (ally->health >= 50) {
-    bird145 = ally->health / 10;
-  }
-  if (ally->level >= 25) {
-    bird146 = ally->level / 10;
-  }
-  if (enemy.level >= 25) {
-    bird249 = enemy.level / 10;
+  switch (enemy.type) {
+    case RESOURCE_ID_egg:
+    case RESOURCE_ID_86:
+    case RESOURCE_ID_87:
+      bird144 = enemy.hours_alive;
   }
   if (rand() % 100 < bird144) {
     return RESOURCE_ID_144;
   }
+
+  int bird145 = ally->health >= 50 ? (ally->health - 45) / 5 : 0;
   if (rand() % 100 < bird145) {
     return RESOURCE_ID_145;
   }
+
+  int bird146 = ally->level >= 25 ? (ally->level - 18) / 7 : 0;
   if (rand() % 100 < bird146) {
     return RESOURCE_ID_146;
   }
+
+  int bird249 = enemy.level >= 25 ? (enemy.level - 22) / 3 : 0;
   if (rand() % 100 < bird249) {
     return RESOURCE_ID_249;
   }
-  if (rand() % 100 < (bird144 + bird145 + bird146 + bird249) / 4) {
+
+  if (rand() % 100 < (bird144 + bird145 + bird146 + bird249) / 8) {
     return RESOURCE_ID_250;
   }
   return 0;
