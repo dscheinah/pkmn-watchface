@@ -71,7 +71,7 @@ bool enemy_reset(EventValue event) {
     enemy.index[0] = 0;
     enemy.index[1] = 0;
   } else if (event & EVENT_BOSS) {
-    evolve(RESOURCE_ID_150, 4, true);
+    evolve(RESOURCE_ID_150, 3, true);
     return true;
   }
   if (event & EVENT_EGG) {
