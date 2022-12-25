@@ -6,6 +6,9 @@
 #define WATCH_SECONDS 8
 #define WATCH_DOW 16
 #define WATCH_TAPS 32
+#define WATCH_QUIET_OFF -1
+#define WATCH_QUIET_NONE 0
+#define WATCH_QUIET_ON 1
 
 void watch_init();
 
@@ -24,6 +27,8 @@ bool watch_has_seconds();
 bool watch_has_bluetooth();
 
 bool watch_has_taps();
+
+int watch_quiet_changed();
 
 void watch_unload();
 

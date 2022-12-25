@@ -4,8 +4,10 @@
 #define VERSION 1
 #define VERSION_KEY 500
 #define FLAGS_KEY 501
+#define QUIET_KEY 502
 
 static uint current = WATCH_DOW | WATCH_BLUETOOTH;
+static int quietState = WATCH_QUIET_NONE;
 
 static TextLayer *timeLayer, *dateLayer, *secondsLayer, *statusLayer;
 static char *timeFormat, *dateFormat;
@@ -23,6 +25,7 @@ static void updateTimeFormat() {
 void watch_init() {
   if (persist_exists(VERSION_KEY) && persist_read_int(VERSION_KEY) == VERSION) {
     current = persist_read_int(FLAGS_KEY);
+    quietState = persist_read_int(QUIET_KEY);
   }
   updateTimeFormat();
 }
@@ -98,6 +101,21 @@ bool watch_has_taps() {
   return current & WATCH_TAPS;
 }
 
+int watch_quiet_changed() {
+  if (quiet_time_is_active()) {
+    if (quietState != WATCH_QUIET_ON) {
+      quietState = WATCH_QUIET_ON;
+      return WATCH_QUIET_ON;
+    }
+  } else {
+    if (quietState != WATCH_QUIET_OFF) {
+      quietState = WATCH_QUIET_OFF;
+      return WATCH_QUIET_OFF;
+    }
+  }
+  return WATCH_QUIET_NONE;
+}
+
 void watch_unload() {
   text_layer_destroy(timeLayer);
   text_layer_destroy(dateLayer);
@@ -110,4 +128,5 @@ void watch_unload() {
 void watch_deinit() {
   persist_write_int(VERSION_KEY, VERSION);
   persist_write_int(FLAGS_KEY, current);
+  persist_write_int(QUIET_KEY, quietState);
 }
