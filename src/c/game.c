@@ -137,6 +137,6 @@ bool game_deal_damage(Ally *ally, Enemy *enemy, Health health) {
   }
   int level = levelModifier(ally->level_final() - enemy->level_final(), ally->type);
   int effective = effectiveModifier(ally, enemy);
-  enemy->health -= (9 * health.active_hour + 3600) * level * effective / 108000;
+  enemy->health -= (7 * health.active_hour + 5400) * level * effective / 108000;
   return true;
 }
