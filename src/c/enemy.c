@@ -249,6 +249,9 @@ static int checkBird(Ally *ally) {
 }
 
 bool enemy_bird(Ally *ally, bool reset) {
+  if (enemy.type == RESOURCE_ID_150) {
+    return false;
+  }
   int bird = checkBird(ally);
   if (!bird) {
     return false;
