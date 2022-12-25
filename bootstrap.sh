@@ -15,12 +15,15 @@ rm -rf ./pokemon/main-sprites/crystal ./pokemon/main-sprites/silver
 
 find ./pokemon -type f -name "*.png" | while read -r file; do
   if [[ $hasConvert ]]; then
-    convert "$file" -flatten -alpha off -type palette "$file.x.png"
+    convert "$file" -flatten -alpha off -type palette "${file%.*}~color.png"
+    convert "$file" -flatten -alpha off -monochrome -type palette "${file%.*}~bw.png"
   else
-    mv "$file" "$file.x.png"
+    cp "$file" "${file%.*}~color.png"
+    cp "$file" "${file%.*}~bw.png"
   fi
   if [[ $hasOptiPng ]]; then
-    optipng -strip all -o7 "$file.x.png"
+    optipng -strip all -o7 "${file%.*}~color.png"
+    optipng -strip all -o7 "${file%.*}~bw.png"
   fi
-  mv "$file.x.png" "$file"
+  rm $file;
 done
