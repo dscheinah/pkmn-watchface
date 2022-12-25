@@ -1,27 +1,21 @@
 #include <pebble.h>
 #include "game.h"
 
-static float levelModifier(float diff, int type) {
-  float level = 1.0 + (diff / 100);
-  if (type > 3) {
-    level += 0.15;
+static int levelModifier(int diff, int type) {
+  if (type < 10) {
+    diff += 100;
   }
-  if (type > 6) {
-    level += 0.15;
+  diff += (type / 3) * 15;
+  if (diff < 50) {
+    return 50;
   }
-  if (type > 9) {
-    level -= 1;
+  if (diff > 200) {
+    return 200;
   }
-  if (level < 0.25) {
-    return 0.25;
-  }
-  if (level > 3) {
-    return 3;
-  }
-  return level;
+  return diff;
 }
 
-static float effectiveModifier(Ally *ally, Enemy *enemy) {
+static int effectiveModifier(Ally *ally, Enemy *enemy) {
   if (ally->type == RESOURCE_ID_a142) {
     switch (enemy->type) {
       case RESOURCE_ID_4:
@@ -37,9 +31,9 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
       case RESOURCE_ID_145:
       case RESOURCE_ID_249:
       case RESOURCE_ID_213:
-        return 2;
+        return 5;
     }
-    return 1;
+    return 3;
   }
   switch (enemy->type) {
     case RESOURCE_ID_1:
@@ -48,9 +42,9 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
       switch (ally->type % 3) {
         case 0:
         case 1:
-          return 0.5;
-        case 2:
           return 2;
+        case 2:
+          return 5;
       }
       break;
     case RESOURCE_ID_4:
@@ -61,10 +55,10 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
     case RESOURCE_ID_250:
       switch (ally->type % 3) {
         case 0:
-          return 2;
+          return 5;
         case 1:
         case 2:
-          return 0.5;
+          return 2;
       }
       break;
     case RESOURCE_ID_7:
@@ -73,19 +67,19 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
     case RESOURCE_ID_134:
       switch (ally->type % 3) {
         case 1:
-          return 2;
+          return 5;
         case 2:
-          return 0.5;
+          return 2;
       }
       break;
     case RESOURCE_ID_86:
     case RESOURCE_ID_87:
       switch (ally->type % 3) {
         case 0:
-          return 0.5;
+          return 2;
         case 1:
         case 2:
-          return 2;
+          return 5;
       }
       break;
     case RESOURCE_ID_92:
@@ -94,12 +88,12 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
     case RESOURCE_ID_145:
     case RESOURCE_ID_249:
       if (ally->type % 3 == 1) {
-        return 0.5;
+        return 2;
       }
       break;
     case RESOURCE_ID_213:
       if (ally->type % 3 == 0) {
-        return 2;
+        return 5;
       }
       break;
     case RESOURCE_ID_144:
@@ -107,18 +101,18 @@ static float effectiveModifier(Ally *ally, Enemy *enemy) {
     case RESOURCE_ID_225:
       switch (ally->type % 3) {
         case 1:
-          return 0.5;
-        case 2:
           return 2;
+        case 2:
+          return 5;
       }
       break;
     case RESOURCE_ID_251:
       if (ally->type % 3 == 2) {
-        return 2;
+        return 5;
       }
       break;
   }
-  return 1;
+  return 3;
 }
 
 void game_set_ally_level(Ally *ally, Health health) {
@@ -141,8 +135,8 @@ bool game_deal_damage(Ally *ally, Enemy *enemy, Health health) {
   if (health.restful_sleep_hour || enemy->type == RESOURCE_ID_egg) {
     return false;
   }
-  float level = levelModifier(ally->level_final() - enemy->level_final(), ally->type);
-  float effective = effectiveModifier(ally, enemy);
-  enemy->health -= (90.0 * health.active_hour / 3600 + 10) * level * effective;
+  int level = levelModifier(ally->level_final() - enemy->level_final(), ally->type);
+  int effective = effectiveModifier(ally, enemy);
+  enemy->health -= (9 * health.active_hour + 3600) * level * effective / 108000;
   return true;
 }
