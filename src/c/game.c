@@ -115,11 +115,22 @@ static int effectiveModifier(Ally *ally, Enemy *enemy) {
   return 3;
 }
 
+static int calcLevelFromSteps(int steps) {
+  int level = 0;
+  int modifier = 26;
+  while ((steps -= 7500) >= 0) {
+    level += modifier;
+    modifier -= modifier / 3;
+  }
+  level += modifier * (steps + 7500) / 7500;
+  return level;
+}
+
 void game_set_ally_level(Ally *ally, Health health) {
-  int level = 30 * health.steps / 10000;
+  int level = calcLevelFromSteps(health.steps);
   int experience = 100 * health.steps / (health.steps_yesterday ?: 5000);
   if (experience > 100) {
-    level += 30 * (health.steps - health.steps_yesterday) / 10000;
+    level += calcLevelFromSteps(health.steps - health.steps_yesterday);
     experience = 100;
   }
   ally->level = level < 1 ? 1 : level;
