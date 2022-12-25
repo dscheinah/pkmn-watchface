@@ -25,7 +25,7 @@ static int level_final() {
 static void evolve(int type, int level, bool reset) {
   enemy.type = type;
   enemy.level_multiplier = level;
-  int key = 0, chk = type - 25;
+  int key = 0, chk = type - ENEMY_OFFSET;
   if (chk > 31) {
     key = 1;
     chk -= 32;
@@ -99,7 +99,7 @@ bool enemy_reset(EventValue event) {
 
 bool enemy_evolution(EventValue event) {
   if (event & EVENT_MORPH) {
-    evolve(enemy.type == RESOURCE_ID_132 ? rand() % 6 + 47 : RESOURCE_ID_132, enemy.level_multiplier, false);
+    evolve(enemy.type == RESOURCE_ID_132 ? rand() % 6 + ENEMY_OFFSET + 24 : RESOURCE_ID_132, enemy.level_multiplier, false);
     return true;
   }
   if (event & EVENT_SLEEP) {
@@ -109,7 +109,7 @@ bool enemy_evolution(EventValue event) {
     switch (enemy.type) {
       case RESOURCE_ID_133:
         if (enemy.hours_alive > 4 || (enemy.hours_alive > 3 && rand() % 2 == 0)) {
-          evolve(enemy.type + 3, 2, false);
+          evolve(RESOURCE_ID_196, 2, false);
         } else {
           evolve(enemy.type + 1 + rand() % 2, 2, false);
         }
@@ -118,7 +118,7 @@ bool enemy_evolution(EventValue event) {
         evolve(RESOURCE_ID_87, 2, false);
         return true;
       default:
-        if (enemy.type >= 23 && enemy.type <= 28) {
+        if (enemy.type >= ENEMY_OFFSET && enemy.type <= ENEMY_OFFSET + 5) {
           evolve(enemy.type + 3, enemy.level_multiplier + 1, false);
           enemy.hours_alive = 0;
           return true;
@@ -188,7 +188,7 @@ bool enemy_hatch(Health health) {
     return true;
   }
   if (health.steps_yesterday > 10000) {
-    evolve(rand() % 3 + 23, 1, true);
+    evolve(rand() % 3 + ENEMY_OFFSET, 1, true);
     return true;
   }
   evolve(RESOURCE_ID_133, 1, true);
