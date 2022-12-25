@@ -80,10 +80,10 @@ static void renderIndicator(Layer *layer, GContext *ctx) {
   if (*current & EVENT_SLEEP) {
     renderCircle(ctx, GColorSunsetOrange, 0);
   }
-  if (*current & EVENT_EGG) {
+  if (*current & (EVENT_EGG | EVENT_BOSS)) {
     renderCircle(ctx, GColorMidnightGreen, 1);
   }
-  if (*current & EVENT_GHOST) {
+  if (*current & (EVENT_GHOST | EVENT_BOSS)) {
     renderCircle(ctx, GColorBlueMoon, 2);
   }
   if (*current & EVENT_MORPH) {
