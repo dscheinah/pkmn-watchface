@@ -13,8 +13,8 @@ typedef struct ally {
 
 Ally* ally_init();
 
-void ally_reset(int shiny_rate);
+void ally_reset(Ally* ally, int shiny_rate);
 
-void ally_evolution();
+void ally_evolution(Ally* ally);
 
 void ally_deinit();

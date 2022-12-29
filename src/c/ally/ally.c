@@ -27,26 +27,6 @@ Ally* ally_init() {
   return &ally;
 }
 
-void ally_reset(int shiny_rate) {
-  ally.type = (ally.type + rand() % 2) % 3 + 1;
-  ally.shiny = rand() % shiny_rate == 0;
-  ally.level_modifier = 0;
-}
-
-void ally_evolution() {
-  int level = level_final();
-  if (level > 100) {
-    ally.type = RESOURCE_ID_a142;
-    return;
-  }
-  if (ally.type < 4 && level > 15) {
-    ally.type += 3;
-  }
-  if ((ally.type == RESOURCE_ID_a2 && level > 31) || (ally.type < 7 && level > 35)) {
-    ally.type += 3;
-  }
-}
-
 void ally_deinit() {
   persist_write_int(VERSION_KEY, VERSION);
   persist_write_int(TYPE_KEY, ally.type);
