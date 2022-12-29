@@ -18,18 +18,22 @@ typedef struct {
 
 Enemy* enemy_init();
 
-bool enemy_reset(EventValue event);
+bool enemy_reset(Enemy* enemy, EventValue event);
 
-bool enemy_evolution(EventValue event);
+bool enemy_reset_bird(Enemy* enemy, Ally* ally);
 
-bool enemy_night();
+bool enemy_evolution(Enemy* enemy, EventValue event);
 
-bool enemy_charge();
+bool enemy_evolution_night(Enemy* enemy);
 
-bool enemy_hatch(Health health);
+bool enemy_hatch(Enemy* enemy, Health health);
 
-bool enemy_quiet(bool quiet, Health health);
+bool enemy_hatch_bird(Enemy* enemy, Ally* ally);
 
-bool enemy_bird(Ally *ally, bool reset);
+bool enemy_charge(Enemy* enemy);
+
+bool enemy_quiet_enable(Enemy* enemy, Health health);
+
+bool enemy_quiet_disable(Enemy* enemy);
 
 void enemy_deinit();

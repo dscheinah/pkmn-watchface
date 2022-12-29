@@ -34,21 +34,29 @@ static void gameTick(bool loop, bool reset, int identifier) {
     if (reset) {
       ally_reset(ally, ENEMY_COUNT - enemy->index_count + 10);
     }
-    if (game_deal_damage(ally, enemy, health) && (enemy_bird(ally, true) || enemy_reset(*event))) {
+    if (game_deal_damage(ally, enemy, health) && (enemy_reset_bird(enemy, ally) || enemy_reset(enemy, *event))) {
       ally->level_modifier += 2;
     } else {
-      if (enemy_evolution(*event)) {
+      if (enemy_evolution(enemy, *event)) {
         ally->level_modifier++;
-      } else if (reset && (enemy_night() || enemy_hatch(health))) {
+      } else if (reset && (enemy_evolution_night(enemy) || enemy_hatch(enemy, health))) {
         ally->level_modifier++;
-      } else if (enemy_bird(ally, false)) {
+      } else if (enemy_hatch_bird(enemy, ally)) {
         ally->level_modifier++;
       }
     }
   } else {
-    int quietState = watch_quiet_changed();
-    if (quietState && enemy_quiet(quietState == WATCH_QUIET_ON, health)) {
-      ally->level_modifier++;
+    switch (watch_quiet_changed()) {
+      case WATCH_QUIET_ON:
+        if (enemy_quiet_enable(enemy, health)) {
+          ally->level_modifier++;
+        }
+        break;
+      case WATCH_QUIET_OFF:
+        if (enemy_quiet_disable(enemy)) {
+          ally->level_modifier++;
+        }
+        break;
     }
   }
   event_next(enemy, health, identifier);
@@ -89,7 +97,7 @@ static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
 
 static void handleBattery(BatteryChargeState charge_state) {
   ally->health = charge_state.charge_percent;
-  if (charge_state.is_charging && enemy_charge()) {
+  if (charge_state.is_charging && enemy_charge(enemy)) {
     ally->level_modifier++;
   }
   battlefield_mark_dirty();
