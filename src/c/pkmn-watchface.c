@@ -9,6 +9,7 @@
 #include "health/health.h"
 #include "render/helper.h"
 #include "render/watch.h"
+#include "state/settings.h"
 #if defined(TEST)
   #include "test.h"
 #endif
@@ -46,13 +47,13 @@ static void gameTick(bool loop, bool reset, int identifier) {
       }
     }
   } else {
-    switch (watch_quiet_changed()) {
-      case WATCH_QUIET_ON:
+    switch (settings_quiet_changed()) {
+      case SETTINGS_QUIET_ON:
         if (enemy_quiet_enable(enemy, health)) {
           ally->level_modifier++;
         }
         break;
-      case WATCH_QUIET_OFF:
+      case SETTINGS_QUIET_OFF:
         if (enemy_quiet_disable(enemy)) {
           ally->level_modifier++;
         }
@@ -66,7 +67,7 @@ static void gameTick(bool loop, bool reset, int identifier) {
 
 static void handleTime(struct tm *tick_time, TimeUnits units_changed) {
   if (units_changed & SECOND_UNIT) {
-    watch_render_seconds(tick_time);
+    watch_render_seconds(tick_time, settings_get());
   }
   if (units_changed & MINUTE_UNIT) {
     #if !defined(TEST)
@@ -119,25 +120,26 @@ static void handleInbox(DictionaryIterator *iter, void *context) {
   Tuple *tuple;
   tuple = dict_find(iter, MESSAGE_KEY_date_format);
   if (tuple && (bool) tuple->value->int8) {
-    flags |= WATCH_DATE_FORMAT;
+    flags |= SETTINGS_DATE_FORMAT;
   }
   tuple = dict_find(iter, MESSAGE_KEY_seconds);
   if (tuple && (bool) tuple->value->int8) {
-    flags |= WATCH_SECONDS;
+    flags |= SETTINGS_SECONDS;
   }
   tuple = dict_find(iter, MESSAGE_KEY_dow);
   if (tuple && (bool) tuple->value->int8) {
-    flags |= WATCH_DOW;
+    flags |= SETTINGS_DOW;
   }
   tuple = dict_find(iter, MESSAGE_KEY_bluetooth);
   if (tuple && (bool) tuple->value->int8) {
-    flags |= WATCH_BLUETOOTH;
+    flags |= SETTINGS_BLUETOOTH;
   }
   tuple = dict_find(iter, MESSAGE_KEY_taps);
   if (tuple && (bool) tuple->value->int8) {
-    flags |= WATCH_TAPS;
+    flags |= SETTINGS_TAPS;
   }
-  watch_set_settings(flags);
+  settings_set(flags);
+  watch_set_settings(settings_get());
 }
 
 static void prv_window_load(Window *window) {
@@ -158,7 +160,7 @@ static void prv_window_load(Window *window) {
 
   watchLayer = layer_create(coords);
   layer_add_child(window_layer, watchLayer);
-  watch_load(watchLayer, battlefieldLayer);
+  watch_load(watchLayer, battlefieldLayer, settings_get());
 }
 
 static void prv_window_unload(Window *window) {
@@ -171,11 +173,13 @@ static void prv_window_unload(Window *window) {
 }
 
 static void prv_init(void) {
-  watch_init();
+  settings_init();
   ally = ally_init();
   enemy = enemy_init();
   event = event_init();
   health_init();
+
+  uint settings = settings_get();
 
   s_window = window_create();
   window_set_window_handlers(s_window, (WindowHandlers) {
@@ -188,7 +192,7 @@ static void prv_init(void) {
   #if defined(TEST)
     tick_timer_service_subscribe(SECOND_UNIT, handleTime);
   #else
-    tick_timer_service_subscribe(watch_has_seconds() ? SECOND_UNIT : MINUTE_UNIT, handleTime);
+    tick_timer_service_subscribe(settings & SETTINGS_SECONDS ? SECOND_UNIT : MINUTE_UNIT, handleTime);
   #endif
   time_t now = time(NULL);
   handleTime(localtime(&now), SECOND_UNIT | MINUTE_UNIT | HOUR_UNIT | DAY_UNIT | INIT_UNIT);
@@ -196,14 +200,14 @@ static void prv_init(void) {
   battery_state_service_subscribe(handleBattery);
   handleBattery(battery_state_service_peek());
 
-  if (watch_has_bluetooth()) {
+  if (settings && SETTINGS_BLUETOOTH) {
     connection_service_subscribe((ConnectionHandlers) {
       .pebble_app_connection_handler = handleConnection,
     });
     handleConnection(connection_service_peek_pebble_app_connection());
   }
 
-  if (watch_has_taps()) {
+  if (settings & SETTINGS_TAPS) {
     tapActive = true;
     accel_tap_service_subscribe(handleTap);
   }
@@ -220,7 +224,7 @@ static void prv_deinit(void) {
 
   window_destroy(s_window);
 
-  watch_deinit();
+  settings_deinit();
   ally_deinit();
   enemy_deinit();
   event_deinit();

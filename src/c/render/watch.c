@@ -1,37 +1,13 @@
 #include <pebble.h>
 #include "watch.h"
 #include "helper.h"
-#define VERSION 1
-#define VERSION_KEY 500
-#define FLAGS_KEY 501
-#define QUIET_KEY 502
-
-static uint current = WATCH_DOW | WATCH_BLUETOOTH;
-static int quietState = WATCH_QUIET_NONE;
+#include "../state/settings.h"
 
 static TextLayer *timeLayer, *dateLayer, *secondsLayer, *statusLayer;
 static char *timeFormat, *dateFormat;
 
-static void updateTimeFormat() {
-  if (clock_is_24h_style()) {
-    current |= WATCH_TIME_FORMAT;
-  } else {
-    current &= ~WATCH_TIME_FORMAT;
-  }
-  timeFormat = current & WATCH_TIME_FORMAT ? "%H:%M" : "%I:%M";
-  dateFormat = current & WATCH_DATE_FORMAT ? "%d / %m" : "%m / %d";
-}
-
-void watch_init() {
-  if (persist_exists(VERSION_KEY) && persist_read_int(VERSION_KEY) == VERSION) {
-    current = persist_read_int(FLAGS_KEY);
-    quietState = persist_read_int(QUIET_KEY);
-  }
-  updateTimeFormat();
-}
-
-void watch_load(Layer *root, Layer *cachedRoot) {
-  if (current & WATCH_SECONDS) {
+void watch_load(Layer *root, Layer *cachedRoot, int settings) {
+  if (settings & SETTINGS_SECONDS) {
     #if defined(PBL_ROUND)
       secondsLayer = helper_create_text_layer(GRect(110, 125, 28, 20), FONT_KEY_LECO_20_BOLD_NUMBERS, GTextAlignmentLeft);
     #else
@@ -47,10 +23,19 @@ void watch_load(Layer *root, Layer *cachedRoot) {
   layer_add_child(root, text_layer_get_layer(timeLayer));
   layer_add_child(cachedRoot, text_layer_get_layer(dateLayer));
 
-  if (current & WATCH_DOW) {
+  if (settings & SETTINGS_DOW) {
     statusLayer = helper_create_text_layer(GRect(101, 73, 35, 14), FONT_KEY_GOTHIC_14, GTextAlignmentRight);
     layer_add_child(cachedRoot, text_layer_get_layer(statusLayer));
   }
+
+  watch_set_settings(settings);
+}
+
+void watch_set_settings(int settings) {
+  timeFormat = settings & SETTINGS_TIME_FORMAT ? "%H:%M" : "%I:%M";
+  dateFormat = settings & SETTINGS_DATE_FORMAT ? "%d / %m" : "%m / %d";
+  time_t now = time(NULL);
+  watch_render_date(localtime(&now));
 }
 
 void watch_render_time(struct tm *tick_time) {
@@ -72,48 +57,14 @@ void watch_render_date(struct tm *tick_time) {
   }
 }
 
-void watch_render_seconds(struct tm *tick_time) {
+void watch_render_seconds(struct tm *tick_time, int settings) {
   static char secondsBuffer[3];
   strftime(secondsBuffer, 3, "%S", tick_time);
   if (secondsLayer) {
     text_layer_set_text(secondsLayer, secondsBuffer);
-  } else if (current & WATCH_TAPS) {
+  } else if (settings & SETTINGS_TAPS) {
     text_layer_set_text(timeLayer, secondsBuffer);
   }
-}
-
-void watch_set_settings(uint flags) {
-  current = flags;
-  updateTimeFormat();
-  time_t now = time(NULL);
-  watch_render_date(localtime(&now));
-}
-
-bool watch_has_seconds() {
-  return current & WATCH_SECONDS;
-}
-
-bool watch_has_bluetooth() {
-  return current & WATCH_BLUETOOTH;
-}
-
-bool watch_has_taps() {
-  return current & WATCH_TAPS;
-}
-
-int watch_quiet_changed() {
-  if (quiet_time_is_active()) {
-    if (quietState != WATCH_QUIET_ON) {
-      quietState = WATCH_QUIET_ON;
-      return WATCH_QUIET_ON;
-    }
-  } else {
-    if (quietState != WATCH_QUIET_OFF) {
-      quietState = WATCH_QUIET_OFF;
-      return WATCH_QUIET_OFF;
-    }
-  }
-  return WATCH_QUIET_NONE;
 }
 
 void watch_unload() {
@@ -123,10 +74,4 @@ void watch_unload() {
   text_layer_destroy(statusLayer);
   secondsLayer = NULL;
   statusLayer = NULL;
-}
-
-void watch_deinit() {
-  persist_write_int(VERSION_KEY, VERSION);
-  persist_write_int(FLAGS_KEY, current);
-  persist_write_int(QUIET_KEY, quietState);
 }
