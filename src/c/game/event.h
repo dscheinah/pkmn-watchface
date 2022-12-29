@@ -1,8 +1,8 @@
 #pragma once
 #include <pebble.h>
-#include "const.h"
-#include "enemy.h"
-#include "health.h"
+#include "../state/const.h"
+#include "../enemy/enemy.h"
+#include "../health/health.h"
 
 EventValue* event_init();
 

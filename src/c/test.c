@@ -1,7 +1,7 @@
 #include <pebble.h>
 #include "test.h"
-#include "const.h"
-#include "health.h"
+#include "state/const.h"
+#include "health/health.h"
 
 static int tick = 0;
 static HealthValue steps = 0, sleep = 0, restful_sleep = 0, active = 0;

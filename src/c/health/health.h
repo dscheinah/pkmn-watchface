@@ -1,6 +1,4 @@
-#ifndef HEALTH_H_SEEN
-#define HEALTH_H_SEEN
-
+#pragma once
 #include <pebble.h>
 
 typedef struct health {
@@ -26,5 +24,3 @@ void health_set(HealthValue steps, HealthValue sleep, HealthValue restful_sleep,
 Health health_get_collected(bool update_relative, bool update_yesterday);
 
 void health_deinit();
-
-#endif

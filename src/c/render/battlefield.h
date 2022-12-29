@@ -1,7 +1,7 @@
 #include <pebble.h>
-#include "const.h"
-#include "ally.h"
-#include "enemy.h"
+#include "../state/const.h"
+#include "../ally/ally.h"
+#include "../enemy/enemy.h"
 
 void battlefield_load(Layer *root, Ally *ally, Enemy *enemy, EventValue *event);
 

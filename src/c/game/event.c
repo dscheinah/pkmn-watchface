@@ -1,6 +1,6 @@
 #include <pebble.h>
 #include "event.h"
-#include "const.h"
+#include "../state/const.h"
 #define VERSION 1
 #define VERSION_KEY 400
 #define VALUE_KEY 401

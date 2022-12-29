@@ -1,7 +1,7 @@
 #include <pebble.h>
 #include "battlefield.h"
 #include "cache.h"
-#include "const.h"
+#include "../state/const.h"
 #include "helper.h"
 #define ALIGN_LEFT 0
 #define ALIGN_RIGHT 1

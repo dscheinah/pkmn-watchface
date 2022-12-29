@@ -1,7 +1,7 @@
 #include <pebble.h>
-#include "ally.h"
-#include "enemy.h"
-#include "health.h"
+#include "../ally/ally.h"
+#include "../enemy/enemy.h"
+#include "../health/health.h"
 
 void game_set_ally_level(Ally *ally, Health health);
 

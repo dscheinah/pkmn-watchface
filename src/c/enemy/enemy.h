@@ -1,8 +1,8 @@
 #pragma once
 #include <pebble.h>
-#include "ally.h"
-#include "const.h"
-#include "health.h"
+#include "../ally/ally.h"
+#include "../state/const.h"
+#include "../health/health.h"
 
 typedef struct {
   int type;

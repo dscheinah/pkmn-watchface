@@ -1,6 +1,6 @@
 #include <pebble.h>
 #include "enemy.h"
-#include "const.h"
+#include "../state/const.h"
 #define VERSION 2
 #define VERSION_KEY 200
 #define TYPE_KEY 201
