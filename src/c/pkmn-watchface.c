@@ -28,13 +28,13 @@ bool tapActive = false;
 
 static void gameTick(bool loop, bool reset, int identifier) {
   Health health = health_get_collected(loop, reset);
-  game_set_ally_level(ally, health);
-  game_set_enemy_level(enemy, health);
+  game_level_set_ally(ally, health);
+  game_level_set_enemy(enemy, health);
   if (loop) {
     if (reset) {
       ally_reset(ally, ENEMY_COUNT - enemy->index_count + 10);
     }
-    if (game_deal_damage(ally, enemy, health) && (enemy_reset_bird(enemy, ally) || enemy_reset(enemy, *event))) {
+    if (game_damage(ally, enemy, health) && (enemy_reset_bird(enemy, ally) || enemy_reset(enemy, *event))) {
       ally->level_modifier += 2;
     } else {
       if (enemy_evolution(enemy, *event)) {

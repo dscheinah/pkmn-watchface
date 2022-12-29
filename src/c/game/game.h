@@ -3,8 +3,8 @@
 #include "../enemy/enemy.h"
 #include "../health/health.h"
 
-void game_set_ally_level(Ally *ally, Health health);
+void game_level_set_ally(Ally *ally, Health health);
 
-void game_set_enemy_level(Enemy *enemy, Health health);
+void game_level_set_enemy(Enemy *enemy, Health health);
 
-bool game_deal_damage(Ally *ally, Enemy *enemy, Health health);
+bool game_damage(Ally *ally, Enemy *enemy, Health health);
