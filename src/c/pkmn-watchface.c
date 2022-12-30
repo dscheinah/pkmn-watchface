@@ -24,35 +24,14 @@ bool tapActive = false;
 
 static void gameTick(bool loop, bool reset, int identifier) {
   Health health = health_get_collected(loop, reset);
-  game_level_set_ally(ally, health);
-  game_level_set_enemy(enemy, health);
+  game_init(ally, enemy, health);
   if (loop) {
+    bool canReset = game_tick(ally, enemy, health, *event);
     if (reset) {
       ally_reset(ally, ENEMY_COUNT - enemy->index_count + 10);
-    }
-    if (game_damage(ally, enemy, health) && (enemy_reset_bird(enemy, ally) || enemy_reset(enemy, *event))) {
-      ally->level_modifier += 2;
-    } else {
-      if (enemy_evolution(enemy, *event)) {
-        ally->level_modifier++;
-      } else if (reset && (enemy_evolution_night(enemy) || enemy_hatch(enemy, health))) {
-        ally->level_modifier++;
-      } else if (enemy_hatch_bird(enemy, ally)) {
-        ally->level_modifier++;
+      if (canReset) {
+        game_reset(ally, enemy, health);
       }
-    }
-  } else {
-    switch (settings_quiet_changed()) {
-      case SETTINGS_QUIET_ON:
-        if (enemy_quiet_enable(enemy, health)) {
-          ally->level_modifier++;
-        }
-        break;
-      case SETTINGS_QUIET_OFF:
-        if (enemy_quiet_disable(enemy)) {
-          ally->level_modifier++;
-        }
-        break;
     }
   }
   event_next(enemy, health, identifier);
