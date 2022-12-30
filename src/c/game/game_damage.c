@@ -65,9 +65,9 @@ static int levelModifier(int diff, int type) {
   return diff;
 }
 
-static int effectiveModifier(Ally *ally, Enemy *enemy) {
-  uint16_t type = types[enemy->type - ENEMY_OFFSET];
-  switch (ally->type) {
+static int effectiveModifier(State* state) {
+  uint16_t type = types[state->enemy->type - ENEMY_OFFSET];
+  switch (state->ally->type) {
     case RESOURCE_ID_a1:
     case RESOURCE_ID_a2:
     case RESOURCE_ID_a3:
@@ -107,12 +107,12 @@ static int effectiveModifier(Ally *ally, Enemy *enemy) {
   return 3;
 }
 
-bool game_damage(Ally *ally, Enemy *enemy, Health health) {
-  if (health.restful_sleep_hour || enemy->type == RESOURCE_ID_egg) {
+bool game_damage(State* state) {
+  if (state->health->restful_sleep_hour || state->enemy->type == RESOURCE_ID_egg) {
     return false;
   }
-  int level = levelModifier(ally->level_final() - enemy->level_final(), ally->type);
-  int effective = effectiveModifier(ally, enemy);
-  enemy->health -= (7 * health.active_hour + 5400) * level * effective / 108000;
+  int level = levelModifier(state->ally->level_final() - state->enemy->level_final(), state->ally->type);
+  int effective = effectiveModifier(state);
+  state->enemy->health -= (7 * state->health->active_hour + 5400) * level * effective / 108000;
   return true;
 }

@@ -1,6 +1,6 @@
 #include <pebble.h>
 #include "test.h"
-#include "state/const.h"
+#include "state/global.h"
 #include "health/health.h"
 
 static int tick = 0;
@@ -8,7 +8,7 @@ static HealthValue steps = 0, sleep = 0, restful_sleep = 0, active = 0;
 static bool day = true;
 
 static void doReset() {
-  steps = rand() % 7000 + 5000;
+  steps = rand() % 7000 + 3000;
   sleep = rand() % 40000 + 20000;
   restful_sleep = active = 0;
 }
@@ -18,15 +18,15 @@ static void doKill() {
   restful_sleep = 0;
 }
 
-static void prepareHatch(EventValue *event, int target) {
+static void prepareHatch(State* state, int target) {
   doKill();
-  *event = EVENT_EGG;
+  state->event = EVENT_EGG;
   steps = target;
 }
 
-void test_next_tick(Enemy *enemy, EventValue *event) {
+void test_next_tick(State* state) {
   day = false;
-  *event = EVENT_NONE;
+  state->event = EVENT_NONE;
   switch (tick++ % 32) {
     case 0:
       steps = 0, sleep = 0, restful_sleep = 0, active = 0;
@@ -37,11 +37,11 @@ void test_next_tick(Enemy *enemy, EventValue *event) {
     case 2:
       steps += 6000;
       sleep += 25000;
-      *event = EVENT_SLEEP;
+      state->event = EVENT_SLEEP;
       restful_sleep++;
       break;
     case 3:
-      prepareHatch(event, 5000);
+      prepareHatch(state, 5000);
       break;
     case 4:
     case 7:
@@ -55,24 +55,24 @@ void test_next_tick(Enemy *enemy, EventValue *event) {
       day = true;
       break;
     case 6:
-      prepareHatch(event, 12000);
+      prepareHatch(state, 12000);
       break;
     case 8:
     case 9:
     case 18:
     case 20:
-      enemy->hours_alive = rand() % 10;
-      *event = EVENT_EVO;
+      state->enemy->hours_alive = rand() % 10;
+      state->event = EVENT_EVO;
       break;
     case 10:
-      prepareHatch(event, 20000);
+      prepareHatch(state, 20000);
       break;
     case 12:
-      prepareHatch(event, 26000);
+      prepareHatch(state, 26000);
       break;
     case 14:
       doKill();
-      *event = EVENT_GHOST;
+      state->event = EVENT_GHOST;
       break;
     case 15:
     case 19:
@@ -81,29 +81,29 @@ void test_next_tick(Enemy *enemy, EventValue *event) {
       doKill();
       break;
     case 17:
-      enemy->hours_alive = 20;
+      state->enemy->hours_alive = 20;
       doKill();
       break;
     case 23:
-      enemy->morph = true;
+      state->enemy->morph = true;
       break;
     case 31:
       doKill();
-      *event = EVENT_BOSS;
+      state->event = EVENT_BOSS;
       break;
     case 30:
       steps = 30000;
     default:
-      if (enemy->morph) {
-        *event = EVENT_MORPH;
+      if (state->enemy->morph) {
+        state->event = EVENT_MORPH;
       }
       active += rand() % 900;
       break;
   }
 }
 
-void test_health_refresh() {
-  health_set(steps, sleep, restful_sleep, active);
+void test_health_refresh(Health* health) {
+  health_set(health, steps, sleep, restful_sleep, active);
 }
 
 bool test_day() {

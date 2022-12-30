@@ -1,14 +1,12 @@
 #include <pebble.h>
 #include "battlefield.h"
 #include "cache.h"
-#include "../state/const.h"
 #include "helper.h"
+#include "../state/global.h"
 #define ALIGN_LEFT 0
 #define ALIGN_RIGHT 1
 
 typedef struct {
-  Ally* ally;
-  Enemy* enemy;
   BitmapLayer* image;
   GBitmap* bitmap;
   TextLayer* level;
@@ -17,13 +15,12 @@ typedef struct {
   int previous;
 } Part;
 
+static State* state;
 static Part allyPart = {.previous = 0};
 static Part enemyPart = {.previous = 0};
+static Layer* indicator;
 
-static EventValue *current;
-static Layer *indicator;
-
-static void renderRect(Layer *layer, GContext *ctx, int alignment, GColor8 color, int percentage) {
+static void renderRect(Layer* layer, GContext* ctx, int alignment, GColor8 color, int percentage) {
   GRect bounds = layer_get_bounds(layer);
   #if defined(PBL_COLOR)
     graphics_context_set_fill_color(ctx, color);
@@ -35,7 +32,7 @@ static void renderRect(Layer *layer, GContext *ctx, int alignment, GColor8 color
   graphics_fill_rect(ctx, GRect(x, 0, w, bounds.size.h), 0, GCornerNone);
 }
 
-static void renderCircle(GContext *ctx, GColor8 color, int pos) {
+static void renderCircle(GContext* ctx, GColor8 color, int pos) {
   #if defined(PBL_COLOR)
     graphics_context_set_stroke_color(ctx, color);
   #else
@@ -44,7 +41,7 @@ static void renderCircle(GContext *ctx, GColor8 color, int pos) {
   graphics_draw_round_rect(ctx, GRect(10 * pos, 0, 7, 4), 4);
 }
 
-static void renderBitmap(Part *part, int resource) {
+static void renderBitmap(Part* part, int resource) {
   if (part->previous == resource) {
     return;
   }
@@ -58,45 +55,43 @@ static GColor8 GColorFromHealth(int percentage) {
   return GColorFromRGB((100 - percentage) * 255 / 100, percentage * 255 / 100, 0);
 }
 
-static void renderAllyExperience(Layer *layer, GContext *ctx) {
-  renderRect(layer, ctx, ALIGN_RIGHT, GColorBlue, allyPart.ally->experience);
+static void renderAllyExperience(Layer* layer, GContext* ctx) {
+  renderRect(layer, ctx, ALIGN_RIGHT, GColorBlue, state->ally->experience);
 }
 
-static void renderAllyHealth(Layer *layer, GContext *ctx) {
-  renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(allyPart.ally->health), allyPart.ally->health);
+static void renderAllyHealth(Layer* layer, GContext* ctx) {
+  renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(state->ally->health), state->ally->health);
 }
 
-static void renderEnemyHealth(Layer *layer, GContext *ctx) {
-  renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(enemyPart.enemy->health), enemyPart.enemy->health);
+static void renderEnemyHealth(Layer* layer, GContext* ctx) {
+  renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(state->enemy->health), state->enemy->health);
 }
 
-static void renderEnemyExperience(Layer *layer, GContext *ctx) {
-  renderRect(layer, ctx, ALIGN_LEFT, GColorVeryLightBlue, 100 * enemyPart.enemy->index_count / ENEMY_COUNT);
+static void renderEnemyExperience(Layer* layer, GContext* ctx) {
+  renderRect(layer, ctx, ALIGN_LEFT, GColorVeryLightBlue, 100 * state->enemy->index_count / ENEMY_COUNT);
 }
 
-static void renderIndicator(Layer *layer, GContext *ctx) {
+static void renderIndicator(Layer* layer, GContext* ctx) {
   graphics_context_set_antialiased(ctx, false);
-  if (*current & EVENT_SLEEP) {
+  if (state->event & EVENT_SLEEP) {
     renderCircle(ctx, GColorSunsetOrange, 0);
   }
-  if (*current & (EVENT_EGG | EVENT_BOSS)) {
+  if (state->event & (EVENT_EGG | EVENT_BOSS)) {
     renderCircle(ctx, GColorMidnightGreen, 1);
   }
-  if (*current & (EVENT_GHOST | EVENT_BOSS)) {
+  if (state->event & (EVENT_GHOST | EVENT_BOSS)) {
     renderCircle(ctx, GColorBlueMoon, 2);
   }
-  if (*current & EVENT_MORPH) {
+  if (state->event & EVENT_MORPH) {
     renderCircle(ctx, GColorPurpureus, 3);
   }
-  if (*current & EVENT_EVO) {
+  if (state->event & EVENT_EVO) {
     renderCircle(ctx, GColorLiberty, 4);
   }
 }
 
-void battlefield_load(Layer *root, Ally *ally, Enemy *enemy, EventValue *event) {
-  allyPart.ally = ally;
-  enemyPart.enemy = enemy;
-  current = event;
+void battlefield_load(Layer* root, State* stateRef) {
+  state = stateRef;
 
   allyPart.image = bitmap_layer_create(GRect(10, 68, 48, 48));
   allyPart.level = helper_create_text_layer(GRect(72, 73, 25, 14), FONT_KEY_GOTHIC_14_BOLD, GTextAlignmentCenter);
@@ -130,17 +125,17 @@ void battlefield_load(Layer *root, Ally *ally, Enemy *enemy, EventValue *event) 
 void battlefield_mark_dirty() {
   cache_layer_mark_dirty();
 
-  int type = quiet_time_is_active() ? allyPart.ally->type + ENEMY_COUNT + ENEMY_OFFSET - 1 : allyPart.ally->type;
-  renderBitmap(&allyPart, allyPart.ally->shiny ? type + 10 : type);
-  renderBitmap(&enemyPart, enemyPart.enemy->missing ? RESOURCE_ID_0 : enemyPart.enemy->type);
+  int type = quiet_time_is_active() ? state->ally->type + ENEMY_COUNT + ENEMY_OFFSET - 1 : state->ally->type;
+  renderBitmap(&allyPart, state->ally->shiny ? type + 10 : type);
+  renderBitmap(&enemyPart, state->missing ? RESOURCE_ID_0 : state->enemy->type);
 
   static char allyLevelBuffer[5];
-  int level = allyPart.ally->level_final();
+  int level = state->ally->level_final();
   snprintf(allyLevelBuffer, 5, "L%d", level > 100 ? level - 100 : level);
   text_layer_set_text(allyPart.level, allyLevelBuffer);
 
   static char enemyLevelBuffer[5];
-  snprintf(enemyLevelBuffer, 5, "L%d", enemyPart.enemy->level_final());
+  snprintf(enemyLevelBuffer, 5, "L%d", state->enemy->level_final());
   text_layer_set_text(enemyPart.level, enemyLevelBuffer);
 }
 

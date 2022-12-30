@@ -1,8 +1,7 @@
 #pragma once
 #include <pebble.h>
-#include "enemy.h"
-#include "../ally/ally.h"
+#include "../state/global.h"
 
-void helper_evolve(Enemy* enemy, int type, int level, bool reset);
+void helper_evolve(State* state, int type, int level, bool reset);
 
-int helper_bird(Enemy* enemy, Ally* ally);
+int helper_bird(State* state);

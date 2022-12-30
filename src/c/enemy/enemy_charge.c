@@ -2,17 +2,17 @@
 #include "enemy.h"
 #include "helper.h"
 
-bool enemy_charge(Enemy* enemy) {
-  switch (enemy->type) {
+bool enemy_charge(State* state) {
+  switch (state->enemy->type) {
     case RESOURCE_ID_133:
-      helper_evolve(enemy, RESOURCE_ID_135, 2, false);
+      helper_evolve(state, RESOURCE_ID_135, 2, false);
       return true;
     case RESOURCE_ID_25:
-      helper_evolve(enemy, RESOURCE_ID_26, 2, false);
-      enemy->health = 100;
+      helper_evolve(state, RESOURCE_ID_26, 2, false);
+      state->enemy->health = 100;
       return true;
     case RESOURCE_ID_26:
-      enemy->health = 100;
+      state->enemy->health = 100;
       break;
     case RESOURCE_ID_7:
     case RESOURCE_ID_8:
@@ -26,8 +26,8 @@ bool enemy_charge(Enemy* enemy) {
     case RESOURCE_ID_225:
     case RESOURCE_ID_249:
     case RESOURCE_ID_250:
-      if (enemy->health > 50) {
-        enemy->health = 50;
+      if (state->enemy->health > 50) {
+        state->enemy->health = 50;
       }
       break;
   }

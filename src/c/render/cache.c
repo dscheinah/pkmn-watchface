@@ -1,12 +1,15 @@
 #include <pebble.h>
 #include "cache.h"
 
-static Layer *cacheLayer, *captureLayer, *replacementLayer;
-static GBitmap *cacheBitmap;
+static Layer* cacheLayer;
+static Layer* captureLayer;
+static Layer* replacementLayer;
+static GBitmap* cacheBitmap;
 static GRect bounds;
-static GBitmapDataRowInfo sourceRow, destinationRow;
+static GBitmapDataRowInfo sourceRow;
+static GBitmapDataRowInfo destinationRow;
 
-static void copy(GBitmap *source, GBitmap *destination) {
+static void copy(GBitmap* source, GBitmap* destination) {
   for (int i = 0; i < bounds.size.h; i++) {
     sourceRow = gbitmap_get_data_row_info(source, i);
     destinationRow = gbitmap_get_data_row_info(destination, i);
@@ -18,19 +21,19 @@ static void copy(GBitmap *source, GBitmap *destination) {
   }
 }
 
-static void update(Layer *layer, GContext *ctx) {
+static void update(Layer* layer, GContext* ctx) {
   if (layer_get_hidden(replacementLayer) && !graphics_frame_buffer_is_captured(ctx)) {
-    GBitmap *buffer = graphics_capture_frame_buffer(ctx);
+    GBitmap* buffer = graphics_capture_frame_buffer(ctx);
     copy(cacheBitmap, buffer);
     graphics_release_frame_buffer(ctx, buffer);
   }
 }
 
-static void capture(Layer *layer, GContext *ctx) {
+static void capture(Layer* layer, GContext* ctx) {
   if (graphics_frame_buffer_is_captured(ctx)) {
     return;
   }
-  GBitmap *buffer = graphics_capture_frame_buffer(ctx);
+  GBitmap* buffer = graphics_capture_frame_buffer(ctx);
   copy(buffer, cacheBitmap);
   graphics_release_frame_buffer(ctx, buffer);
 
@@ -38,7 +41,7 @@ static void capture(Layer *layer, GContext *ctx) {
   layer_set_hidden(captureLayer, true);
 }
 
-void cache_layer_create(Layer *root, Layer *replacement) {
+void cache_layer_create(Layer* root, Layer* replacement) {
   bounds = layer_get_bounds(root);
 
   cacheLayer = layer_create(bounds);

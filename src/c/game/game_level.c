@@ -12,18 +12,18 @@ static int calcLevelFromSteps(int steps) {
   return level;
 }
 
-void game_level_set_ally(Ally *ally, Health health) {
-  int level = calcLevelFromSteps(health.steps);
-  int experience = 100 * health.steps / (health.steps_yesterday ?: 5000);
+void game_level_set_ally(State* state) {
+  int level = calcLevelFromSteps(state->health->steps);
+  int experience = 100 * state->health->steps / (state->health->steps_yesterday ?: 5000);
   if (experience > 100) {
-    level += calcLevelFromSteps(health.steps - health.steps_yesterday);
+    level += calcLevelFromSteps(state->health->steps - state->health->steps_yesterday);
     experience = 100;
   }
-  ally->level = level < 1 ? 1 : level;
-  ally->experience = experience;
+  state->ally->level = level < 1 ? 1 : level;
+  state->ally->experience = experience;
 }
 
-void game_level_set_enemy(Enemy *enemy, Health health) {
-  int level = 30 * (health.sleep + health.restful_sleep) / 47520;
-  enemy->level = level < 1 ? 1 : level;
+void game_level_set_enemy(State* state) {
+  int level = 30 * (state->health->sleep + state->health->restful_sleep) / 47520;
+  state->enemy->level = level < 1 ? 1 : level;
 }

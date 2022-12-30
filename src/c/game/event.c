@@ -1,58 +1,42 @@
 #include <pebble.h>
 #include "event.h"
-#include "../state/const.h"
-#define VERSION 1
-#define VERSION_KEY 400
-#define VALUE_KEY 401
-#define ID_KEY 402
 
-static EventValue event = EVENT_NONE;
-static int id = -1;
-
-EventValue* event_init() {
-  if (persist_exists(VERSION_KEY) && persist_read_int(VERSION_KEY) == VERSION) {
-    event = persist_read_int(VALUE_KEY);
-    id = persist_read_int(ID_KEY);
-  }
-  return &event;
-}
-
-void event_next(Enemy *enemy, Health health, int identifier) {
-  if (identifier == id) {
+void event_next(State* state, int identifier) {
+  if (identifier == state->identifier) {
     return;
   }
-  id = identifier;
+  state->identifier = identifier;
   int check = rand() % 5;
-  if (health.restful_sleep_hour) {
-    event = EVENT_SLEEP;
-    if (enemy->morph && enemy->type != RESOURCE_ID_132 && check == 4) {
-      event |= EVENT_MORPH;
+  if (state->health->restful_sleep_hour) {
+    state->event = EVENT_SLEEP;
+    if (state->enemy->morph && state->enemy->type != RESOURCE_ID_132 && check == 4) {
+      state->event |= EVENT_MORPH;
     }
     return;
   }
-  if (enemy->type != RESOURCE_ID_150 && enemy->index_count >= ENEMY_COUNT - 1 && rand() % 20 == 0) {
-    event = EVENT_BOSS;
+  if (state->enemy->type != RESOURCE_ID_150 && state->enemy->index_count >= ENEMY_COUNT - 1 && rand() % 20 == 0) {
+    state->event = EVENT_BOSS;
   } else {
-    event = EVENT_NONE;
+    state->event = EVENT_NONE;
   }
-  if (enemy->type == RESOURCE_ID_egg) {
+  if (state->enemy->type == RESOURCE_ID_egg) {
     return;
   }
   switch (check) {
     case 0:
-      event |= EVENT_EGG;
+      state->event |= EVENT_EGG;
       break;
     case 1:
-      if (enemy->level_multiplier > 1) {
-        event |= EVENT_GHOST;
+      if (state->enemy->level_multiplier > 1) {
+        state->event |= EVENT_GHOST;
       }
       break;
   }
-  if (enemy->morph && check == 4) {
-    event |= EVENT_MORPH;
+  if (state->enemy->morph && check == 4) {
+    state->event |= EVENT_MORPH;
     return;
   }
-  switch (enemy->type) {
+  switch (state->enemy->type) {
     case RESOURCE_ID_1:
     case RESOURCE_ID_2:
     case RESOURCE_ID_4:
@@ -61,15 +45,9 @@ void event_next(Enemy *enemy, Health health, int identifier) {
     case RESOURCE_ID_8:
     case RESOURCE_ID_86:
     case RESOURCE_ID_133:
-      if (check < enemy->hours_alive) {
-        event |= EVENT_EVO;
+      if (check < state->enemy->hours_alive) {
+        state->event |= EVENT_EVO;
       }
       break;
   }
-}
-
-void event_deinit() {
-  persist_write_int(VERSION_KEY, VERSION);
-  persist_write_int(VALUE_KEY, event);
-  persist_write_int(ID_KEY, id);
 }
