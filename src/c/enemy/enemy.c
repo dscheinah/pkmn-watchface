@@ -12,7 +12,7 @@
 #define INDEX_0_KEY 207
 #define INDEX_1_KEY 208
 
-static Enemy enemy = {.level = 1};
+static Enemy enemy = {.level = 1, .missing = false};
 
 static int level_final() {
   int level = enemy.level * enemy.level_multiplier;

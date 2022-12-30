@@ -105,7 +105,11 @@ static void handleBattery(BatteryChargeState charge_state) {
 }
 
 static void handleConnection(bool connected) {
-  battlefield_set_enemy_missing(!connected);
+  bool missing = !connected;
+  if (enemy->missing ^ missing) {
+    enemy->missing = missing;
+    battlefield_mark_dirty();
+  }
 }
 
 static void handleTap(AccelAxisType axis, int32_t direction) {

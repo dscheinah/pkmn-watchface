@@ -14,6 +14,7 @@ typedef struct {
   bool morph;
   int index_count;
   uint index[2];
+  bool missing;
 } Enemy;
 
 Enemy* enemy_init();

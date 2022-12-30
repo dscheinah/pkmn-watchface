@@ -14,12 +14,11 @@ typedef struct {
   TextLayer* level;
   Layer* health;
   Layer* experience;
-  bool missing;
   int previous;
 } Part;
 
 static Part allyPart = {.previous = 0};
-static Part enemyPart = {.previous = 0, .missing = 0};
+static Part enemyPart = {.previous = 0};
 
 static EventValue *current;
 static Layer *indicator;
@@ -128,19 +127,12 @@ void battlefield_load(Layer *root, Ally *ally, Enemy *enemy, EventValue *event) 
   layer_set_update_proc(indicator, renderIndicator);
 }
 
-void battlefield_set_enemy_missing(bool missing) {
-  if (enemyPart.missing ^ missing) {
-    enemyPart.missing = missing;
-    battlefield_mark_dirty();
-  }
-}
-
 void battlefield_mark_dirty() {
   cache_layer_mark_dirty();
 
   int type = quiet_time_is_active() ? allyPart.ally->type + ENEMY_COUNT + ENEMY_OFFSET - 1 : allyPart.ally->type;
   renderBitmap(&allyPart, allyPart.ally->shiny ? type + 10 : type);
-  renderBitmap(&enemyPart, enemyPart.missing ? RESOURCE_ID_0 : enemyPart.enemy->type);
+  renderBitmap(&enemyPart, enemyPart.enemy->missing ? RESOURCE_ID_0 : enemyPart.enemy->type);
 
   static char allyLevelBuffer[5];
   int level = allyPart.ally->level_final();
