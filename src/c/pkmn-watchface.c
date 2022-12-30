@@ -1,13 +1,12 @@
 #include <pebble.h>
 #include "ally/ally.h"
-#include "render/cache.h"
 #include "state/const.h"
+#include "render/layout.h"
 #include "render/battlefield.h"
 #include "enemy/enemy.h"
 #include "game/event.h"
 #include "game/game.h"
 #include "health/health.h"
-#include "render/helper.h"
 #include "render/watch.h"
 #include "state/settings.h"
 #if defined(TEST)
@@ -16,10 +15,6 @@
 #define INIT_UNIT 128
 
 static Window *s_window;
-
-static Layer *watchLayer;
-static BitmapLayer *templateLayer;
-static GBitmap *templateBitmap;
 
 static Ally *ally;
 static Enemy *enemy;
@@ -147,33 +142,15 @@ static void handleInbox(DictionaryIterator *iter, void *context) {
 }
 
 static void prv_window_load(Window *window) {
-  Layer *window_layer = window_get_root_layer(window);
-  GRect bounds = layer_get_bounds(window_layer);
-
-  int x = (bounds.size.w - 144) / 2;
-  int y = (bounds.size.h - 168) / 2;
-  GRect coords = GRect(x, y, 144, 168);
-
-  templateLayer = bitmap_layer_create(coords);
-  templateBitmap = gbitmap_create_with_resource(RESOURCE_ID_template);
-  bitmap_layer_set_bitmap(templateLayer, templateBitmap);
-
-  Layer *battlefieldLayer = bitmap_layer_get_layer(templateLayer);
-  battlefield_load(battlefieldLayer, ally, enemy, event);
-  cache_layer_create(window_layer, battlefieldLayer);
-
-  watchLayer = layer_create(coords);
-  layer_add_child(window_layer, watchLayer);
-  watch_load(watchLayer, battlefieldLayer, settings_get());
+  layout_load(window_get_root_layer(window));
+  battlefield_load(layout_get_battlefield(), ally, enemy, event);
+  watch_load(layout_get_watch(), layout_get_root(), settings_get());
 }
 
 static void prv_window_unload(Window *window) {
   watch_unload();
   battlefield_unload();
-  cache_layer_destroy();
-  gbitmap_destroy(templateBitmap);
-  bitmap_layer_destroy(templateLayer);
-  layer_destroy(watchLayer);
+  layout_unload();
 }
 
 static void prv_init(void) {
