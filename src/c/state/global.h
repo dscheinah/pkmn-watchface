@@ -26,24 +26,24 @@
 #define QUIET_ON 2
 
 typedef struct {
- int type;
+ uint16_t type;
+ uint16_t level;
+ uint16_t level_modifier;
+ short health;
+ uint16_t experience;
  bool shiny;
- int level;
- int level_modifier;
  int (*level_final)();
- int health;
- int experience;
 } Ally;
 
 typedef struct {
-  int type;
-  int level;
-  int level_multiplier;
-  int (*level_final)();
-  int health;
-  int hours_alive;
+  uint16_t type;
+  uint16_t level;
+  uint16_t level_multiplier;
+  short health;
+  uint16_t hours_alive;
+  uint16_t index_count;
   bool morph;
-  int index_count;
+  int (*level_final)();
 } Enemy;
 
 typedef struct {
@@ -60,11 +60,11 @@ typedef struct {
  HealthValue active_hour;
 } Health;
 
-typedef uint EventValue;
+typedef uint16_t EventValue;
 
-typedef uint SettingsValue;
+typedef uint16_t SettingsValue;
 
-typedef int QuietValue;
+typedef short QuietValue;
 
 typedef struct {
   Ally* ally;
@@ -75,5 +75,5 @@ typedef struct {
   QuietValue quiet;
   uint index[2];
   bool missing;
-  int identifier;
+  short identifier;
 } State;
