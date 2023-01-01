@@ -2,7 +2,7 @@
 #include <pebble.h>
 
 #define ENEMY_COUNT 40
-#define ENEMY_OFFSET 25
+#define ENEMY_OFFSET 45
 
 #define EVENT_NONE 0
 #define EVENT_SLEEP 1

@@ -118,8 +118,14 @@ void battlefield_load(Layer* root, State* stateRef) {
 void battlefield_mark_dirty() {
   cache_layer_mark_dirty();
 
-  int type = state->quiet > 0 ? state->ally->type + ENEMY_COUNT + ENEMY_OFFSET - 1 : state->ally->type;
-  renderBitmap(&allyPart, state->ally->shiny ? type + 10 : type);
+  int type = state->ally->type;
+  if (state->quiet > QUIET_NONE) {
+    type += 20;
+  }
+  if (state->ally->shiny) {
+    type += 10;
+  }
+  renderBitmap(&allyPart, type);
   renderBitmap(&enemyPart, state->missing ? RESOURCE_ID_0 : state->enemy->type);
 
   int level = state->ally->level_final();
