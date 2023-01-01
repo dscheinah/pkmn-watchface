@@ -20,6 +20,13 @@ static State* state;
 
 bool tapActive = false;
 
+static void markDirty() {
+  if (state_update_index()) {
+    state_write();
+  }
+  battlefield_mark_dirty();
+}
+
 static void gameTick(bool loop, bool reset, int identifier) {
   settings_quiet_changed(state);
   health_update(state->health, loop, reset);
@@ -28,7 +35,7 @@ static void gameTick(bool loop, bool reset, int identifier) {
     game_tick(state, reset);
   }
   event_next(state, identifier);
-  battlefield_mark_dirty();
+  markDirty();
 }
 
 static void handleTime(struct tm* tick_time, TimeUnits units_changed) {
@@ -68,14 +75,14 @@ static void handleBattery(BatteryChargeState charge_state) {
   if (charge_state.is_charging && enemy_charge(state)) {
     state->ally->level_modifier++;
   }
-  battlefield_mark_dirty();
+  markDirty();
 }
 
 static void handleConnection(bool connected) {
   bool missing = !connected;
   if (state->missing ^ missing) {
     state->missing = missing;
-    battlefield_mark_dirty();
+    markDirty();
   }
 }
 
@@ -172,7 +179,7 @@ static void prv_deinit(void) {
 
   window_destroy(s_window);
 
-  state_deinit();
+  state_write();
 
   app_message_deregister_callbacks();
 }

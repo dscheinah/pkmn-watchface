@@ -4,16 +4,6 @@
 void helper_evolve(State* state, int type, int level, bool reset) {
   state->enemy->type = type;
   state->enemy->level_multiplier = level;
-  int key = 0, chk = type - ENEMY_OFFSET;
-  if (chk > 31) {
-    key = 1;
-    chk -= 32;
-  }
-  int pos = 1 << chk;
-  if (!(state->index[key] & pos)) {
-    state->index[key] = state->index[key] | pos;
-    state->enemy->index_count++;
-  }
   if (reset) {
     state->enemy->health = 100;
     state->enemy->morph = rand() % 8 == 0;

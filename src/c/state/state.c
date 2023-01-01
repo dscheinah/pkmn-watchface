@@ -75,7 +75,26 @@ State* state_init() {
   return &state;
 }
 
-void state_deinit() {
+bool state_update_index() {
+  if (!enemy.index_count) {
+    state.index[0] = 0;
+    state.index[1] = 0;
+  }
+  int key = 0, chk = enemy.type - ENEMY_OFFSET;
+  if (chk > 31) {
+    key = 1;
+    chk -= 32;
+  }
+  int pos = 1 << chk;
+  if (!(state.index[key] & pos)) {
+    state.index[key] = state.index[key] | pos;
+    enemy.index_count++;
+    return true;
+  }
+  return false;
+}
+
+void state_write() {
   persist_write_int(VERSION_KEY, VERSION);
   persist_write_data(STATE_KEY, &state, sizeof(State));
   persist_write_data(ALLY_KEY, &ally, sizeof(Ally));

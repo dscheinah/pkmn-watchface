@@ -8,8 +8,6 @@ bool enemy_reset(State* state) {
   }
   if (state->enemy->type == RESOURCE_ID_150) {
     state->enemy->index_count = 0;
-    state->index[0] = 0;
-    state->index[1] = 0;
   }
   if (state->event & EVENT_BOSS) {
     helper_evolve(state, RESOURCE_ID_150, 3, true);

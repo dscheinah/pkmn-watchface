@@ -3,4 +3,6 @@
 
 State* state_init();
 
-void state_deinit();
+bool state_update_index();
+
+void state_write();
