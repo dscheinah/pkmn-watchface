@@ -14,13 +14,12 @@ void event_next(State* state, int identifier) {
     }
     return;
   }
-  if (state->enemy->type != RESOURCE_ID_150 && state->enemy->index_count >= ENEMY_COUNT - 1 && rand() % 20 == 0) {
-    state->event = EVENT_BOSS;
-  } else {
-    state->event = EVENT_NONE;
-  }
+  state->event = EVENT_NONE;
   if (state->enemy->type == RESOURCE_ID_egg) {
     return;
+  }
+  if (state->enemy->type != RESOURCE_ID_150 && state->enemy->index_count >= ENEMY_COUNT - 1 && rand() % 20 == 0) {
+    state->event |= EVENT_BOSS;
   }
   switch (check) {
     case 0:
@@ -31,10 +30,12 @@ void event_next(State* state, int identifier) {
         state->event |= EVENT_GHOST;
       }
       break;
-  }
-  if (state->enemy->morph && check == 4) {
-    state->event |= EVENT_MORPH;
-    return;
+    case 4:
+      if (state->enemy->morph) {
+        state->event |= EVENT_MORPH;
+        return;
+      }
+      break;
   }
   switch (state->enemy->type) {
     case RESOURCE_ID_1:
