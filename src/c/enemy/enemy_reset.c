@@ -30,9 +30,13 @@ bool enemy_reset(State* state) {
     helper_evolve(state, RESOURCE_ID_86, 1, true);
     return true;
   }
-  if (state->enemy->hours_alive <= 3 && (state->enemy->type == RESOURCE_ID_92 || state->enemy->type == RESOURCE_ID_93)) {
-    helper_evolve(state, state->enemy->type + 1, state->enemy->level_multiplier + 1, true);
-    return true;
+  if (state->enemy->hours_alive <= 3) {
+    switch (state->enemy->type) {
+      case RESOURCE_ID_92:
+      case RESOURCE_ID_93:
+        helper_evolve(state, state->enemy->type + 1, state->enemy->level_multiplier + 1, true);
+        return true;
+    }
   }
   helper_evolve(state, state->enemy->type == RESOURCE_ID_133 ? RESOURCE_ID_25 : RESOURCE_ID_133, 1, true);
   return true;

@@ -15,7 +15,7 @@ bool enemy_hatch(State* state) {
     return true;
   }
   if (state->health->steps_yesterday > 10000) {
-    helper_evolve(state, rand() % 3 + ENEMY_OFFSET, 1, true);
+    helper_evolve(state, RESOURCE_ID_1 + rand() % 3, 1, true);
     return true;
   }
   helper_evolve(state, RESOURCE_ID_133, 1, true);
