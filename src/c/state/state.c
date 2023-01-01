@@ -1,5 +1,4 @@
 #include "state.h"
-#include "../enemy/helper.h"
 
 #define ALLY_VERSION 2
 #define ALLY_VERSION_KEY 100
@@ -38,12 +37,21 @@
 #define SETTINGS_QUIET_KEY 502
 
 static Ally ally = {
+  .type = RESOURCE_ID_a1,
+  .shiny = false,
   .level = 1,
+  .level_modifier = 0,
   .health = 100,
   .experience = 0,
 };
 static Enemy enemy = {
+  .type = RESOURCE_ID_133,
   .level = 1,
+  .level_multiplier = 1,
+  .health = 100,
+  .hours_alive = 0,
+  .morph = false,
+  .index_count = 1,
 };
 static Health health = {
   .steps = 0,
@@ -86,10 +94,6 @@ State* state_init() {
     ally.type = persist_read_int(ALLY_TYPE_KEY);
     ally.shiny = persist_read_bool(ALLY_SHINY_KEY);
     ally.level_modifier = persist_read_int(ALLY_LEVEL_KEY);
-  } else {
-    ally.type = rand() % 3 + 1;
-    ally.shiny = 0;
-    ally.level_modifier = 0;
   }
   ally.level_final = &ally_level_final;
 
@@ -103,10 +107,8 @@ State* state_init() {
     state.index[0] = persist_read_int(ENEMY_INDEX_0_KEY);
     state.index[1] = persist_read_int(ENEMY_INDEX_1_KEY);
   } else {
-    enemy.index_count = 0;
-    state.index[0] = 0;
+    state.index[0] = 1 << (RESOURCE_ID_133 - ENEMY_OFFSET);
     state.index[1] = 0;
-    helper_evolve(&state, RESOURCE_ID_133, 1, true);
   }
   enemy.level_final = &enemy_level_final;
 
