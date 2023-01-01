@@ -1,9 +1,7 @@
 #include <pebble.h>
 #include "settings.h"
 
-static State* state;
-
-static void updateTimeFormat() {
+static void updateTimeFormat(State* state) {
   if (clock_is_24h_style()) {
     state->settings |= SETTINGS_TIME_FORMAT;
   } else {
@@ -11,27 +9,37 @@ static void updateTimeFormat() {
   }
 }
 
-void settings_init(State* stateRef) {
-  state = stateRef;
-  updateTimeFormat();
+void settings_init(State* state) {
+  updateTimeFormat(state);
 }
 
-void settings_set(SettingsValue settings) {
+void settings_set(State* state, SettingsValue settings) {
   state->settings = settings;
-  updateTimeFormat();
+  updateTimeFormat(state);
 }
 
-void settings_quiet_changed() {
+void settings_quiet_changed(State* state) {
   if (quiet_time_is_active()) {
-    if (state->quiet != QUIET_ON) {
-      state->quiet = QUIET_ON;
-      return;
+    switch (state->quiet) {
+      case QUIET_ON:
+        break;
+      case QUIET_TOGGLE_ON:
+        state->quiet = QUIET_ON;
+        break;
+      default:
+        state->quiet = QUIET_TOGGLE_ON;
+        break;
     }
   } else {
-    if (state->quiet != QUIET_OFF) {
-      state->quiet = QUIET_OFF;
-      return;
+    switch (state->quiet) {
+      case QUIET_OFF:
+        break;
+      case QUIET_TOGGLE_OFF:
+        state->quiet = QUIET_OFF;
+        break;
+      default:
+        state->quiet = QUIET_TOGGLE_OFF;
+        break;
     }
   }
-  state->quiet = QUIET_NONE;
 }

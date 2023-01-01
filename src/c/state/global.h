@@ -19,9 +19,11 @@
 #define SETTINGS_DOW 16
 #define SETTINGS_TAPS 32
 
-#define QUIET_OFF -1
+#define QUIET_OFF -2
+#define QUIET_TOGGLE_OFF -1
 #define QUIET_NONE 0
-#define QUIET_ON 1
+#define QUIET_TOGGLE_ON 1
+#define QUIET_ON 2
 
 typedef struct {
  int type;

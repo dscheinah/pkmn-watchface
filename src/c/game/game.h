@@ -10,6 +10,4 @@ bool game_damage(State* state);
 
 void game_init(State* state);
 
-bool game_tick(State* state);
-
-void game_reset(State* state);
+void game_tick(State* state, bool reset);

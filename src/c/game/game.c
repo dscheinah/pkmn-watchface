@@ -1,26 +1,8 @@
 #include "game.h"
+#include "../ally/ally.h"
 #include "../enemy/enemy.h"
-#include "../state/settings.h"
 
-void game_init(State* state) {
-  game_level_set_ally(state);
-  game_level_set_enemy(state);
-  settings_quiet_changed();
-  switch (state->quiet) {
-    case QUIET_ON:
-      if (enemy_quiet_enable(state)) {
-        state->ally->level_modifier++;
-      }
-      break;
-    case QUIET_OFF:
-      if (enemy_quiet_disable(state)) {
-        state->ally->level_modifier++;
-      }
-      break;
-  }
-}
-
-bool game_tick(State* state) {
+bool doTick(State* state) {
   if (game_damage(state) && (enemy_reset_bird(state) || enemy_reset(state))) {
     state->ally->level_modifier += 2;
     return false;
@@ -36,8 +18,31 @@ bool game_tick(State* state) {
   return true;
 }
 
-void game_reset(State* state) {
-  if (enemy_evolution_night(state) || enemy_hatch(state)) {
-    state->ally->level_modifier++;
+void game_init(State* state) {
+  game_level_set_ally(state);
+  game_level_set_enemy(state);
+  switch (state->quiet) {
+    case QUIET_TOGGLE_ON:
+      if (enemy_quiet_enable(state)) {
+        state->ally->level_modifier++;
+      }
+      break;
+    case QUIET_TOGGLE_OFF:
+      if (enemy_quiet_disable(state)) {
+        state->ally->level_modifier++;
+      }
+      break;
   }
+  ally_evolution(state->ally);
+}
+
+void game_tick(State* state, bool reset) {
+  bool canResetEnemy = doTick(state);
+  if (reset) {
+    ally_reset(state->ally, ENEMY_COUNT - state->enemy->index_count + 10);
+    if (canResetEnemy && (enemy_evolution_night(state) || enemy_hatch(state))) {
+      state->ally->level_modifier++;
+    }
+  }
+  ally_evolution(state->ally);
 }

@@ -1,5 +1,4 @@
 #include <pebble.h>
-#include "ally/ally.h"
 #include "state/global.h"
 #include "state/state.h"
 #include "render/layout.h"
@@ -22,19 +21,13 @@ static State* state;
 bool tapActive = false;
 
 static void gameTick(bool loop, bool reset, int identifier) {
+  settings_quiet_changed(state);
   health_update(state->health, loop, reset);
   game_init(state);
   if (loop) {
-    bool canReset = game_tick(state);
-    if (reset) {
-      ally_reset(state->ally, ENEMY_COUNT - state->enemy->index_count + 10);
-      if (canReset) {
-        game_reset(state);
-      }
-    }
+    game_tick(state, reset);
   }
   event_next(state, identifier);
-  ally_evolution(state->ally);
   battlefield_mark_dirty();
 }
 
@@ -51,10 +44,11 @@ static void handleTime(struct tm* tick_time, TimeUnits units_changed) {
     #endif
     watch_render_time(tick_time);
   }
-  bool day = units_changed & DAY_UNIT, loop = !(units_changed & INIT_UNIT);
+  bool day = units_changed & DAY_UNIT;
   if (day) {
     watch_render_date(tick_time);
   }
+  bool loop = !(units_changed & INIT_UNIT);
   #if defined(TEST)
     if (!loop || time(NULL) % 5 == 0) {
       test_health_refresh(state->health);
@@ -115,7 +109,7 @@ static void handleInbox(DictionaryIterator* iter, void* context) {
   if (tuple && (bool) tuple->value->int8) {
     flags |= SETTINGS_TAPS;
   }
-  settings_set(flags);
+  settings_set(state, flags);
   watch_update_settings();
 }
 
