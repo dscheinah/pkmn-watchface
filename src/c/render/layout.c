@@ -13,14 +13,12 @@ void layout_load(Layer* root) {
   int y = (bounds.size.h - 168) / 2;
   GRect coords = GRect(x, y, 144, 168);
 
-  templateLayer = bitmap_layer_create(coords);
   templateBitmap = gbitmap_create_with_resource(RESOURCE_ID_template);
-  bitmap_layer_set_bitmap(templateLayer, templateBitmap);
+  templateLayer = helper_create_bitmap_layer(root, coords, templateBitmap);
 
   cache_layer_create(root, bitmap_layer_get_layer(templateLayer));
 
-  watchLayer = layer_create(coords);
-  layer_add_child(root, watchLayer);
+  watchLayer = helper_create_layer(root, coords);
 }
 
 Layer* layout_get_root() {

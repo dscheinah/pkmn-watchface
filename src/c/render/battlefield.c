@@ -2,7 +2,6 @@
 #include "battlefield.h"
 #include "cache.h"
 #include "helper.h"
-#include "../state/global.h"
 #define ALIGN_LEFT 0
 #define ALIGN_RIGHT 1
 
@@ -19,6 +18,9 @@ static State* state;
 static Part allyPart = {.previous = 0};
 static Part enemyPart = {.previous = 0};
 static Layer* indicator;
+
+static char allyLevelBuffer[5];
+static char enemyLevelBuffer[5];
 
 static void renderRect(Layer* layer, GContext* ctx, int alignment, GColor8 color, int percentage) {
   GRect bounds = layer_get_bounds(layer);
@@ -93,27 +95,18 @@ static void renderIndicator(Layer* layer, GContext* ctx) {
 void battlefield_load(Layer* root, State* stateRef) {
   state = stateRef;
 
-  allyPart.image = bitmap_layer_create(GRect(10, 68, 48, 48));
-  allyPart.level = helper_create_text_layer(GRect(72, 73, 25, 14), FONT_KEY_GOTHIC_14_BOLD, GTextAlignmentCenter);
-  allyPart.health = layer_create(GRect(96, 91, 37, 4));
-  allyPart.experience = layer_create(GRect(76, 111, 61, 2));
-  layer_add_child(root, bitmap_layer_get_layer(allyPart.image));
-  layer_add_child(root, text_layer_get_layer(allyPart.level));
-  layer_add_child(root, allyPart.health);
-  layer_add_child(root, allyPart.experience);
+  allyPart.image = helper_create_bitmap_layer(root, GRect(10, 68, 48, 48), NULL);
+  allyPart.level = helper_create_text_layer(root, GRect(72, 73, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter);
+  allyPart.health = helper_create_layer(root, GRect(96, 91, 37, 4));
+  allyPart.experience = helper_create_layer(root, GRect(76, 111, 61, 2));
 
-  enemyPart.image = bitmap_layer_create(GRect(82, 14, 56, 56));
-  enemyPart.level = helper_create_text_layer(GRect(16, 10, 25, 14), FONT_KEY_GOTHIC_14_BOLD, GTextAlignmentCenter);
-  enemyPart.health = layer_create(GRect(40, 28, 29, 3));
-  enemyPart.experience = layer_create(GRect(20, 41, 49, 1));
+  enemyPart.image = helper_create_bitmap_layer(root, GRect(82, 14, 56, 56), NULL);
+  enemyPart.level = helper_create_text_layer(root, GRect(16, 10, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter);
+  enemyPart.health = helper_create_layer(root, GRect(40, 28, 29, 3));
+  enemyPart.experience = helper_create_layer(root, GRect(20, 41, 49, 1));
   bitmap_layer_set_alignment(enemyPart.image, GAlignBottom);
-  layer_add_child(root, bitmap_layer_get_layer(enemyPart.image));
-  layer_add_child(root, text_layer_get_layer(enemyPart.level));
-  layer_add_child(root, enemyPart.health);
-  layer_add_child(root, enemyPart.experience);
 
-  indicator = layer_create(GRect(21, 35, 47, 4));
-  layer_add_child(root, indicator);
+  indicator = helper_create_layer(root, GRect(21, 35, 47, 4));
 
   layer_set_update_proc(allyPart.health, renderAllyHealth);
   layer_set_update_proc(allyPart.experience, renderAllyExperience);
@@ -125,16 +118,14 @@ void battlefield_load(Layer* root, State* stateRef) {
 void battlefield_mark_dirty() {
   cache_layer_mark_dirty();
 
-  int type = quiet_time_is_active() ? state->ally->type + ENEMY_COUNT + ENEMY_OFFSET - 1 : state->ally->type;
+  int type = state->quiet > 0 ? state->ally->type + ENEMY_COUNT + ENEMY_OFFSET - 1 : state->ally->type;
   renderBitmap(&allyPart, state->ally->shiny ? type + 10 : type);
   renderBitmap(&enemyPart, state->missing ? RESOURCE_ID_0 : state->enemy->type);
 
-  static char allyLevelBuffer[5];
   int level = state->ally->level_final();
   snprintf(allyLevelBuffer, 5, "L%d", level > 100 ? level - 100 : level);
   text_layer_set_text(allyPart.level, allyLevelBuffer);
 
-  static char enemyLevelBuffer[5];
   snprintf(enemyLevelBuffer, 5, "L%d", state->enemy->level_final());
   text_layer_set_text(enemyPart.level, enemyLevelBuffer);
 }
@@ -152,5 +143,6 @@ void battlefield_unload() {
   text_layer_destroy(enemyPart.level);
   layer_destroy(enemyPart.health);
   layer_destroy(enemyPart.experience);
+
   layer_destroy(indicator);
 }

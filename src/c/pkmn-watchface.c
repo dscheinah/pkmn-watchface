@@ -110,7 +110,6 @@ static void handleInbox(DictionaryIterator* iter, void* context) {
     flags |= SETTINGS_TAPS;
   }
   settings_set(state, flags);
-  watch_update_settings();
 }
 
 static void prv_window_load(Window* window) {

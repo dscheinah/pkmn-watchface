@@ -1,5 +1,6 @@
 #include <pebble.h>
 #include "cache.h"
+#include "helper.h"
 
 static Layer* cacheLayer;
 static Layer* captureLayer;
@@ -42,18 +43,15 @@ static void capture(Layer* layer, GContext* ctx) {
 }
 
 void cache_layer_create(Layer* root, Layer* replacement) {
+  replacementLayer = replacement;
+
   bounds = layer_get_bounds(root);
 
-  cacheLayer = layer_create(bounds);
+  cacheLayer = helper_create_layer(root, bounds);
   layer_set_update_proc(cacheLayer, update);
-  layer_add_child(root, cacheLayer);
 
-  replacementLayer = replacement;
-  layer_add_child(cacheLayer, replacement);
-
-  captureLayer = layer_create(bounds);
+  captureLayer = helper_create_layer(cacheLayer, bounds);
   layer_set_update_proc(captureLayer, capture);
-  layer_add_child(cacheLayer, captureLayer);
 
   #if defined(PBL_COLOR)
     cacheBitmap = gbitmap_create_blank(bounds.size, GBitmapFormat8Bit);

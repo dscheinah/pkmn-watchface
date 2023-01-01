@@ -4,8 +4,6 @@
 
 void watch_load(Layer* root, Layer* cachedRoot, State* stateRef);
 
-void watch_update_settings();
-
 void watch_render_time(struct tm* tick_time);
 
 void watch_render_date(struct tm* tick_time);
