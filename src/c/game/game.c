@@ -19,8 +19,7 @@ bool doTick(State* state) {
 }
 
 void game_init(State* state) {
-  game_level_set_ally(state);
-  game_level_set_enemy(state);
+  game_level(state);
   switch (state->quiet) {
     case QUIET_TOGGLE_ON:
       if (enemy_quiet_enable(state)) {
