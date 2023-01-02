@@ -2,7 +2,7 @@
 #include "../ally/ally.h"
 #include "../enemy/enemy.h"
 
-bool doTick(State* state) {
+static bool doTick(State* state) {
   if (game_damage(state) && (enemy_reset_bird(state) || enemy_reset(state))) {
     state->ally->level_modifier += 2;
     return false;

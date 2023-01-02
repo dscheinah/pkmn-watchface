@@ -21,7 +21,7 @@ static State* state;
 
 bool tapActive = false;
 
-static void game(TimeUnits units_changed, int identifier) {
+static void game(struct tm* tick_time, TimeUnits units_changed) {
   #if defined(TEST)
     if (time(NULL) % 5 == 0) {
       units_changed |= HOUR_UNIT;
@@ -29,6 +29,10 @@ static void game(TimeUnits units_changed, int identifier) {
   #endif
   if (!(units_changed & HOUR_UNIT)) {
     return;
+  }
+  bool aprilsFool = tick_time->tm_mon == 3 && tick_time->tm_mday == 1;
+  if (aprilsFool) {
+    state->ally->type = RESOURCE_ID_a142;
   }
   bool reset = units_changed & DAY_UNIT;
   #if defined(TEST)
@@ -40,11 +44,14 @@ static void game(TimeUnits units_changed, int identifier) {
   if (!(units_changed & INIT_UNIT)) {
     health_update(state->health, reset);
     game_tick(state, reset);
+    if (aprilsFool) {
+      state->ally->type = RESOURCE_ID_a142;
+    }
   }
   #if defined(TEST)
     test_next_tick(state);
   #endif
-  event_next(state, identifier);
+  event_next(state, tick_time->tm_hour);
 }
 
 static void markDirty() {
@@ -68,7 +75,7 @@ static void handleTime(struct tm* tick_time, TimeUnits units_changed) {
   if (units_changed & DAY_UNIT) {
     watch_render_date(tick_time);
   }
-  game(units_changed, tick_time->tm_hour);
+  game(tick_time, units_changed);
   markDirty();
 }
 
