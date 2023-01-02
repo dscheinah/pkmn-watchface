@@ -50,7 +50,6 @@ typedef struct {
  HealthValue steps;
  HealthValue steps_yesterday;
  HealthValue steps_last;
- HealthValue steps_hour;
  HealthValue sleep;
  HealthValue restful_sleep;
  HealthValue restful_sleep_last;
