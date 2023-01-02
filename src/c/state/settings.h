@@ -3,6 +3,6 @@
 
 void settings_init(State* state);
 
-void settings_set(State* state, SettingsValue settings);
+void settings_set(State* state, DictionaryIterator* iter);
 
 void settings_quiet_changed(State* state);

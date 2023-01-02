@@ -13,8 +13,29 @@ void settings_init(State* state) {
   updateTimeFormat(state);
 }
 
-void settings_set(State* state, SettingsValue settings) {
-  state->settings = settings;
+void settings_set(State* state, DictionaryIterator* iter) {
+  Tuple* tuple;
+  state->settings = 0;
+  tuple = dict_find(iter, MESSAGE_KEY_date_format);
+  if (tuple && (bool) tuple->value->int8) {
+    state->settings |= SETTINGS_DATE_FORMAT;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_seconds);
+  if (tuple && (bool) tuple->value->int8) {
+    state->settings |= SETTINGS_SECONDS;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_dow);
+  if (tuple && (bool) tuple->value->int8) {
+    state->settings |= SETTINGS_DOW;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_bluetooth);
+  if (tuple && (bool) tuple->value->int8) {
+    state->settings |= SETTINGS_BLUETOOTH;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_taps);
+  if (tuple && (bool) tuple->value->int8) {
+    state->settings |= SETTINGS_TAPS;
+  }
   updateTimeFormat(state);
 }
 

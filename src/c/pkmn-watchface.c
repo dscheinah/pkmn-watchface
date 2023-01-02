@@ -1,17 +1,18 @@
 #include <pebble.h>
 #include "state/global.h"
 #include "state/state.h"
+#include "state/settings.h"
 #include "render/layout.h"
 #include "render/battlefield.h"
+#include "render/watch.h"
 #include "enemy/enemy.h"
 #include "game/event.h"
 #include "game/game.h"
 #include "health/health.h"
-#include "render/watch.h"
-#include "state/settings.h"
 #if defined(TEST)
   #include "test.h"
 #endif
+
 #define INIT_UNIT 128
 
 static Window* s_window;
@@ -94,29 +95,7 @@ static void handleTap(AccelAxisType axis, int32_t direction) {
 }
 
 static void handleInbox(DictionaryIterator* iter, void* context) {
-  SettingsValue flags = 0;
-  Tuple* tuple;
-  tuple = dict_find(iter, MESSAGE_KEY_date_format);
-  if (tuple && (bool) tuple->value->int8) {
-    flags |= SETTINGS_DATE_FORMAT;
-  }
-  tuple = dict_find(iter, MESSAGE_KEY_seconds);
-  if (tuple && (bool) tuple->value->int8) {
-    flags |= SETTINGS_SECONDS;
-  }
-  tuple = dict_find(iter, MESSAGE_KEY_dow);
-  if (tuple && (bool) tuple->value->int8) {
-    flags |= SETTINGS_DOW;
-  }
-  tuple = dict_find(iter, MESSAGE_KEY_bluetooth);
-  if (tuple && (bool) tuple->value->int8) {
-    flags |= SETTINGS_BLUETOOTH;
-  }
-  tuple = dict_find(iter, MESSAGE_KEY_taps);
-  if (tuple && (bool) tuple->value->int8) {
-    flags |= SETTINGS_TAPS;
-  }
-  settings_set(state, flags);
+  settings_set(state, iter);
 }
 
 static void prv_window_load(Window* window) {
