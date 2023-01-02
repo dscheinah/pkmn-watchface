@@ -1,15 +1,25 @@
 #include <pebble.h>
 #include "event.h"
 
+#if !defined(TEST)
+int event_check() {
+  return rand() % 5;
+}
+
+bool event_boss() {
+  return rand() % 20 == 0;
+}
+#endif
+
 void event_next(State* state, int identifier) {
   if (identifier == state->identifier) {
     return;
   }
   state->identifier = identifier;
-  int check = rand() % 5;
+  int check = event_check();
   if (state->health->restful_sleep_hour) {
     state->event = EVENT_SLEEP;
-    if (state->enemy->morph && state->enemy->type != RESOURCE_ID_132 && check == 4) {
+    if (state->enemy->morph && state->enemy->type != RESOURCE_ID_132 && check == 3) {
       state->event |= EVENT_MORPH;
     }
     return;
@@ -18,19 +28,19 @@ void event_next(State* state, int identifier) {
   if (state->enemy->type == RESOURCE_ID_egg) {
     return;
   }
-  if (state->enemy->type != RESOURCE_ID_150 && state->enemy->index_count >= ENEMY_COUNT - 1 && rand() % 20 == 0) {
+  if (state->enemy->type != RESOURCE_ID_150 && state->enemy->index_count >= ENEMY_COUNT - 1 && event_boss()) {
     state->event |= EVENT_BOSS;
   }
   switch (check) {
-    case 0:
+    case 1:
       state->event |= EVENT_EGG;
       break;
-    case 1:
+    case 2:
       if (state->enemy->level_multiplier > 1) {
         state->event |= EVENT_GHOST;
       }
       break;
-    case 4:
+    case 3:
       if (state->enemy->morph) {
         state->event |= EVENT_MORPH;
         return;

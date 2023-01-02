@@ -21,6 +21,32 @@ static State* state;
 
 bool tapActive = false;
 
+static void game(TimeUnits units_changed, int identifier) {
+  #if defined(TEST)
+    if (time(NULL) % 5 == 0) {
+      units_changed |= HOUR_UNIT;
+    }
+  #endif
+  if (!(units_changed & HOUR_UNIT)) {
+    return;
+  }
+  bool reset = units_changed & DAY_UNIT;
+  #if defined(TEST)
+    reset = test_day();
+  #endif
+  settings_quiet_changed(state);
+  health_refresh(state->health, reset);
+  game_init(state);
+  if (!(units_changed & INIT_UNIT)) {
+    health_update(state->health, reset);
+    game_tick(state, reset);
+  }
+  #if defined(TEST)
+    test_next_tick(state);
+  #endif
+  event_next(state, identifier);
+}
+
 static void markDirty() {
   if (state_update_index()) {
     state_write();
@@ -28,47 +54,22 @@ static void markDirty() {
   battlefield_mark_dirty();
 }
 
-static void gameTick(bool loop, bool reset, int identifier) {
-  settings_quiet_changed(state);
-  health_update(state->health, loop, reset);
-  game_init(state);
-  if (loop) {
-    game_tick(state, reset);
-  }
-  event_next(state, identifier);
-  markDirty();
-}
-
 static void handleTime(struct tm* tick_time, TimeUnits units_changed) {
   if (units_changed & SECOND_UNIT) {
     watch_render_seconds(tick_time);
   }
   if (units_changed & MINUTE_UNIT) {
-    #if !defined(TEST)
-      if (tapActive) {
-        tapActive = false;
-        tick_timer_service_subscribe(MINUTE_UNIT, handleTime);
-      }
-    #endif
+    if (tapActive) {
+      tapActive = false;
+      tick_timer_service_subscribe(MINUTE_UNIT, handleTime);
+    }
     watch_render_time(tick_time);
   }
-  bool day = units_changed & DAY_UNIT;
-  if (day) {
+  if (units_changed & DAY_UNIT) {
     watch_render_date(tick_time);
   }
-  bool loop = !(units_changed & INIT_UNIT);
-  #if defined(TEST)
-    if (!loop || time(NULL) % 5 == 0) {
-      test_health_refresh(state->health);
-      gameTick(loop, test_day(), tick_time->tm_hour);
-      test_next_tick(state);
-    }
-  #else
-    if (units_changed & HOUR_UNIT) {
-      health_refresh(state->health, day);
-      gameTick(loop, day, tick_time->tm_hour);
-    }
-  #endif
+  game(units_changed, tick_time->tm_hour);
+  markDirty();
 }
 
 static void handleBattery(BatteryChargeState charge_state) {

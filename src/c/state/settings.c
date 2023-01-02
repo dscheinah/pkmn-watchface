@@ -39,6 +39,7 @@ void settings_set(State* state, DictionaryIterator* iter) {
   updateTimeFormat(state);
 }
 
+#if !defined(TEST)
 void settings_quiet_changed(State* state) {
   if (quiet_time_is_active()) {
     switch (state->quiet) {
@@ -64,3 +65,4 @@ void settings_quiet_changed(State* state) {
     }
   }
 }
+#endif

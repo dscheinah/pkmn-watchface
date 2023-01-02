@@ -22,56 +22,40 @@ void health_init() {
   }
 }
 
-void health_refresh(Health* health, bool update_yesterday) {
-  HealthValue steps, sleep, restful, active;
+#if !defined(TEST)
+void health_refresh(Health* health, bool reset) {
   if (mode & DEMO) {
-    steps = rand() % 1500;
-    active = rand() % 900;
-    if (!update_yesterday) {
-      steps += health->steps;
-      active += health->active;
+    if (reset) {
+      health->steps = rand() % 30000;
     }
   } else {
-    steps = health_service_sum_today(HealthMetricStepCount);
-    active = health_service_sum_today(HealthMetricActiveSeconds);
+    health->steps = health_service_sum_today(HealthMetricStepCount);
+    health->active = health_service_sum_today(HealthMetricActiveSeconds);
   }
   if (mode & DEMO_SLEEP) {
-    if (update_yesterday) {
-      sleep = rand() % 30000;
-      restful = rand() % 20000;
-    } else {
-      sleep = health->sleep;
-      restful = health->restful_sleep;
+    if (reset) {
+      health->sleep = rand() % 50000;
     }
   } else {
-    sleep = health_service_sum_today(HealthMetricSleepSeconds);
-    restful = health_service_sum_today(HealthMetricSleepRestfulSeconds);
+    health->sleep = health_service_sum_today(HealthMetricSleepSeconds);
+    health->restful_sleep = health_service_sum_today(HealthMetricSleepRestfulSeconds);
   }
-  health_set(health, steps, sleep, restful, active);
 }
+#endif
 
-void health_set(Health* health, HealthValue steps, HealthValue sleep, HealthValue restful_sleep, HealthValue active) {
-  health->steps = steps;
-  health->sleep = sleep;
-  health->restful_sleep = restful_sleep;
-  health->active = active;
-}
-
-void health_update(Health* health, bool update_relative, bool update_yesterday) {
-  if (update_relative) {
-    if (update_yesterday) {
-      health->steps_yesterday = health->steps > health->steps_last ? health->steps : health->steps_last;
-    }
-    health->restful_sleep_hour = health->restful_sleep - health->restful_sleep_last;
-    if (health->restful_sleep_hour < 0) {
-      health->restful_sleep_hour = health->restful_sleep;
-    }
-    health->active_hour = health->active - health->active_last;
-    if (health->active_hour < 0) {
-      health->active_hour = health->active;
-    }
-    health->steps_last = health->steps;
-    health->restful_sleep_last = health->restful_sleep;
-    health->active_last = health->active;
+void health_update(Health* health, bool reset) {
+  if (reset) {
+    health->steps_yesterday = health->steps > health->steps_last ? health->steps : health->steps_last;
   }
+  health->restful_sleep_hour = health->restful_sleep - health->restful_sleep_last;
+  if (health->restful_sleep_hour < 0) {
+    health->restful_sleep_hour = health->restful_sleep;
+  }
+  health->active_hour = health->active - health->active_last;
+  if (health->active_hour < 0) {
+    health->active_hour = health->active;
+  }
+  health->steps_last = health->steps;
+  health->restful_sleep_last = health->restful_sleep;
+  health->active_last = health->active;
 }
