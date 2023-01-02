@@ -80,6 +80,9 @@ bool state_update_index() {
     state.index[0] = 0;
     state.index[1] = 0;
   }
+  if (enemy.type < RESOURCE_ID_1) {
+    return false;
+  }
   int key = 0, chk = enemy.type - ENEMY_OFFSET;
   if (chk > 31) {
     key = 1;
