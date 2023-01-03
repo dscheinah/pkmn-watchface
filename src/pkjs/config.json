@@ -23,7 +23,8 @@
 			{
 				"type": "toggle",
 				"messageKey": "seconds",
-				"label": "Render seconds"
+				"label": "Render seconds",
+				"description": "Should only be enabled if you don't care about battery life."
 			},
 			{
 				"type": "toggle",
