@@ -4,11 +4,11 @@
 static int calcLevelFromSteps(int steps) {
   int level = 0;
   int modifier = 26;
-  while ((steps -= 7500) >= 0) {
+  while ((steps -= 9000) >= 0) {
     level += modifier;
     modifier -= modifier / 3;
   }
-  level += modifier * (steps + 7500) / 7500;
+  level += modifier * (steps + 9000) / 9000;
   return level;
 }
 

@@ -29,12 +29,12 @@ static Test ticks[] = {
     .day = true,
   },
   {
-    .steps = 5000,
+    .steps = 7500,
     .sleep = 25000,
     .restful_sleep = 1,
   },
   {
-    .steps = 5000,
+    .steps = 7500,
     .sleep = 25000,
   },
   // test ally quiet
@@ -44,13 +44,13 @@ static Test ticks[] = {
     .quiet = QUIET_ON,
   },
   {
-    .steps = 5000,
+    .steps = 7500,
     .sleep = 25000,
     .quiet = QUIET_ON,
     .restful_sleep = 1,
   },
   {
-    .steps = 5000,
+    .steps = 7500,
     .sleep = 25000,
     .quiet = QUIET_ON,
   },
