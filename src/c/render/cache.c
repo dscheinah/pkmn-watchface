@@ -61,12 +61,15 @@ void cache_layer_create(Layer* root, Layer* replacement) {
 }
 
 void cache_layer_mark_dirty() {
-  layer_set_hidden(replacementLayer, false);
-  layer_set_hidden(captureLayer, false);
+  if (replacementLayer) {
+    layer_set_hidden(replacementLayer, false);
+    layer_set_hidden(captureLayer, false);
+  }
 }
 
 void cache_layer_destroy() {
   gbitmap_destroy(cacheBitmap);
   layer_destroy(captureLayer);
   layer_destroy(cacheLayer);
+  replacementLayer = NULL;
 }

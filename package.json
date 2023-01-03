@@ -33,7 +33,8 @@
       "seconds",
       "dow",
       "bluetooth",
-      "taps"
+      "taps",
+      "cache"
     ],
     "resources": {
       "media": [

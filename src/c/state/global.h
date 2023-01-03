@@ -18,6 +18,7 @@
 #define SETTINGS_SECONDS 8
 #define SETTINGS_DOW 16
 #define SETTINGS_TAPS 32
+#define SETTINGS_CACHE 64
 
 #define QUIET_OFF -2
 #define QUIET_TOGGLE_OFF -1

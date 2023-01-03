@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include "layout.h"
 #include "cache.h"
 #include "helper.h"
 
@@ -6,7 +7,7 @@ static Layer* watchLayer;
 static BitmapLayer* templateLayer;
 static GBitmap* templateBitmap;
 
-void layout_load(Layer* root) {
+void layout_load(Layer* root, State* state) {
   GRect bounds = layer_get_bounds(root);
 
   int x = (bounds.size.w - 144) / 2;
@@ -16,7 +17,9 @@ void layout_load(Layer* root) {
   templateBitmap = gbitmap_create_with_resource(RESOURCE_ID_template);
   templateLayer = helper_create_bitmap_layer(root, coords, templateBitmap);
 
-  cache_layer_create(root, bitmap_layer_get_layer(templateLayer));
+  if (state->settings & SETTINGS_CACHE) {
+    cache_layer_create(root, bitmap_layer_get_layer(templateLayer));
+  }
 
   watchLayer = helper_create_layer(root, coords);
 }

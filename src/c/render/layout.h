@@ -1,7 +1,8 @@
 #pragma once
 #include <pebble.h>
+#include "../state/global.h"
 
-void layout_load(Layer* root);
+void layout_load(Layer* root, State* state);
 
 Layer* layout_get_root();
 

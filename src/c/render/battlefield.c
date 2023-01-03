@@ -116,7 +116,9 @@ void battlefield_load(Layer* root, State* stateRef) {
 }
 
 void battlefield_mark_dirty() {
-  cache_layer_mark_dirty();
+  if (state->settings & SETTINGS_CACHE) {
+    cache_layer_mark_dirty();
+  }
 
   int type = state->ally->type;
   if (state->quiet > QUIET_NONE) {

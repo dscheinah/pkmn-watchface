@@ -21,6 +21,13 @@ static State* state;
 
 bool tapActive = false;
 
+static void markDirty() {
+  if (state_update_index()) {
+    state_write();
+  }
+  battlefield_mark_dirty();
+}
+
 static void game(struct tm* tick_time, TimeUnits units_changed) {
   #if defined(TEST)
     if (time(NULL) % 5 == 0) {
@@ -52,13 +59,7 @@ static void game(struct tm* tick_time, TimeUnits units_changed) {
     test_next_tick(state);
   #endif
   event_next(state, tick_time->tm_hour);
-}
-
-static void markDirty() {
-  if (state_update_index()) {
-    state_write();
-  }
-  battlefield_mark_dirty();
+  markDirty();
 }
 
 static void handleTime(struct tm* tick_time, TimeUnits units_changed) {
@@ -76,7 +77,6 @@ static void handleTime(struct tm* tick_time, TimeUnits units_changed) {
     watch_render_date(tick_time);
   }
   game(tick_time, units_changed);
-  markDirty();
 }
 
 static void handleBattery(BatteryChargeState charge_state) {
@@ -107,7 +107,7 @@ static void handleInbox(DictionaryIterator* iter, void* context) {
 }
 
 static void prv_window_load(Window* window) {
-  layout_load(window_get_root_layer(window));
+  layout_load(window_get_root_layer(window), state);
   battlefield_load(layout_get_battlefield(), state);
   watch_load(layout_get_watch(), layout_get_root(), state);
 }
@@ -155,7 +155,7 @@ static void prv_init(void) {
   }
 
   app_message_register_inbox_received(handleInbox);
-  app_message_open(dict_calc_buffer_size(5, 5), 0);
+  app_message_open(128, 128);
 }
 
 static void prv_deinit(void) {

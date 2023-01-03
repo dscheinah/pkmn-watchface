@@ -1,42 +1,41 @@
 #include <pebble.h>
 #include "settings.h"
 
-static void updateTimeFormat(State* state) {
-  if (clock_is_24h_style()) {
-    state->settings |= SETTINGS_TIME_FORMAT;
+static void updateSetting(State* state, SettingsValue setting, bool enabled) {
+  if (enabled) {
+    state->settings |= setting;
   } else {
-    state->settings &= ~SETTINGS_TIME_FORMAT;
+    state->settings &= ~setting;
   }
 }
 
 void settings_init(State* state) {
-  updateTimeFormat(state);
+  updateSetting(state, SETTINGS_TIME_FORMAT, clock_is_24h_style());
 }
 
 void settings_set(State* state, DictionaryIterator* iter) {
-  Tuple* tuple;
-  state->settings = 0;
-  tuple = dict_find(iter, MESSAGE_KEY_date_format);
-  if (tuple && (bool) tuple->value->int8) {
-    state->settings |= SETTINGS_DATE_FORMAT;
+  int keys[] = {
+    MESSAGE_KEY_date_format,
+    MESSAGE_KEY_seconds,
+    MESSAGE_KEY_dow,
+    MESSAGE_KEY_bluetooth,
+    MESSAGE_KEY_taps,
+    MESSAGE_KEY_cache,
+  };
+  SettingsValue settings[] = {
+    SETTINGS_DATE_FORMAT,
+    SETTINGS_SECONDS,
+    SETTINGS_DOW,
+    SETTINGS_BLUETOOTH,
+    SETTINGS_TAPS,
+    SETTINGS_CACHE,
+  };
+  for (int i = 0; i < 6; i++) {
+    Tuple* tuple = dict_find(iter, keys[i]);
+    if (tuple) {
+      updateSetting(state, settings[i], (bool) tuple->value->int8);
+    }
   }
-  tuple = dict_find(iter, MESSAGE_KEY_seconds);
-  if (tuple && (bool) tuple->value->int8) {
-    state->settings |= SETTINGS_SECONDS;
-  }
-  tuple = dict_find(iter, MESSAGE_KEY_dow);
-  if (tuple && (bool) tuple->value->int8) {
-    state->settings |= SETTINGS_DOW;
-  }
-  tuple = dict_find(iter, MESSAGE_KEY_bluetooth);
-  if (tuple && (bool) tuple->value->int8) {
-    state->settings |= SETTINGS_BLUETOOTH;
-  }
-  tuple = dict_find(iter, MESSAGE_KEY_taps);
-  if (tuple && (bool) tuple->value->int8) {
-    state->settings |= SETTINGS_TAPS;
-  }
-  updateTimeFormat(state);
 }
 
 #if !defined(TEST)
