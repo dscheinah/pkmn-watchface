@@ -196,7 +196,7 @@ static Test ticks[] = {
 };
 
 static int tick = 0;
-static int size = sizeof(ticks) / sizeof(Test);
+static int size = ARRAY_LENGTH(ticks);
 
 int event_check() {
   return ticks[tick % size].check;
