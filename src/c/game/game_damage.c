@@ -113,6 +113,6 @@ bool game_damage(State* state) {
   if (state->health->restful_sleep_hour || state->enemy->type == RESOURCE_ID_egg) {
     return false;
   }
-  state->enemy->health -= (7 * state->health->active_hour + 5400) * level(state) * effective(state) / 108000;
+  state->enemy->health -= (6 * state->health->active_hour + 5400) * level(state) * effective(state) / 108000;
   return true;
 }
