@@ -38,7 +38,7 @@ static Health health = {
 };
 static State state = {
   .event = EVENT_NONE,
-  .settings = SETTINGS_DOW | SETTINGS_BLUETOOTH,
+  .settings = SETTINGS_DOW | SETTINGS_BLUETOOTH | SETTINGS_VIBES,
   .quiet = QUIET_NONE,
   .missing = false,
   .identifier = -1,

@@ -19,10 +19,19 @@ static Window* s_window;
 
 static State* state;
 
+static uint32_t durations[] = {300, 200, 100, 100, 200, 100, 500};
+static VibePattern vibes = {
+  .durations = durations,
+  .num_segments = ARRAY_LENGTH(durations),
+};
+
 bool tapActive = false;
 
 static void markDirty() {
   if (state_update_index()) {
+    if (state->quiet < QUIET_NONE && (state->settings & SETTINGS_VIBES)) {
+      vibes_enqueue_custom_pattern(vibes);
+    }
     state_write();
   }
   battlefield_mark_dirty();

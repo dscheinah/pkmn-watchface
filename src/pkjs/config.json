@@ -50,6 +50,13 @@
 				"messageKey": "cache",
 				"label": "Cached rendering",
 				"description": "Enables experimental caching of the battle-screen. This increases memory usage but may also reduce battery drain."
+			},
+			{
+				"type": "toggle",
+				"messageKey": "vibes",
+				"label": "Vibrate on achievement",
+				"description": "This option respects quiet time but may still wake you up.",
+				"defaultValue": true
 			}
 		]
 	},

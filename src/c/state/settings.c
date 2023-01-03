@@ -21,6 +21,7 @@ void settings_set(State* state, DictionaryIterator* iter) {
     MESSAGE_KEY_bluetooth,
     MESSAGE_KEY_taps,
     MESSAGE_KEY_cache,
+    MESSAGE_KEY_vibes,
   };
   SettingsValue settings[] = {
     SETTINGS_DATE_FORMAT,
@@ -29,6 +30,7 @@ void settings_set(State* state, DictionaryIterator* iter) {
     SETTINGS_BLUETOOTH,
     SETTINGS_TAPS,
     SETTINGS_CACHE,
+    SETTINGS_VIBES,
   };
   for (int i = 0; i < 6; i++) {
     Tuple* tuple = dict_find(iter, keys[i]);

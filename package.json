@@ -34,7 +34,8 @@
       "dow",
       "bluetooth",
       "taps",
-      "cache"
+      "cache",
+      "vibes"
     ],
     "resources": {
       "media": [
