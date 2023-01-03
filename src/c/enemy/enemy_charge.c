@@ -4,13 +4,20 @@
 
 bool enemy_charge(State* state) {
   switch (state->enemy->type) {
+    case RESOURCE_ID_egg:
+      helper_evolve(state, RESOURCE_ID_25, 1, true);
+      return true;
     case RESOURCE_ID_133:
       helper_evolve(state, RESOURCE_ID_135, 2, false);
       return true;
     case RESOURCE_ID_25:
-      helper_evolve(state, RESOURCE_ID_26, 2, false);
+      if (state->enemy->health < 50) {
+        helper_evolve(state, RESOURCE_ID_26, 2, false);
+        state->enemy->health = 100;
+        return true;
+      }
       state->enemy->health = 100;
-      return true;
+      break;
     case RESOURCE_ID_26:
       state->enemy->health = 100;
       break;

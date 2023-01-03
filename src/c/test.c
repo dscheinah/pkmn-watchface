@@ -147,15 +147,12 @@ static Test ticks[] = {
   {
     .hours_alive = 3,
   },
-  // double reset and baby
+  // double reset
   {
     .active = 30000,
   },
   {
     .active = 30000,
-  },
-  {
-    .quiet = QUIET_TOGGLE_ON,
   },
   {
     .steps = 7500,

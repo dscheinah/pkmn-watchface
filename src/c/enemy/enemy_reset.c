@@ -36,7 +36,7 @@ bool enemy_reset(State* state) {
         return true;
     }
   }
-  helper_evolve(state, state->enemy->type == RESOURCE_ID_133 ? RESOURCE_ID_25 : RESOURCE_ID_133, 1, true);
+  helper_evolve(state, RESOURCE_ID_133, 1, true);
   return true;
 }
 
