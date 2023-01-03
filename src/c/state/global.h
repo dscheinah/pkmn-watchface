@@ -1,7 +1,7 @@
 #pragma once
 #include <pebble.h>
 
-#define ENEMY_COUNT 40
+#define ENEMY_COUNT 43
 #define ENEMY_OFFSET 45
 
 #define EVENT_NONE 0
@@ -45,6 +45,8 @@ typedef struct {
   uint16_t hours_alive;
   uint16_t index_count;
   bool morph;
+  short teleport;
+  uint16_t teleport_type;
   int (*level_final)();
 } Enemy;
 

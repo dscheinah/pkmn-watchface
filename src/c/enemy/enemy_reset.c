@@ -2,7 +2,7 @@
 #include "enemy.h"
 #include "helper.h"
 
-bool enemy_reset(State* state) {
+bool enemy_reset(State* state, bool teleport) {
   if (state->enemy->health > 0) {
     return false;
   }
@@ -35,6 +35,28 @@ bool enemy_reset(State* state) {
         helper_evolve(state, state->enemy->type + 1, state->enemy->level_multiplier + 1, true);
         return true;
     }
+  }
+  if (!teleport && state->enemy->teleport > 0) {
+    if (state->enemy->teleport_type == RESOURCE_ID_63) {
+      if (state->event & EVENT_EVO) {
+        helper_evolve(state, RESOURCE_ID_64, 2, true);
+        state->enemy->health = state->enemy->teleport;
+        state->enemy->teleport = 0;
+        return true;
+      }
+      helper_evolve(state, RESOURCE_ID_63, 1, true);
+      state->enemy->health = state->enemy->teleport;
+      return true;
+    }
+    helper_evolve(state, state->enemy->teleport_type, 3, true);
+    state->enemy->health = state->enemy->teleport;
+    return true;
+  }
+  if (state->enemy->type == RESOURCE_ID_133) {
+    helper_evolve(state, RESOURCE_ID_63, 1, true);
+    state->enemy->teleport = 100;
+    state->enemy->teleport_type = RESOURCE_ID_63;
+    return true;
   }
   helper_evolve(state, RESOURCE_ID_133, 1, true);
   return true;

@@ -132,6 +132,7 @@ static Test ticks[] = {
     .active = 30000,
   },
   {
+    .steps = 7500,
     .sleep = 25000,
     .day = true,
   },
@@ -150,20 +151,41 @@ static Test ticks[] = {
   {
     .hours_alive = 3,
   },
-  // double reset
+  // double reset and vanish
   {
     .active = 30000,
   },
   {
     .active = 30000,
   },
+  {
+    .check = 10,
+    .active = 600,
+  },
+  // return and vanish
+  {
+    .active = 30000,
+  },
+  {
+    .check = 10,
+    .active = 600,
+  },
+  // return evolved
+  {
+    .hours_alive = 5,
+    .active = 30000,
+  },
+  // evolve last
+  {
+    .quiet = QUIET_TOGGLE_OFF,
+  },
+  // do some game ticks with morph
   {
     .steps = 7500,
     .active = 30000,
     .sleep = 25000,
     .day = true,
   },
-  // do some game ticks with morph
   {
     .check = 3,
     .active = 600,

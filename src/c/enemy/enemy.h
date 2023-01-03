@@ -2,7 +2,7 @@
 #include <pebble.h>
 #include "../state/global.h"
 
-bool enemy_reset(State* state);
+bool enemy_reset(State* state, bool teleport);
 
 bool enemy_reset_bird(State* state);
 

@@ -18,9 +18,13 @@ bool enemy_quiet_enable(State* state) {
 }
 
 bool enemy_quiet_disable(State* state) {
-  if (state->enemy->type == RESOURCE_ID_175) {
-    helper_evolve(state, RESOURCE_ID_176, 2, false);
-    return true;
+  switch (state->enemy->type) {
+    case RESOURCE_ID_64:
+      helper_evolve(state, RESOURCE_ID_65, 3, false);
+      return true;
+    case RESOURCE_ID_175:
+      helper_evolve(state, RESOURCE_ID_176, 2, false);
+      return true;
   }
   return false;
 }

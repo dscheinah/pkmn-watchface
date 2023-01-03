@@ -3,9 +3,17 @@
 #include "../enemy/enemy.h"
 
 static bool doTick(State* state) {
-  if (game_damage(state) && (enemy_reset_bird(state) || enemy_reset(state))) {
-    state->ally->level_modifier += 2;
-    return false;
+  if (game_damage(state)) {
+    bool teleport = false;
+    if (state->enemy->type == state->enemy->teleport_type && state->enemy->teleport - 20 > state->enemy->health) {
+      teleport = true;
+      state->enemy->teleport = state->enemy->health;
+      state->enemy->health = 0;
+    }
+    if (enemy_reset_bird(state) || enemy_reset(state, teleport)) {
+      state->ally->level_modifier += 2;
+      return false;
+    }
   }
   if (enemy_evolution(state)) {
     state->ally->level_modifier++;
