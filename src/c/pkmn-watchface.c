@@ -27,11 +27,20 @@ static VibePattern vibes = {
 
 bool tapActive = false;
 
+static void sendPokedex() {
+  DictionaryIterator* outbox;
+  app_message_outbox_begin(&outbox);
+  dict_write_int(outbox, MESSAGE_KEY_pokedex0, &state->index[0], 4, false);
+  dict_write_int(outbox, MESSAGE_KEY_pokedex1, &state->index[1], 4, false);
+  app_message_outbox_send();
+}
+
 static void markDirty() {
   if (state_update_index()) {
     if (state->quiet < QUIET_NONE && (state->settings & SETTINGS_VIBES)) {
       vibes_enqueue_custom_pattern(vibes);
     }
+    sendPokedex();
     state_write();
   }
   battlefield_mark_dirty();
@@ -165,6 +174,8 @@ static void prv_init(void) {
 
   app_message_register_inbox_received(handleInbox);
   app_message_open(128, 128);
+
+  sendPokedex();
 }
 
 static void prv_deinit(void) {

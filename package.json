@@ -35,7 +35,10 @@
       "bluetooth",
       "taps",
       "cache",
-      "vibes"
+      "vibes",
+      "pokedex",
+      "pokedex0",
+      "pokedex1"
     ],
     "resources": {
       "media": [
