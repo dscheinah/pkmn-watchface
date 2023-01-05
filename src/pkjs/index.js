@@ -1,34 +1,20 @@
 var Clay = require('pebble-clay');
 var config = require('./config.json');
-var clay = new Clay(config);
+var pokedex = require('./pokedex.js');
 
-clay.registerComponent({
-    name: 'pokedex',
-    template: '<div class="component pokedex"></div>',
-    manipulator: {
-        get: function () {
-        },
-        set: function (index) {
-            var count = 0;
-            for (var i = 0; i < 2; i++) {
-                var current = parseInt(index[i]);
-                for (var j = 0; j < 32; j++) {
-                    if (current & (1 << j)) {
-                        count++;
-                    }
-                }
-            }
-            this.$element.set('innerHTML', count);
-        }
-    },
-    style: ''
+var clay = new Clay(config, function () {
+    var clayConfig = this;
+    clayConfig.on(clayConfig.EVENTS.AFTER_BUILD, function() {
+        clayConfig.getItemByMessageKey('pokedex').setUserData(clayConfig.meta.userData);
+    });
+}, {
+    userData: pokedex.userData
 });
-clay.setSettings('pokedex', [localStorage.getItem('pokedex0'), localStorage.getItem('pokedex1')]);
+
+pokedex.init(clay);
+
 Pebble.addEventListener('ready', function () {
     Pebble.addEventListener('appmessage', function (event) {
-        var index = [event.payload['pokedex0'].toString(), event.payload['pokedex1'].toString()];
-        localStorage.setItem('pokedex0', index[0]);
-        localStorage.setItem('pokedex1', index[1]);
-        clay.setSettings('pokedex', index);
+        pokedex.pebble(clay, event.payload);
     });
 });
