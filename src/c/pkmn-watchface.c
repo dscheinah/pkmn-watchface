@@ -37,11 +37,11 @@ static void sendPokedex() {
 
 static void markDirty() {
   if (state_update_index()) {
+    state_write();
+    sendPokedex();
     if (state->quiet < QUIET_NONE && (state->settings & SETTINGS_VIBES)) {
       vibes_enqueue_custom_pattern(vibes);
     }
-    sendPokedex();
-    state_write();
   }
   battlefield_mark_dirty();
 }
