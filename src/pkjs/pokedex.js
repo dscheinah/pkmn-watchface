@@ -3,11 +3,11 @@ var component = {
     template: '<div class="component pokedex"></div>',
     manipulator: {
         get: function () {
-            return '';
+            return this.index || ['0', '0'];
         },
         set: function (index) {
             this.index = index;
-            if (!this.pokedex) {
+            if (!this.pokedex || !this.pokedex_mapper) {
                 return;
             }
             var html = '';
