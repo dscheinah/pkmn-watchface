@@ -31,10 +31,10 @@ var component = {
         }
     },
     style:
-        '.pokedex { display: flex; flex-wrap: wrap; gap: 1rem; }' +
-        '.pokedex div { display: flex; align-items: center; justify-content: center; background: white; border-radius: .25rem; width: 64px; height: 64px; }' +
+        '.pokedex { display: flex; flex-wrap: wrap; }' +
+        '.pokedex div { margin: 1rem; display: flex; align-items: center; justify-content: center; background: white; border-radius: .25rem; width: 64px; height: 64px; }' +
         '.pokedex div span { font-size: 32px; color: rgba(0, 0, 0, .2); }'
-}
+};
 
 module.exports = {
     init: function (clay) {
@@ -95,4 +95,4 @@ module.exports = {
             /* 251 */ 33
         ]
     }
-}
+};
