@@ -44,7 +44,7 @@ bool enemy_reset_bird(State* state) {
   if (state->enemy->health > 0 || state->enemy->type == RESOURCE_ID_150) {
     return false;
   }
-  int bird = helper_bird(state);
+  const int bird = helper_bird(state);
   if (!bird || bird == RESOURCE_ID_250) {
     return false;
   }

@@ -39,7 +39,7 @@ void game_init(State* state) {
 }
 
 void game_tick(State* state, bool reset) {
-  bool canResetEnemy = doTick(state);
+  const bool canResetEnemy = doTick(state);
   if (reset) {
     ally_reset(state->ally, ENEMY_COUNT - state->enemy->index_count + 10);
     if (canResetEnemy && (enemy_evolution_night(state) || enemy_hatch(state))) {

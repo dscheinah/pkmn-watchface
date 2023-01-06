@@ -6,8 +6,8 @@
 static int mode = 0;
 
 void health_init() {
-  time_t start = time_start_of_today();
-  time_t end = time(NULL);
+  const time_t start = time_start_of_today();
+  const time_t end = time(NULL);
   int available = HealthServiceAccessibilityMaskAvailable
     & health_service_metric_accessible(HealthMetricStepCount, start, end)
     & health_service_metric_accessible(HealthMetricActiveSeconds, start, end);

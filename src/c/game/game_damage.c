@@ -8,7 +8,7 @@
 #define STRONG_FIRE 32
 #define STRONG_WATER 64
 
-static uint16_t types[ENEMY_COUNT] = {
+static const uint16_t types[ENEMY_COUNT] = {
   /* 001 */ WEAK_FIRE | STRONG_PLANT | STRONG_WATER,
   /* 004 */ WEAK_WATER | WEAK_STONE | STRONG_PLANT | STRONG_FIRE,
   /* 007 */ WEAK_PLANT | STRONG_FIRE | STRONG_WATER,
@@ -55,7 +55,7 @@ static uint16_t types[ENEMY_COUNT] = {
 };
 
 static int level(State* state) {
-  int allyLevel = state->ally->level_final();
+  const int allyLevel = state->ally->level_final();
   int diff = allyLevel - state->enemy->level_final();
   if (allyLevel <= 100) {
     diff += 100;
@@ -71,7 +71,7 @@ static int level(State* state) {
 }
 
 static int effective(State* state) {
-  uint16_t type = types[state->enemy->type - ENEMY_OFFSET];
+  const uint16_t type = types[state->enemy->type - ENEMY_OFFSET];
   switch (state->ally->type) {
     case RESOURCE_ID_a1:
     case RESOURCE_ID_a2:

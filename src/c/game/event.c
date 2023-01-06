@@ -16,7 +16,7 @@ void event_next(State* state, int identifier) {
     return;
   }
   state->identifier = identifier;
-  int check = event_check();
+  const int check = event_check();
   if (state->health->restful_sleep_hour) {
     state->event = EVENT_SLEEP;
     if (state->enemy->morph && state->enemy->type != RESOURCE_ID_132 && check == 3) {

@@ -2,7 +2,7 @@
 #include "ally.h"
 
 void ally_evolution(Ally* ally) {
-  int level = ally->level_final();
+  const int level = ally->level_final();
   if (level > 100) {
     ally->type = RESOURCE_ID_a142;
     return;

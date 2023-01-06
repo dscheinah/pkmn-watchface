@@ -14,7 +14,7 @@ void settings_init(State* state) {
 }
 
 void settings_set(State* state, DictionaryIterator* iter) {
-  int keys[] = {
+  const int keys[] = {
     MESSAGE_KEY_date_format,
     MESSAGE_KEY_seconds,
     MESSAGE_KEY_dow,
@@ -23,7 +23,7 @@ void settings_set(State* state, DictionaryIterator* iter) {
     MESSAGE_KEY_cache,
     MESSAGE_KEY_vibes,
   };
-  SettingsValue settings[] = {
+  const SettingsValue settings[] = {
     SETTINGS_DATE_FORMAT,
     SETTINGS_SECONDS,
     SETTINGS_DOW,
