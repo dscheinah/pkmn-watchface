@@ -2,12 +2,17 @@ var Clay = require('pebble-clay');
 var config = require('./config.json');
 var pokedex = require('./pokedex.js');
 
-var clay = new Clay(config, function () {
-    var clayConfig = this;
-    clayConfig.on(clayConfig.EVENTS.AFTER_BUILD, function() {
-        clayConfig.getItemByMessageKey('pokedex').setUserData(clayConfig.meta.userData);
+function customFn () {
+    var c = this;
+    c.on('AFTER_BUILD', function() {
+        c.getItemByMessageKey('pokedex').setData(c.meta.userData);
     });
-}, {
+}
+customFn.toString = function () {
+    return 'function(){var c=this;c.on("AFTER_BUILD",function(){c.getItemByMessageKey("pokedex").setData(c.meta.userData)})}';
+};
+
+var clay = new Clay(config, customFn, {
     userData: pokedex.userData
 });
 

@@ -1,37 +1,51 @@
+function get() {
+    return this.x || ['', ''];
+}
+get.toString = function () {
+    return 'function(){return this.x||["",""]}';
+};
+function set(index) {
+    this.x = index;
+    if (!this.i) {
+        return;
+    }
+    var html = '';
+    var length = this.m.length;
+    for (var i = 0; i < length; i++) {
+        var entry = this.m[i];
+        if ((parseInt(index[entry < 32 ? 0 : 1]) || 0) & (1 << (entry < 32 ? entry : entry - 32))) {
+            html += this.e + this.p[entry + 1] + this.t;
+        } else {
+            html += this.u;
+        }
+    }
+    document.getElementById('pokedex').innerHTML = html;
+}
+set.toString = function () {
+    return 'function(a){if(this.x=a,!!this.i){for(var b,c="",d=this.m.length,e=0;e<d;e++)b=this.m[e],c+=(parseInt(a[32>b?0:1])||0)&1<<(32>b?b:b-32)?this.e+this.p[b+1]+this.t:this.u;document.getElementById("pokedex").innerHTML=c}}';
+};
+
+function setData(userData) {
+    this.i = true;
+    this.p = userData.pokedex;
+    this.m = userData.pokedex_mapper;
+    this.e = '<div><img src="data:image/png;base64,';
+    this.t = '"/></div>';
+    this.u = '<div><span>?</span></div>';
+    if (this.x) {
+        this.set(this.x);
+    }
+}
+setData.toString = function () {
+    return 'function(a){this.i=!0,this.p=a.pokedex,this.m=a.pokedex_mapper,this.e="<div><img src=\\"data:image/png;base64,",this.t="\\"/></div>",this.u="<div><span>?</span></div>",this.x&&this.set(this.x)}';
+};
+
 var component = {
     name: 'pokedex',
-    template: '<div class="component pokedex"></div>',
-    manipulator: {
-        get: function () {
-            return this.index || ['0', '0'];
-        },
-        set: function (index) {
-            this.index = index;
-            if (!this.pokedex || !this.pokedex_mapper) {
-                return;
-            }
-            var html = '';
-            var length = this.pokedex_mapper.length;
-            for (var i = 0; i < length; i++) {
-                var entry = this.pokedex_mapper[i];
-                if ((parseInt(index[entry < 32 ? 0 : 1]) || 0) & (1 << (entry < 32 ? entry : entry - 32))) {
-                    html += '<div><img src="data:image/png;base64,' + this.pokedex[entry + 1] + '"/></div>';
-                } else {
-                    html += '<div><span>?</span></div>';
-                }
-            }
-            this.$element.set('innerHTML', html);
-        },
-        setUserData: function (userData) {
-            this.pokedex = userData.pokedex;
-            this.pokedex_mapper = userData.pokedex_mapper;
-            if (this.index) {
-                this.set(this.index);
-            }
-        }
-    },
+    template: '<div id="pokedex" class="component pokedex"></div>',
+    manipulator: {get: get, set: set, setData: setData},
     style:
-        '.pokedex { display: flex; flex-wrap: wrap; }' +
+        '.pokedex { display: flex; flex-wrap: wrap; margin-bottom: 80px; }' +
         '.pokedex div { margin: 1rem; display: flex; align-items: center; justify-content: center; background: white; border-radius: .25rem; width: 64px; height: 64px; }' +
         '.pokedex div span { font-size: 32px; color: rgba(0, 0, 0, .2); }'
 };
