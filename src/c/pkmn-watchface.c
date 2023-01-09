@@ -175,7 +175,8 @@ static void prv_init(void) {
   app_message_register_inbox_received(handleInbox);
   app_message_open(128, 128);
 
-  sendPokedex();
+  void* data = NULL;
+  app_timer_register(1000, &sendPokedex, data);
 }
 
 static void prv_deinit(void) {
