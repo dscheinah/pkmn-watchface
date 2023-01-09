@@ -3,21 +3,22 @@
 
 static int calcLevelFromSteps(int steps) {
   int level = 0;
-  int modifier = 26;
-  while ((steps -= 9000) >= 0) {
+  int modifier = 15;
+  while ((steps -= 5000) >= 0) {
     level += modifier;
-    modifier -= modifier / 3;
+    modifier -= modifier / 4;
   }
-  level += modifier * (steps + 9000) / 9000;
+  level += modifier * (steps + 5000) / 5000;
   return level;
 }
 
 void game_level(State* state) {
   int level, experience;
   level = calcLevelFromSteps(state->health->steps);
-  experience = 100 * state->health->steps / (state->health->steps_yesterday ?: 5000);
+  int stepsYesterday = state->health->steps_yesterday ?: 5000;
+  experience = 100 * state->health->steps / stepsYesterday;
   if (experience > 100) {
-    level += calcLevelFromSteps(state->health->steps - state->health->steps_yesterday);
+    level += calcLevelFromSteps(state->health->steps - stepsYesterday);
     experience = 100;
   }
   state->ally->level = level < 1 ? 1 : level;
