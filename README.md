@@ -21,7 +21,7 @@ http://apps.rebble.io/de_DE/application/620187963ea70300099815fa
 
 # Development
 
-Use the `bootstrap.sh` to download and prepare the resources. This script uses `curl` and `tar` to download the assets from https://veekun.com/dex/downloads. For aplite support also `convert` from ImageMagick and maybe `optipng` are needed.
+Use the `bootstrap.sh` to download and prepare the resources. This script uses `curl` and `tar` to download the assets from https://veekun.com/dex/downloads. For aplite support also `convert` from ImageMagick and maybe `optipng` are needed. In addition, the images are added `base64` encoded to the Pokédex.
 
 The `docker-compose.yml` provides a setup for the SDK by configuring https://hub.docker.com/r/bboehmke/pebble-dev. Use it with:
 `docker-compose run --rm sdk`.

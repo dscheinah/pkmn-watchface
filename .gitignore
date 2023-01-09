@@ -2,4 +2,5 @@
 /build
 /node_modules
 /resources/pokemon
+/src/pkjs/pokedex.json
 !.git*
