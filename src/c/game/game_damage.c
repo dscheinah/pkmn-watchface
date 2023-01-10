@@ -60,7 +60,7 @@ static int level(State* state) {
   if (allyLevel <= 100) {
     diff += 100;
   }
-  diff += (state->ally->type / 3) * 15;
+  diff += ((state->ally->type - 1) / 3) * 10;
   if (diff < 50) {
     return 50;
   }
