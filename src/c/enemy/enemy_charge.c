@@ -5,8 +5,11 @@
 bool enemy_charge(State* state) {
   switch (state->enemy->type) {
     case RESOURCE_ID_egg:
-      helper_evolve(state, RESOURCE_ID_25, 1, true);
-      return true;
+      if (state->health->steps <= 10000) {
+        helper_evolve(state, RESOURCE_ID_25, 1, true);
+        return true;
+      }
+      break;
     case RESOURCE_ID_133:
       helper_evolve(state, RESOURCE_ID_135, 2, false);
       return true;
