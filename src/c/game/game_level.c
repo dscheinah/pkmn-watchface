@@ -23,6 +23,6 @@ void game_level(State* state) {
   }
   state->ally->level = level < 1 ? 1 : level;
   state->ally->experience = experience;
-  level = 30 * (state->health->sleep + state->health->restful_sleep) / 47520;
+  level = 30 * (state->health->sleep + state->health->restful_sleep) / 43200;
   state->enemy->level = level < 1 ? 1 : level;
 }
