@@ -12,6 +12,14 @@ bool enemy_evolution(State* state) {
     return true;
   }
   if (state->event & EVENT_SLEEP) {
+    switch (state->enemy->type) {
+      case RESOURCE_ID_egg:
+        if (state->health->steps <= 10000) {
+          helper_evolve(state, RESOURCE_ID_39, 1, true);
+          return true;
+        }
+        break;
+    }
     return false;
   }
   if (state->event & EVENT_EVO) {

@@ -68,6 +68,39 @@ static Test ticks[] = {
   {
     .quiet = QUIET_TOGGLE_OFF,
   },
+  // hatch to sleep and evolve
+  {
+    .check = 1,
+    .steps = 7500,
+    .active = 30000,
+    .sleep = 25000,
+    .day = true,
+  },
+  {
+    .restful_sleep = 1,
+  },
+  {
+    .restful_sleep = 1,
+  },
+  {
+    .quiet = QUIET_TOGGLE_ON,
+  },
+  {
+    .check = 1,
+    .steps = 7500,
+    .active = 30000,
+    .sleep = 25000,
+    .day = true,
+  },
+  {
+    .restful_sleep = 1,
+  },
+  {
+    .restful_sleep = 1,
+  },
+  {
+    .quiet = QUIET_TOGGLE_OFF,
+  },
   {
     .sleep = 25000,
     .day = true,

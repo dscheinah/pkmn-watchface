@@ -13,12 +13,18 @@ bool enemy_quiet_enable(State* state) {
     case RESOURCE_ID_25:
       helper_evolve(state, RESOURCE_ID_172, 0, false);
       return true;
+    case RESOURCE_ID_39:
+      helper_evolve(state, RESOURCE_ID_174, 0, false);
+      return true;
   }
   return false;
 }
 
 bool enemy_quiet_disable(State* state) {
   switch (state->enemy->type) {
+    case RESOURCE_ID_39:
+      helper_evolve(state, RESOURCE_ID_40, 2, false);
+      return true;
     case RESOURCE_ID_64:
       helper_evolve(state, RESOURCE_ID_65, 3, false);
       return true;
