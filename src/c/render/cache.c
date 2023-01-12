@@ -14,11 +14,7 @@ static void copy(GBitmap* source, GBitmap* destination) {
   for (int i = 0; i < bounds.size.h; i++) {
     sourceRow = gbitmap_get_data_row_info(source, i);
     destinationRow = gbitmap_get_data_row_info(destination, i);
-    #if defined(PBL_COLOR)
-      memcpy(destinationRow.data, sourceRow.data, sourceRow.max_x + 1);
-    #else
-      memcpy(destinationRow.data, sourceRow.data, sourceRow.max_x / 8 + 1);
-    #endif
+    memcpy(destinationRow.data, sourceRow.data, PBL_IF_COLOR_ELSE(sourceRow.max_x, sourceRow.max_x / 8) + 1);
   }
 }
 
@@ -53,11 +49,7 @@ void cache_layer_create(Layer* root, Layer* replacement) {
   captureLayer = helper_create_layer(cacheLayer, bounds);
   layer_set_update_proc(captureLayer, capture);
 
-  #if defined(PBL_COLOR)
-    cacheBitmap = gbitmap_create_blank(bounds.size, GBitmapFormat8Bit);
-  #else
-    cacheBitmap = gbitmap_create_blank(bounds.size, GBitmapFormat1Bit);
-  #endif
+  cacheBitmap = gbitmap_create_blank(bounds.size, PBL_IF_COLOR_ELSE(GBitmapFormat8Bit, GBitmapFormat1Bit));
 }
 
 void cache_layer_mark_dirty() {

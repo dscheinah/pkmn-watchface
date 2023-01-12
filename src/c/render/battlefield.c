@@ -24,22 +24,14 @@ static char enemyLevelBuffer[5];
 
 static void renderRect(Layer* layer, GContext* ctx, int alignment, GColor8 color, int percentage) {
   GRect bounds = layer_get_bounds(layer);
-  #if defined(PBL_COLOR)
-    graphics_context_set_fill_color(ctx, color);
-  #else
-    graphics_context_set_fill_color(ctx, GColorLightGray);
-  #endif
+  graphics_context_set_fill_color(ctx, COLOR_FALLBACK(color, GColorLightGray));
   int w = bounds.size.w * percentage / 100;
   int x = alignment == ALIGN_LEFT ? 0 : bounds.size.w - w;
   graphics_fill_rect(ctx, GRect(x, 0, w, bounds.size.h), 0, GCornerNone);
 }
 
 static void renderCircle(GContext* ctx, GColor8 color, int pos) {
-  #if defined(PBL_COLOR)
-    graphics_context_set_stroke_color(ctx, color);
-  #else
-    graphics_context_set_stroke_color(ctx, GColorBlack);
-  #endif
+  graphics_context_set_stroke_color(ctx, COLOR_FALLBACK(color, GColorBlack));
   graphics_draw_round_rect(ctx, GRect(10 * pos, 0, 7, 4), 4);
 }
 

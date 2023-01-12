@@ -22,11 +22,7 @@ void watch_load(Layer* root, Layer* cachedRoot, State* stateRef) {
   timeFormat = state->settings & SETTINGS_TIME_FORMAT ? "%H:%M" : "%I:%M";
   dateFormat = state->settings & SETTINGS_DATE_FORMAT ? "%d / %m" : "%m / %d";
   if (state->settings & SETTINGS_SECONDS) {
-    #if defined(PBL_ROUND)
-      secondsLayer = helper_create_text_layer(root, GRect(110, 125, 28, 20), FONT_MEDIUM, GTextAlignmentLeft);
-    #else
-      secondsLayer = helper_create_text_layer(root, GRect(110, 133, 28, 20), FONT_MEDIUM, GTextAlignmentLeft);
-    #endif
+    secondsLayer = helper_create_text_layer(root, GRect(110, PBL_IF_ROUND_ELSE(125, 133), 28, 20), FONT_MEDIUM, GTextAlignmentLeft);
     timeLayer = helper_create_text_layer(root, GRect(13, 121, 97, 32), FONT_LARGE, GTextAlignmentCenter);
   } else {
     timeLayer = helper_create_text_layer(root, GRect(9, 121, 129, 32), FONT_LARGE, GTextAlignmentCenter);
