@@ -24,11 +24,11 @@ bool enemy_reset(State* state) {
     helper_evolve(state, RESOURCE_ID_92, 1, true);
     return true;
   }
-  if (state->enemy->hours_alive > 9) {
+  if (state->enemy->hours_alive > 8) {
     helper_evolve(state, RESOURCE_ID_86, 1, true);
     return true;
   }
-  if (state->enemy->hours_alive <= 3) {
+  if (state->enemy->hours_alive < 3) {
     switch (state->enemy->type) {
       case RESOURCE_ID_92:
       case RESOURCE_ID_93:
