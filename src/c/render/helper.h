@@ -11,3 +11,5 @@ TextLayer* helper_create_text_layer(Layer* parent, GRect rect, char* font, GText
 BitmapLayer* helper_create_bitmap_layer(Layer* parent, GRect rect, GBitmap* bitmap);
 
 Layer* helper_create_layer(Layer* parent, GRect rect);
+
+GBitmap* helper_create_bitmap(int resource);

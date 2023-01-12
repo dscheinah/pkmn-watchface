@@ -31,7 +31,7 @@ static void renderRect(Layer* layer, GContext* ctx, int alignment, GColor8 color
 }
 
 static void renderCircle(GContext* ctx, GColor8 color, int pos) {
-  graphics_context_set_stroke_color(ctx, COLOR_FALLBACK(color, GColorBlack));
+  graphics_context_set_stroke_color(ctx, COLOR_FALLBACK(color, GColorWhite));
   graphics_draw_round_rect(ctx, GRect(10 * pos, 0, 7, 4), 4);
 }
 
@@ -41,7 +41,7 @@ static void renderBitmap(Part* part, int resource) {
   }
   part->previous = resource;
   gbitmap_destroy(part->bitmap);
-  part->bitmap = gbitmap_create_with_resource(resource);
+  part->bitmap = helper_create_bitmap(resource);
   bitmap_layer_set_bitmap(part->image, part->bitmap);
 }
 
@@ -71,16 +71,16 @@ static void renderIndicator(Layer* layer, GContext* ctx) {
     renderCircle(ctx, GColorSunsetOrange, 0);
   }
   if (state->event & (EVENT_EGG | EVENT_BOSS)) {
-    renderCircle(ctx, GColorMidnightGreen, 1);
+    renderCircle(ctx, GColorJaegerGreen, 1);
   }
   if (state->event & (EVENT_GHOST | EVENT_BOSS)) {
-    renderCircle(ctx, GColorBlueMoon, 2);
+    renderCircle(ctx, GColorPictonBlue, 2);
   }
   if (state->event & EVENT_MORPH) {
     renderCircle(ctx, GColorPurpureus, 3);
   }
   if (state->event & EVENT_EVO) {
-    renderCircle(ctx, GColorLiberty, 4);
+    renderCircle(ctx, GColorChromeYellow, 4);
   }
 }
 

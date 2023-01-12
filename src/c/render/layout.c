@@ -14,7 +14,7 @@ void layout_load(Layer* root, State* state) {
   int y = (bounds.size.h - 168) / 2;
   GRect coords = GRect(x, y, 144, 168);
 
-  templateBitmap = gbitmap_create_with_resource(RESOURCE_ID_template);
+  templateBitmap = helper_create_bitmap(RESOURCE_ID_template);
   templateLayer = helper_create_bitmap_layer(root, coords, templateBitmap);
 
   if (state->settings & SETTINGS_CACHE) {
