@@ -41,7 +41,7 @@ static void renderBitmap(Part* part, int resource) {
   }
   part->previous = resource;
   gbitmap_destroy(part->bitmap);
-  part->bitmap = helper_create_bitmap(resource);
+  part->bitmap = helper_create_bitmap(resource, PBL_IF_BW_ELSE(true, false));
   bitmap_layer_set_bitmap(part->image, part->bitmap);
 }
 
