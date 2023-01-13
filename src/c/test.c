@@ -169,6 +169,13 @@ static Test ticks[] = {
     .sleep = 25000,
     .day = true,
   },
+  // reset and evolve
+  {
+    .active = 30000,
+  },
+  {
+    .hours_alive = 3,
+  },
   // create and evolve frozen
   {
     .hours_alive = 20,
@@ -176,13 +183,6 @@ static Test ticks[] = {
   },
   {
     .hours_alive = 5,
-  },
-  // reset and evolve
-  {
-    .active = 30000,
-  },
-  {
-    .hours_alive = 3,
   },
   // test long sleep trigger
   {
