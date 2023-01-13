@@ -184,6 +184,11 @@ static Test ticks[] = {
   {
     .hours_alive = 3,
   },
+  // test long sleep trigger
+  {
+    .sleep = 50000,
+    .active = 30000,
+  },
   // double reset and vanish
   {
     .active = 30000,

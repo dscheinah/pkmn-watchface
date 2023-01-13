@@ -1,7 +1,7 @@
 #pragma once
 #include <pebble.h>
 
-#define ENEMY_COUNT 46
+#define ENEMY_COUNT 47
 #define ENEMY_OFFSET 45
 
 #define EVENT_NONE 0
