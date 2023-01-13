@@ -191,6 +191,9 @@ static Test ticks[] = {
   },
   // double reset and vanish
   {
+    .steps = 7500,
+    .sleep = 25000,
+    .day = true,
     .active = 30000,
   },
   {
