@@ -22,6 +22,7 @@ void settings_set(State* state, DictionaryIterator* iter) {
     MESSAGE_KEY_taps,
     MESSAGE_KEY_cache,
     MESSAGE_KEY_vibes,
+    MESSAGE_KEY_dark,
   };
   const SettingsValue settings[] = {
     SETTINGS_DATE_FORMAT,
@@ -31,8 +32,9 @@ void settings_set(State* state, DictionaryIterator* iter) {
     SETTINGS_TAPS,
     SETTINGS_CACHE,
     SETTINGS_VIBES,
+    SETTINGS_DARK,
   };
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 8; i++) {
     Tuple* tuple = dict_find(iter, keys[i]);
     if (tuple) {
       updateSetting(state, settings[i], (bool) tuple->value->int8);

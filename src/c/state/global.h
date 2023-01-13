@@ -20,12 +20,17 @@
 #define SETTINGS_TAPS 32
 #define SETTINGS_CACHE 64
 #define SETTINGS_VIBES 128
+#define SETTINGS_DARK 256
 
 #define QUIET_OFF -2
 #define QUIET_TOGGLE_OFF -1
 #define QUIET_NONE 0
 #define QUIET_TOGGLE_ON 1
 #define QUIET_ON 2
+
+#define DARK_OFF 0
+#define DARK_ON 1
+#define DARK_FULL 2
 
 typedef struct {
  uint16_t type;
@@ -80,3 +85,5 @@ typedef struct {
   bool missing;
   short identifier;
 } State;
+
+typedef int DarkValue;

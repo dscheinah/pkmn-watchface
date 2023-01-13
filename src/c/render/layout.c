@@ -8,7 +8,10 @@ static BitmapLayer* templateLayer;
 static GBitmap* templateBitmap;
 
 void layout_load(Window* window, State* state) {
-  window_set_background_color(window, COLOR_FALLBACK(GColorDarkGray, GColorBlack));
+  DarkValue dark = state->settings & SETTINGS_DARK ? DARK_FULL : DARK_OFF;
+  if (dark) {
+    window_set_background_color(window, COLOR_FALLBACK(GColorDarkGray, GColorBlack));
+  }
 
   Layer* root = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(root);
@@ -17,7 +20,7 @@ void layout_load(Window* window, State* state) {
   int y = (bounds.size.h - 168) / 2;
   GRect coords = GRect(x, y, 144, 168);
 
-  templateBitmap = helper_create_bitmap(RESOURCE_ID_template, true);
+  templateBitmap = helper_create_bitmap(RESOURCE_ID_template, dark);
   templateLayer = helper_create_bitmap_layer(root, coords, templateBitmap);
 
   if (state->settings & SETTINGS_CACHE) {

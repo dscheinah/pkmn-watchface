@@ -48,6 +48,12 @@
 			},
 			{
 				"type": "toggle",
+				"messageKey": "dark",
+				"label": "Dark theme",
+				"description": "Be warned that some monsters will look weird on colored devices, because all white is swapped to gray."
+			},
+			{
+				"type": "toggle",
 				"messageKey": "cache",
 				"label": "Cached rendering",
 				"description": "Enables experimental caching of the battle-screen. This increases memory usage but may also reduce battery drain."
