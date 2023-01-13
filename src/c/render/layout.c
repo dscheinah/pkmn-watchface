@@ -7,7 +7,10 @@ static Layer* watchLayer;
 static BitmapLayer* templateLayer;
 static GBitmap* templateBitmap;
 
-void layout_load(Layer* root, State* state) {
+void layout_load(Window* window, State* state) {
+  window_set_background_color(window, COLOR_FALLBACK(GColorDarkGray, GColorBlack));
+
+  Layer* root = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(root);
 
   int x = (bounds.size.w - 144) / 2;
