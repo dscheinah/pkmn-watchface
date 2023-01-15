@@ -28,7 +28,7 @@ Layer* helper_create_layer(Layer* parent, GRect rect) {
   return layer;
 }
 
-GBitmap* helper_create_bitmap(int resource, DarkValue dark) {
+GBitmap* helper_create_bitmap(ResourceValue resource, DarkValue dark) {
   GBitmap* bitmap = gbitmap_create_with_resource(resource);
   if (dark) {
     GColor* palette = gbitmap_get_palette(bitmap);

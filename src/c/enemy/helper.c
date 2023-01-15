@@ -1,7 +1,7 @@
 #include <pebble.h>
 #include "helper.h"
 
-void helper_evolve(State* state, int type, int level, bool reset) {
+void helper_evolve(State* state, ResourceValue type, int level, bool reset) {
   state->enemy->type = type;
   state->enemy->level_multiplier = level;
   if (reset) {
@@ -11,7 +11,7 @@ void helper_evolve(State* state, int type, int level, bool reset) {
   }
 }
 
-int helper_bird(State* state) {
+ResourceValue helper_bird(State* state) {
   int bird144 = 0;
   switch (state->enemy->type) {
     case RESOURCE_ID_egg:

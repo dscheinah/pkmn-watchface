@@ -13,4 +13,4 @@ BitmapLayer* helper_create_bitmap_layer(Layer* parent, GRect rect, GBitmap* bitm
 
 Layer* helper_create_layer(Layer* parent, GRect rect);
 
-GBitmap* helper_create_bitmap(int resource, DarkValue dark);
+GBitmap* helper_create_bitmap(ResourceValue resource, DarkValue dark);
