@@ -42,6 +42,7 @@ static State state = {
   .quiet = QUIET_NONE,
   .missing = false,
   .identifier = -1,
+  .counter = 0,
 };
 
 static int ally_level_final() {
@@ -67,6 +68,8 @@ State* state_init() {
     switch (version) {
       case 0:
         ally.selected = 0;
+      case 1:
+        state.counter = 0;
     }
   } else {
     state.index[0] = 1 << (RESOURCE_ID_133 - ENEMY_OFFSET);
@@ -77,6 +80,7 @@ State* state_init() {
   state.ally = &ally;
   state.enemy = &enemy;
   state.health = &health;
+  state.counter++;
   return &state;
 }
 
@@ -103,7 +107,7 @@ bool state_update_index() {
 }
 
 void state_write() {
-  persist_write_int(VERSION_KEY, 1);
+  persist_write_int(VERSION_KEY, 2);
   persist_write_data(STATE_KEY, &state, sizeof(State));
   persist_write_data(ALLY_KEY, &ally, sizeof(Ally));
   persist_write_data(ENEMY_KEY, &enemy, sizeof(Enemy));

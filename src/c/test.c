@@ -16,6 +16,7 @@ typedef struct {
   int hours_alive;
   int index_count;
   bool morph;
+  int counter;
 } Test;
 
 static Test ticks[] = {
@@ -53,6 +54,11 @@ static Test ticks[] = {
     .steps = 7500,
     .sleep = 25000,
     .quiet = QUIET_ON,
+  },
+  // test counter
+  {
+    .active = 30000,
+    .counter = 600,
   },
   // hatch to quiet and evolve
   {
@@ -309,6 +315,7 @@ void test_next_tick(State* state) {
   Test current = ticks[++tick % size];
   state->enemy->hours_alive = current.hours_alive;
   state->enemy->morph = current.morph;
+  state->counter = current.counter;
   if (current.index_count) {
     state->enemy->index_count = current.index_count;
   }
