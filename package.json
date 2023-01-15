@@ -583,6 +583,30 @@
           "name": "174",
           "type": "bitmap",
           "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/201-x.png",
+          "name": "a201x",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/201-x.png",
+          "name": "b201x",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/201-o.png",
+          "name": "a201o",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
+        },
+        {
+          "file": "pokemon/main-sprites/gold/back/shiny/201-o.png",
+          "name": "b201o",
+          "type": "bitmap",
+          "spaceOptimization": "memory"
         }
       ]
     }

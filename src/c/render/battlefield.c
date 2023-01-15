@@ -117,10 +117,10 @@ void battlefield_mark_dirty() {
 
   ResourceValue type = state->ally->type;
   if (state->quiet > QUIET_NONE) {
-    type += 20;
+    type += type == RESOURCE_ID_a201x ? 2 : 20;
   }
   if (state->ally->shiny) {
-    type += 10;
+    type += type == RESOURCE_ID_a201x ? 1 : 10;
   }
   renderBitmap(&allyPart, type);
   renderBitmap(&enemyPart, state->missing ? RESOURCE_ID_0 : state->enemy->type);

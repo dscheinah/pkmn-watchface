@@ -63,7 +63,9 @@ static int level(State* state) {
   if (allyLevel <= 100) {
     diff += 100;
   }
-  diff += ((state->ally->type - 1) / 3) * 10;
+  if (state->ally->type != RESOURCE_ID_a201x) {
+    diff += ((state->ally->type - 1) / 3) * 10;
+  }
   if (diff < 50) {
     return 50;
   }
@@ -111,6 +113,8 @@ static int effective(State* state) {
         return 5;
       }
       break;
+    default:
+      return rand() % 6 + 1;
   }
   return 3;
 }
