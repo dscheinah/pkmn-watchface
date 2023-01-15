@@ -19,6 +19,9 @@ bool enemy_evolution(State* state) {
           return true;
         }
         break;
+      case RESOURCE_ID_132:
+        helper_evolve(state, RESOURCE_ID_200, state->enemy->level_multiplier, false);
+        return true;
     }
     return false;
   }

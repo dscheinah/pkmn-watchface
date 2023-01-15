@@ -35,6 +35,7 @@ if [[ $hasConvert ]]; then
   convert "$prefix/92.png" -level 0%,100%,0.7 "$prefix/92.png"
   convert "$prefix/93.png" -level 0%,100%,1.7 "$prefix/93.png"
   convert "$prefix/94.png" -level 0%,100%,1.5 "$prefix/94.png"
+  convert "$prefix/200.png" -level 0%,100%,1.7 "$prefix/200.png"
   convert "$prefix/214.png" -level 0%,100%,1.2 "$prefix/214.png"
   convert "$prefix/216.png" -level 0%,100%,1.1 "$prefix/216.png"
 fi

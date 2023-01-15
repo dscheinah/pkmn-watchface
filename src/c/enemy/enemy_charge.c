@@ -10,6 +10,9 @@ bool enemy_charge(State* state) {
         return true;
       }
       break;
+    case RESOURCE_ID_132:
+      helper_evolve(state, RESOURCE_ID_125, state->enemy->level_multiplier, false);
+      return true;
     case RESOURCE_ID_133:
       helper_evolve(state, RESOURCE_ID_135, 2, false);
       return true;
