@@ -49,7 +49,7 @@ static void markDirty() {
 
 static void game(struct tm* tick_time, TimeUnits units_changed) {
   #if defined(TEST)
-    if (time(NULL) % 5 == 0) {
+    if (time(NULL) % 3 == 0) {
       units_changed |= HOUR_UNIT;
     }
   #endif
