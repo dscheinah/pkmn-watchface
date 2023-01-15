@@ -34,6 +34,7 @@ bool enemy_charge(State* state) {
     case RESOURCE_ID_146:
     case RESOURCE_ID_176:
     case RESOURCE_ID_225:
+    case RESOURCE_ID_245:
     case RESOURCE_ID_249:
     case RESOURCE_ID_250:
       if (state->enemy->health > 50) {
