@@ -56,6 +56,7 @@ void event_next(State* state, int identifier) {
     case RESOURCE_ID_8:
     case RESOURCE_ID_86:
     case RESOURCE_ID_133:
+    case RESOURCE_ID_216:
       if (check < state->enemy->hours_alive) {
         state->event |= EVENT_EVO;
       }

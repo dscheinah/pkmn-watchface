@@ -34,6 +34,9 @@ bool enemy_evolution(State* state) {
       case RESOURCE_ID_86:
         helper_evolve(state, RESOURCE_ID_87, 2, false);
         return true;
+      case RESOURCE_ID_216:
+        helper_evolve(state, RESOURCE_ID_217, 2, false);
+        return true;
       default:
         if (state->enemy->type >= RESOURCE_ID_1 && state->enemy->type <= RESOURCE_ID_8) {
           helper_evolve(state, state->enemy->type + 3, state->enemy->level_multiplier + 1, false);

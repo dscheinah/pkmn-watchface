@@ -220,6 +220,20 @@ static Test ticks[] = {
   {
     .quiet = QUIET_TOGGLE_OFF,
   },
+  // test reset with event and evolve
+  {
+    .steps = 7500,
+    .active = 30000,
+    .sleep = 25000,
+    .day = true,
+  },
+  {
+    .active = 30000,
+    .hours_alive = 5,
+  },
+  {
+    .hours_alive = 5,
+  },
   // do some game ticks with morph
   {
     .steps = 7500,

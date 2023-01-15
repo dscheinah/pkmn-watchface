@@ -36,6 +36,7 @@ if [[ $hasConvert ]]; then
   convert "$prefix/93.png" -level 0%,100%,1.7 "$prefix/93.png"
   convert "$prefix/94.png" -level 0%,100%,1.5 "$prefix/94.png"
   convert "$prefix/214.png" -level 0%,100%,1.2 "$prefix/214.png"
+  convert "$prefix/216.png" -level 0%,100%,1.1 "$prefix/216.png"
 fi
 
 grep main-sprites package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | while read -r file; do
