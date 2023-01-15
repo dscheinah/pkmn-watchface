@@ -249,11 +249,13 @@ static Test ticks[] = {
   },
   {
     .check = 3,
-    .active = 600,
     .morph = true,
+    .restful_sleep = 1,
   },
   {
-    .restful_sleep = 1,
+    .check = 3,
+    .active = 600,
+    .morph = true,
   },
   {
     .check = 3,
