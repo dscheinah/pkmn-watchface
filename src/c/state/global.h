@@ -41,6 +41,7 @@ typedef struct {
  short health;
  uint16_t experience;
  bool shiny;
+ ResourceValue selected;
  int (*level_final)();
 } Ally;
 

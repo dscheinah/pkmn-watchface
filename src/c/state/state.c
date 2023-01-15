@@ -1,6 +1,5 @@
 #include "state.h"
 
-#define VERSION     0
 #define VERSION_KEY 0
 #define STATE_KEY   1
 #define ALLY_KEY    2
@@ -14,6 +13,7 @@ static Ally ally = {
   .level_modifier = 0,
   .health = 100,
   .experience = 0,
+  .selected = 0,
 };
 static Enemy enemy = {
   .type = RESOURCE_ID_133,
@@ -58,11 +58,16 @@ static int enemy_level_final() {
 }
 
 State* state_init() {
-  if (persist_read_int(VERSION_KEY) == VERSION) {
+  int version = persist_read_int(VERSION_KEY);
+  if (version) {
     persist_read_data(STATE_KEY, &state, sizeof(State));
     persist_read_data(ALLY_KEY, &ally, sizeof(Ally));
     persist_read_data(ENEMY_KEY, &enemy, sizeof(Enemy));
     persist_read_data(HEALTH_KEY, &health, sizeof(Health));
+    switch (version) {
+      case 0:
+        ally.selected = 0;
+    }
   } else {
     state.index[0] = 1 << (RESOURCE_ID_133 - ENEMY_OFFSET);
     state.index[1] = 0;
@@ -98,7 +103,7 @@ bool state_update_index() {
 }
 
 void state_write() {
-  persist_write_int(VERSION_KEY, VERSION);
+  persist_write_int(VERSION_KEY, 1);
   persist_write_data(STATE_KEY, &state, sizeof(State));
   persist_write_data(ALLY_KEY, &ally, sizeof(Ally));
   persist_write_data(ENEMY_KEY, &enemy, sizeof(Enemy));
