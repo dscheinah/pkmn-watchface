@@ -36,6 +36,13 @@ if [[ $hasConvert ]]; then
   convert "$prefix/93.png" -level 0%,100%,1.7 "$prefix/93.png"
   convert "$prefix/94.png" -level 0%,100%,1.5 "$prefix/94.png"
   convert "$prefix/214.png" -level 0%,100%,1.2 "$prefix/214.png"
+
+  for i in 125 200 214 225 241; do
+    convert "$prefix/$i.png" -sample 44x44 "$prefix/$i.png"
+  done
+  for i in 26 92 143 144 145 146 203 217 235 243 244 245 249 250; do
+    convert "$prefix/$i.png" -sample 48x48 "$prefix/$i.png"
+  done
 fi
 
 grep main-sprites package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | while read -r file; do
@@ -54,7 +61,14 @@ grep main-sprites package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | whil
     optipng -strip all -o7 "$fileBw"
   fi
   if [[ "$file" != *"back"* ]]; then
-    echo ',"'$(base64 -w0 "$fileColor")'"' >> $pokedex
+    line=$(base64 -w0 "$fileColor")
+    if [[ $hasConvert ]]; then
+      gif=$(convert "$fileColor" -trim -strip gif:- | base64 -w0)
+      if [[ ${#gif} -lt ${#line} ]]; then
+        line=${gif}
+      fi
+    fi
+    echo ',"'${line}'"' >> $pokedex
   fi
 done
 
