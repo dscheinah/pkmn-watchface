@@ -40,8 +40,11 @@ if [[ $hasConvert ]]; then
   for i in 125 200 214 225 241; do
     convert "$prefix/$i.png" -sample 44x44 "$prefix/$i.png"
   done
-  for i in 26 92 143 144 145 146 203 217 235 243 244 245 249 250; do
+  for i in 26 92 203 217 235; do
     convert "$prefix/$i.png" -sample 48x48 "$prefix/$i.png"
+  done
+  for i in 143 144 145 146 243 244 245 249 250; do
+    convert "$prefix/$i.png" -sample 52x52 "$prefix/$i.png"
   done
 fi
 
