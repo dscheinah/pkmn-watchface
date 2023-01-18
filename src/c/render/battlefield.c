@@ -22,6 +22,8 @@ static Layer* indicator;
 static char allyLevelBuffer[5];
 static char enemyLevelBuffer[5];
 
+DarkValue dark;
+
 static void renderRect(Layer* layer, GContext* ctx, int alignment, GColor8 color, int percentage) {
   GRect bounds = layer_get_bounds(layer);
   graphics_context_set_fill_color(ctx, COLOR_FALLBACK(color, GColorLightGray));
@@ -31,7 +33,7 @@ static void renderRect(Layer* layer, GContext* ctx, int alignment, GColor8 color
 }
 
 static void renderCircle(GContext* ctx, GColor8 color, int pos) {
-  graphics_context_set_stroke_color(ctx, COLOR_FALLBACK(color, GColorBlack));
+  graphics_context_set_stroke_color(ctx, COLOR_FALLBACK(color, dark ? GColorWhite : GColorBlack));
   graphics_draw_round_rect(ctx, GRect(10 * pos, 0, 7, 4), 4);
 }
 
@@ -41,7 +43,7 @@ static void renderBitmap(Part* part, int resource) {
   }
   part->previous = resource;
   gbitmap_destroy(part->bitmap);
-  part->bitmap = gbitmap_create_with_resource(resource);
+  part->bitmap = helper_create_bitmap(resource, dark);
   bitmap_layer_set_bitmap(part->image, part->bitmap);
 }
 
@@ -71,29 +73,30 @@ static void renderIndicator(Layer* layer, GContext* ctx) {
     renderCircle(ctx, GColorSunsetOrange, 0);
   }
   if (state->event & (EVENT_EGG | EVENT_BOSS)) {
-    renderCircle(ctx, GColorMidnightGreen, 1);
+    renderCircle(ctx, dark ? GColorJaegerGreen : GColorMidnightGreen, 1);
   }
   if (state->event & (EVENT_GHOST | EVENT_BOSS)) {
-    renderCircle(ctx, GColorBlueMoon, 2);
+    renderCircle(ctx, dark ? GColorPictonBlue : GColorBlueMoon, 2);
   }
   if (state->event & EVENT_MORPH) {
     renderCircle(ctx, GColorPurpureus, 3);
   }
   if (state->event & EVENT_EVO) {
-    renderCircle(ctx, GColorLiberty, 4);
+    renderCircle(ctx, dark ? GColorChromeYellow : GColorLiberty, 4);
   }
 }
 
 void battlefield_load(Layer* root, State* stateRef) {
   state = stateRef;
+  dark = state->settings & SETTINGS_DARK ? PBL_IF_BW_ELSE(DARK_FULL, DARK_ON) : DARK_OFF;
 
   allyPart.image = helper_create_bitmap_layer(root, GRect(10, 68, 48, 48), NULL);
-  allyPart.level = helper_create_text_layer(root, GRect(72, 73, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter);
+  allyPart.level = helper_create_text_layer(root, GRect(72, 73, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter, dark);
   allyPart.health = helper_create_layer(root, GRect(96, 91, 37, 4));
   allyPart.experience = helper_create_layer(root, GRect(76, 111, 61, 2));
 
   enemyPart.image = helper_create_bitmap_layer(root, GRect(82, 14, 56, 56), NULL);
-  enemyPart.level = helper_create_text_layer(root, GRect(16, 10, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter);
+  enemyPart.level = helper_create_text_layer(root, GRect(16, 10, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter, dark);
   enemyPart.health = helper_create_layer(root, GRect(40, 28, 29, 3));
   enemyPart.experience = helper_create_layer(root, GRect(20, 41, 49, 1));
   bitmap_layer_set_alignment(enemyPart.image, GAlignBottom);

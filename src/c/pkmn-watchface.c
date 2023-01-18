@@ -127,7 +127,7 @@ static void handleInbox(DictionaryIterator* iter, void* context) {
 }
 
 static void prv_window_load(Window* window) {
-  layout_load(window_get_root_layer(window), state);
+  layout_load(window, state);
   battlefield_load(layout_get_battlefield(), state);
   watch_load(layout_get_watch(), layout_get_root(), state);
 }

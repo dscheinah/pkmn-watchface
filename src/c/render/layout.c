@@ -7,14 +7,20 @@ static Layer* watchLayer;
 static BitmapLayer* templateLayer;
 static GBitmap* templateBitmap;
 
-void layout_load(Layer* root, State* state) {
+void layout_load(Window* window, State* state) {
+  DarkValue dark = state->settings & SETTINGS_DARK ? DARK_FULL : DARK_OFF;
+  if (dark) {
+    window_set_background_color(window, COLOR_FALLBACK(GColorDarkGray, GColorBlack));
+  }
+
+  Layer* root = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(root);
 
   int x = (bounds.size.w - 144) / 2;
   int y = (bounds.size.h - 168) / 2;
   GRect coords = GRect(x, y, 144, 168);
 
-  templateBitmap = gbitmap_create_with_resource(RESOURCE_ID_template);
+  templateBitmap = helper_create_bitmap(RESOURCE_ID_template, dark);
   templateLayer = helper_create_bitmap_layer(root, coords, templateBitmap);
 
   if (state->settings & SETTINGS_CACHE) {
