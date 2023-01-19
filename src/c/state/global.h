@@ -32,18 +32,21 @@
 #define DARK_ON 1
 #define DARK_FULL 2
 
+typedef uint16_t ResourceValue;
+
 typedef struct {
- uint16_t type;
+ ResourceValue type;
  uint16_t level;
  uint16_t level_modifier;
  short health;
  uint16_t experience;
  bool shiny;
+ ResourceValue selected;
  int (*level_final)();
 } Ally;
 
 typedef struct {
-  uint16_t type;
+  ResourceValue type;
   uint16_t level;
   uint16_t level_multiplier;
   short health;
@@ -51,7 +54,7 @@ typedef struct {
   uint16_t index_count;
   bool morph;
   short teleport;
-  uint16_t teleport_type;
+  ResourceValue teleport_type;
   int (*level_final)();
 } Enemy;
 

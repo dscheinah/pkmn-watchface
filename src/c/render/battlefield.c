@@ -11,7 +11,7 @@ typedef struct {
   TextLayer* level;
   Layer* health;
   Layer* experience;
-  int previous;
+  ResourceValue previous;
 } Part;
 
 static State* state;
@@ -37,7 +37,7 @@ static void renderCircle(GContext* ctx, GColor8 color, int pos) {
   graphics_draw_round_rect(ctx, GRect(10 * pos, 0, 7, 4), 4);
 }
 
-static void renderBitmap(Part* part, int resource) {
+static void renderBitmap(Part* part, ResourceValue resource) {
   if (part->previous == resource) {
     return;
   }
@@ -114,7 +114,7 @@ void battlefield_mark_dirty() {
     cache_layer_mark_dirty();
   }
 
-  int type = state->ally->type;
+  ResourceValue type = state->ally->type;
   if (state->quiet > QUIET_NONE) {
     type += 20;
   }

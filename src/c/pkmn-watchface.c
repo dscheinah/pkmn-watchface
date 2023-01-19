@@ -5,6 +5,7 @@
 #include "render/layout.h"
 #include "render/battlefield.h"
 #include "render/watch.h"
+#include "ally/ally.h"
 #include "enemy/enemy.h"
 #include "game/event.h"
 #include "game/game.h"
@@ -124,6 +125,13 @@ static void handleTap(AccelAxisType axis, int32_t direction) {
 
 static void handleInbox(DictionaryIterator* iter, void* context) {
   settings_set(state, iter);
+  Tuple* tuple = dict_find(iter, MESSAGE_KEY_ally);
+  if (tuple) {
+    ally_switch(state->ally, tuple->value->uint8 - 48);
+    ally_evolution(state->ally);
+    battlefield_mark_dirty();
+  }
+  state_write();
 }
 
 static void prv_window_load(Window* window) {

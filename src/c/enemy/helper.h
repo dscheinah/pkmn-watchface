@@ -2,6 +2,6 @@
 #include <pebble.h>
 #include "../state/global.h"
 
-void helper_evolve(State* state, int type, int level, bool reset);
+void helper_evolve(State* state, ResourceValue type, int level, bool reset);
 
-int helper_bird(State* state);
+ResourceValue helper_bird(State* state);

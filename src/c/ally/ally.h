@@ -5,3 +5,5 @@
 void ally_reset(Ally* ally, int shiny_rate);
 
 void ally_evolution(Ally* ally);
+
+void ally_switch(Ally* ally, ResourceValue target);
