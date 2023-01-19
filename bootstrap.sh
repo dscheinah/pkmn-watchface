@@ -53,8 +53,8 @@ grep main-sprites package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | whil
   fileColor="${file%.*}~color.png"
   fileBw="${file%.*}~bw.png"
   if [[ $hasConvert ]]; then
-    convert "$file" -flatten -alpha off +dither -remap ./pebble_colors_64.gif -type palette "$fileColor"
-    convert "$file" -flatten -alpha off -monochrome -type palette "$fileBw"
+    convert "$file" -flatten -alpha off +dither -remap ./pebble_colors_64.gif -trim -colors 4 -type palette "$fileColor"
+    convert "$file" -flatten -alpha off -monochrome -trim -colors 2 -type palette "$fileBw"
   else
     cp "$file" "${file%.*}~color.png"
     cp "$file" "${file%.*}~bw.png"
@@ -66,7 +66,7 @@ grep main-sprites package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | whil
   if [[ "$file" != *"back"* ]]; then
     line=$(base64 -w0 "$fileColor")
     if [[ $hasConvert ]]; then
-      gif=$(convert "$fileColor" -trim -strip gif:- | base64 -w0)
+      gif=$(convert "$fileColor" -strip gif:- | base64 -w0)
       if [[ ${#gif} -lt ${#line} ]]; then
         line=${gif}
       fi
