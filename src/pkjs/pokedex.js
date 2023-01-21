@@ -29,7 +29,7 @@ function setData(userData) {
     this.i = true;
     this.p = userData.pokedex;
     this.m = userData.pokedex_mapper;
-    this.e = '<div><img src="data:image/png;base64,';
+    this.e = '<div><img src="data:image;base64,';
     this.t = '"/></div>';
     this.u = '<div><span>?</span></div>';
     if (this.x) {
@@ -37,7 +37,7 @@ function setData(userData) {
     }
 }
 setData.toString = function () {
-    return 'function(a){this.i=!0,this.p=a.pokedex,this.m=a.pokedex_mapper,this.e="<div><img src=\\"data:image/png;base64,",this.t="\\"/></div>",this.u="<div><span>?</span></div>",this.x&&this.set(this.x)}';
+    return 'function(a){this.i=!0,this.p=a.pokedex,this.m=a.pokedex_mapper,this.e="<div><img src=\\"data:image;base64,",this.t="\\"/></div>",this.u="<div><span>?</span></div>",this.x&&this.set(this.x)}';
 };
 
 var component = {
