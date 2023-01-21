@@ -25,7 +25,7 @@ bool enemy_evolution(State* state) {
   if (state->event & EVENT_EVO) {
     switch (state->enemy->type) {
       case RESOURCE_ID_133:
-        if (rand() % (6 - state->enemy->hours_alive) == 0) {
+        if ((rand() % 2 + 3) - state->enemy->hours_alive < 0) {
           helper_evolve(state, RESOURCE_ID_196, 2, false);
         } else {
           helper_evolve(state, RESOURCE_ID_134 + rand() % 2, 2, false);
