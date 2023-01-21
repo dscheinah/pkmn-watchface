@@ -38,6 +38,16 @@ if [[ $hasConvert ]]; then
   convert "$prefix/200.png" -level 0%,100%,1.7 "$prefix/200.png"
   convert "$prefix/214.png" -level 0%,100%,1.2 "$prefix/214.png"
   convert "$prefix/216.png" -level 0%,100%,1.1 "$prefix/216.png"
+
+  for i in 125 200 214 225 241; do
+    convert "$prefix/$i.png" -sample 44x44 "$prefix/$i.png"
+  done
+  for i in 26 92 203 217 235; do
+    convert "$prefix/$i.png" -sample 48x48 "$prefix/$i.png"
+  done
+  for i in 143 144 145 146 243 244 245 249 250; do
+    convert "$prefix/$i.png" -sample 52x52 "$prefix/$i.png"
+  done
 fi
 
 grep main-sprites package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | while read -r file; do
@@ -45,8 +55,8 @@ grep main-sprites package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | whil
   fileColor="${file%.*}~color.png"
   fileBw="${file%.*}~bw.png"
   if [[ $hasConvert ]]; then
-    convert "$file" -flatten -alpha off +dither -remap ./pebble_colors_64.gif -type palette "$fileColor"
-    convert "$file" -flatten -alpha off -monochrome -type palette "$fileBw"
+    convert "$file" -flatten -alpha off +dither -remap ./pebble_colors_64.gif -trim -colors 4 -type palette "$fileColor"
+    convert "$file" -flatten -alpha off -monochrome -trim -colors 2 -type palette "$fileBw"
   else
     cp "$file" "${file%.*}~color.png"
     cp "$file" "${file%.*}~bw.png"
@@ -56,7 +66,14 @@ grep main-sprites package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | whil
     optipng -strip all -o7 "$fileBw"
   fi
   if [[ "$file" != *"back"* ]]; then
-    echo ',"'$(base64 -w0 "$fileColor")'"' >> $pokedex
+    line=$(base64 -w0 "$fileColor")
+    if [[ $hasConvert ]]; then
+      gif=$(convert "$fileColor" -strip gif:- | base64 -w0)
+      if [[ ${#gif} -lt ${#line} ]]; then
+        line=${gif}
+      fi
+    fi
+    echo ',"'${line}'"' >> $pokedex
   fi
 done
 

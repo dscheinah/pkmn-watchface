@@ -15,6 +15,7 @@ TextLayer* helper_create_text_layer(Layer* parent, GRect rect, char* font, GText
 
 BitmapLayer* helper_create_bitmap_layer(Layer* parent, GRect rect, GBitmap* bitmap) {
   BitmapLayer* layer = bitmap_layer_create(rect);
+  bitmap_layer_set_alignment(layer, GAlignBottom);
   layer_add_child(parent, bitmap_layer_get_layer(layer));
   if (bitmap != NULL) {
     bitmap_layer_set_bitmap(layer, bitmap);

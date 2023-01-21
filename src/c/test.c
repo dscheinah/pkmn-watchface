@@ -180,7 +180,7 @@ static Test ticks[] = {
     .active = 30000,
   },
   {
-    .hours_alive = 3,
+    .hours_alive = 4,
   },
   // create and evolve frozen
   {

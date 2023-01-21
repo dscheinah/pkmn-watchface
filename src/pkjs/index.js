@@ -16,6 +16,10 @@ var clay = new Clay(config, customFn, {
     userData: pokedex.userData
 });
 
+clay.components.select.initialize.toString = function () {
+    return 'function (){var e,n=this;(e=n.$element?function(){var e=n.$element.select(".value"),t=n.$manipulatorTarget.get("selectedIndex"),o=n.$manipulatorTarget.select("option");e.set("innerHTML",o[t]&&o[t].innerHTML)}:function(){var e=document.querySelector(".component-select select");if(e){var n=document.querySelector(".component-select .value"),t=e.selectedIndex,o=e.options;n.innerHTML=o[t]&&o[t].innerHTML||""}})(),n.on("change",e)}'
+};
+
 pokedex.init(clay);
 
 Pebble.addEventListener('ready', function () {

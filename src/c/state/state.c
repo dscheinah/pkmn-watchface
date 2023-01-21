@@ -59,13 +59,12 @@ static int enemy_level_final() {
 }
 
 State* state_init() {
-  int version = persist_read_int(VERSION_KEY);
-  if (version) {
+  if (persist_exists(VERSION_KEY)) {
     persist_read_data(STATE_KEY, &state, sizeof(State));
     persist_read_data(ALLY_KEY, &ally, sizeof(Ally));
     persist_read_data(ENEMY_KEY, &enemy, sizeof(Enemy));
     persist_read_data(HEALTH_KEY, &health, sizeof(Health));
-    switch (version) {
+    switch (persist_read_int(VERSION_KEY)) {
       case 0:
         ally.selected = 0;
       case 1:
