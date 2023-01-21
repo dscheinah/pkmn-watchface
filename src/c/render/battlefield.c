@@ -99,7 +99,6 @@ void battlefield_load(Layer* root, State* stateRef) {
   enemyPart.level = helper_create_text_layer(root, GRect(16, 10, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter, dark);
   enemyPart.health = helper_create_layer(root, GRect(40, 28, 29, 3));
   enemyPart.experience = helper_create_layer(root, GRect(20, 41, 49, 1));
-  bitmap_layer_set_alignment(enemyPart.image, GAlignBottom);
 
   indicator = helper_create_layer(root, GRect(21, 35, 47, 4));
 

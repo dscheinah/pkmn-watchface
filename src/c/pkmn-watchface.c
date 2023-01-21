@@ -31,9 +31,11 @@ bool tapActive = false;
 static void sendPokedex() {
   DictionaryIterator* outbox;
   app_message_outbox_begin(&outbox);
-  dict_write_int(outbox, MESSAGE_KEY_pokedex0, &state->index[0], 4, false);
-  dict_write_int(outbox, MESSAGE_KEY_pokedex1, &state->index[1], 4, false);
-  app_message_outbox_send();
+  if (outbox) {
+    dict_write_int(outbox, MESSAGE_KEY_pokedex0, &state->index[0], 4, false);
+    dict_write_int(outbox, MESSAGE_KEY_pokedex1, &state->index[1], 4, false);
+    app_message_outbox_send();
+  }
 }
 
 static void markDirty() {
