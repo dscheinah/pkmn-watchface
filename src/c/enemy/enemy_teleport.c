@@ -41,6 +41,9 @@ void enemy_teleport(State* state) {
     returnTeleport(state, state->enemy->teleport_type, 3);
     return;
   }
+  if (state->event) {
+    return;
+  }
   switch (state->enemy->type) {
     case RESOURCE_ID_133:
       createTeleport(state, RESOURCE_ID_63, 1);

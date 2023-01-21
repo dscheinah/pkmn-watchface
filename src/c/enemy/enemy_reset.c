@@ -24,6 +24,10 @@ bool enemy_reset(State* state) {
     helper_evolve(state, RESOURCE_ID_92, 1, true);
     return true;
   }
+  if (state->event) {
+    helper_evolve(state, RESOURCE_ID_216, 1, true);
+    return true;
+  }
   if (state->enemy->type != RESOURCE_ID_143 && state->enemy->level >= 40) {
     helper_evolve(state, RESOURCE_ID_143, 1, true);
     return true;
