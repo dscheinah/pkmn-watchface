@@ -44,6 +44,11 @@ bool enemy_reset(State* state) {
         return true;
     }
   }
+  if (state->counter > 512) {
+    state->counter = 0;
+    helper_evolve(state, RESOURCE_ID_185, 1, true);
+    return true;
+  }
   helper_evolve(state, RESOURCE_ID_133, 1, true);
   return true;
 }

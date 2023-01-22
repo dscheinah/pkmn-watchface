@@ -61,6 +61,7 @@ static const uint16_t types[ENEMY_COUNT] = {
   /* 243 */ 0,
   /* 244 */ WEAK_WATER | WEAK_STONE | STRONG_PLANT | STRONG_FIRE,
   /* 245 */ WEAK_PLANT | STRONG_FIRE | STRONG_WATER,
+  /* 185 */ WEAK_PLANT | WEAK_WATER | STRONG_FIRE,
 };
 
 static int level(State* state) {

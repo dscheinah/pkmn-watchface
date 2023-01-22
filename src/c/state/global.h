@@ -1,7 +1,7 @@
 #pragma once
 #include <pebble.h>
 
-#define ENEMY_COUNT 52
+#define ENEMY_COUNT 53
 #define ENEMY_OFFSET 45
 
 #define EVENT_NONE 0
@@ -87,6 +87,7 @@ typedef struct {
   uint index[2];
   bool missing;
   short identifier;
+  uint16_t counter;
 } State;
 
 typedef int DarkValue;
