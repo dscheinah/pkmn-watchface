@@ -48,5 +48,31 @@ void enemy_teleport(State* state) {
     case RESOURCE_ID_133:
       createTeleport(state, RESOURCE_ID_63, 1);
       break;
+    case RESOURCE_ID_25:
+    case RESOURCE_ID_26:
+    case RESOURCE_ID_135:
+    case RESOURCE_ID_145:
+    case RESOURCE_ID_172:
+      if (rand() % 12 == 0) {
+        createTeleport(state, RESOURCE_ID_243, 3);
+      }
+      break;
+    case RESOURCE_ID_4:
+    case RESOURCE_ID_5:
+    case RESOURCE_ID_6:
+    case RESOURCE_ID_136:
+    case RESOURCE_ID_146:
+      if (rand() % 12 == 0) {
+        createTeleport(state, RESOURCE_ID_244, 3);
+      }
+      break;
+    case RESOURCE_ID_7:
+    case RESOURCE_ID_8:
+    case RESOURCE_ID_9:
+    case RESOURCE_ID_134:
+      if (rand() % 12 == 0) {
+        createTeleport(state, RESOURCE_ID_245, 3);
+      }
+      break;
   }
 }
