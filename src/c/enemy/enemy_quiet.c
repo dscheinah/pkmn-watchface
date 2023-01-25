@@ -16,6 +16,9 @@ bool enemy_quiet_enable(State* state) {
     case RESOURCE_ID_39:
       helper_evolve(state, RESOURCE_ID_174, 0, false);
       return true;
+    case RESOURCE_ID_125:
+      helper_evolve(state, RESOURCE_ID_239, 0, false);
+      return true;
   }
   return false;
 }

@@ -35,16 +35,17 @@ if [[ $hasConvert ]]; then
   convert "$prefix/92.png" -level 0%,100%,0.7 "$prefix/92.png"
   convert "$prefix/93.png" -level 0%,100%,1.7 "$prefix/93.png"
   convert "$prefix/94.png" -level 0%,100%,1.5 "$prefix/94.png"
+  convert "$prefix/200.png" -level 0%,100%,1.7 "$prefix/200.png"
   convert "$prefix/214.png" -level 0%,100%,1.2 "$prefix/214.png"
   convert "$prefix/216.png" -level 0%,100%,1.1 "$prefix/216.png"
 
-  for i in 125 200 214 225 241; do
+  for i in 125 200 214 225 239 241; do
     convert "$prefix/$i.png" -sample 44x44 "$prefix/$i.png"
   done
-  for i in 26 92 203 217 235; do
+  for i in 26 64 92 203 217 235; do
     convert "$prefix/$i.png" -sample 48x48 "$prefix/$i.png"
   done
-  for i in 143 144 145 146 243 244 245 249 250; do
+  for i in 3 6 9 65 143 144 145 146 243 244 245 249 250; do
     convert "$prefix/$i.png" -sample 52x52 "$prefix/$i.png"
   done
 fi
