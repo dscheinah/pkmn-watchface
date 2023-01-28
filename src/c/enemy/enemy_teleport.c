@@ -8,8 +8,16 @@ static void createTeleport(State* state, int resource, int level) {
   state->enemy->teleport_type = resource;
 }
 
-static void returnTeleport(State* state, int resource, int level) {
-  helper_evolve(state, resource, level, true);
+static void returnTeleport(State* state) {
+  bool isDefault = state->enemy->teleport_type == RESOURCE_ID_63;
+  if (state->event) {
+    if (isDefault) {
+      helper_evolve(state, RESOURCE_ID_64, 2, true);
+      state->enemy->teleport = 0;
+    }
+    return;
+  }
+  helper_evolve(state, state->enemy->teleport_type, isDefault ? 1 : 3, true);
   state->enemy->health = state->enemy->teleport;
 }
 
@@ -25,20 +33,11 @@ void enemy_teleport(State* state) {
     state->enemy->teleport = 0;
     return;
   }
-  if (state->event & (EVENT_GHOST | EVENT_EGG | EVENT_BOSS)) {
+  if (state->event & EVENT_BOSS) {
     return;
   }
   if (state->enemy->teleport > 0) {
-    if (state->enemy->teleport_type == RESOURCE_ID_63) {
-      if (state->event & EVENT_EVO) {
-        returnTeleport(state, RESOURCE_ID_64, 2);
-        state->enemy->teleport = 0;
-        return;
-      }
-      returnTeleport(state, RESOURCE_ID_63, 1);
-      return;
-    }
-    returnTeleport(state, state->enemy->teleport_type, 3);
+    returnTeleport(state);
     return;
   }
   if (state->event) {
