@@ -7,7 +7,7 @@
 #define HEALTH_KEY  4
 
 static Ally ally = {
-  .type = RESOURCE_ID_a1,
+  .type = RESOURCE_ID_a201x,
   .shiny = false,
   .level = 1,
   .level_modifier = 0,

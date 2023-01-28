@@ -86,7 +86,7 @@ if [[ $hasConvert ]]; then
   convert "$prefix/back/8.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/8~bw.png"
   convert "$prefix/back/shiny/4.png" -flatten -level 0%,100%,0.5 -alpha off -monochrome -type palette "$prefix/back/shiny/4~bw.png"
   convert "$prefix/back/shiny/222.png" -flatten -level 0%,100%,0.3 -alpha off -monochrome -type palette "$prefix/back/shiny/222~bw.png"
-  for i in 155 156 157; do
+  for i in 155 156 157 201-x 201-o; do
     convert "$prefix/back/shiny/$i.png" -flatten -alpha off -colorspace gray -threshold 99% -type bilevel "$prefix/back/shiny/$i.base.png"
     convert "$prefix/back/shiny/$i.png" -flatten -channel rgba -transparent black -fill black -opaque white -fill white -opaque none -alpha off -colorspace gray -threshold 99% -type bilevel "$prefix/back/shiny/$i.mask.png"
     convert "$prefix/back/shiny/$i.base.png" "$prefix/back/shiny/$i.mask.png" -compose add -composite "$prefix/back/shiny/$i~bw.png"
@@ -102,6 +102,8 @@ if [[ $hasOptiPng ]]; then
   optipng -strip all -o7 "$prefix/back/shiny/156~bw.png"
   optipng -strip all -o7 "$prefix/back/shiny/157~bw.png"
   optipng -strip all -o7 "$prefix/back/shiny/222~bw.png"
+  optipng -strip all -o7 "$prefix/back/shiny/201-x~bw.png"
+  optipng -strip all -o7 "$prefix/back/shiny/201-o~bw.png"
 fi
 
 find $prefix -type f -not -iname "*~*" -delete

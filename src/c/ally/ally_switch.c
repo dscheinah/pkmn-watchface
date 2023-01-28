@@ -2,9 +2,13 @@
 #include "ally.h"
 
 void ally_switch(Ally* ally, ResourceValue target) {
-  ally->selected = target;
-  if (!target || ally->type == RESOURCE_ID_a142) {
+  if (target == 4) {
+    ally->selected = 0;
+    ally->type = RESOURCE_ID_a201x;
     return;
   }
-  ally->type = target;
+  ally->selected = target;
+  if (target) {
+    ally->type = target;
+  }
 }
