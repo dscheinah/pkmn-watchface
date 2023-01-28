@@ -9,9 +9,9 @@ The watch uses the battlefield to render date, time and various health statistic
 - Own health decreases with remaining battery.
 - Enemy health is reduced every hour based on level difference, types and your time spent active.
 
-Also there are certain events you can explore that change the selected monsters.
+Also, there are certain events you can explore that change the selected monsters. Some events are triggered by conditions you are able to control. There is a total of 56 different enemies visualized in the Pokédex on the settings page.
 
-It is also possible to skip parts of the hourly events when another screen is active. This may or may not be an advantage.
+It is also possible to skip parts of the hourly events when another app is active. This may or may not be an advantage.
 
 All assets have been taken from the original game and are subject to Pokémon and Nintendo/Creatures Inc./GAME FREAK.
 
