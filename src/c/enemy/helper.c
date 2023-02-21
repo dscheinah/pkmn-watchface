@@ -33,7 +33,7 @@ ResourceValue helper_bird(State* state) {
     return RESOURCE_ID_146;
   }
 
-  int bird249 = state->enemy->level >= 25 ? (state->enemy->level - 22) / 3 : 0;
+  int bird249 = state->enemy->level >= 25 ? (state->enemy->level - 24) / 4 : 0;
   if (rand() % 100 < bird249) {
     return RESOURCE_ID_249;
   }
