@@ -23,17 +23,17 @@ ResourceValue helper_bird(State* state) {
     return RESOURCE_ID_144;
   }
 
-  int bird145 = state->ally->health >= 50 ? (state->ally->health - 45) / 5 : 0;
+  int bird145 = state->enemy->type != RESOURCE_ID_145 && state->ally->health >= 50 ? (state->ally->health - 45) / 5 : 0;
   if (rand() % 100 < bird145) {
     return RESOURCE_ID_145;
   }
 
-  int bird146 = state->ally->level >= 25 ? (state->ally->level - 18) / 7 : 0;
+  int bird146 = state->enemy->type != RESOURCE_ID_146 && state->ally->level >= 25 ? (state->ally->level - 18) / 7 : 0;
   if (rand() % 100 < bird146) {
     return RESOURCE_ID_146;
   }
 
-  int bird249 = state->enemy->level >= 25 ? (state->enemy->level - 24) / 4 : 0;
+  int bird249 = state->enemy->type != RESOURCE_ID_249 && state->enemy->level >= 25 ? (state->enemy->level - 24) / 4 : 0;
   if (rand() % 100 < bird249) {
     return RESOURCE_ID_249;
   }
