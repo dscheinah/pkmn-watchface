@@ -17,7 +17,7 @@ static void returnTeleport(State* state) {
     }
     return;
   }
-  helper_evolve(state, state->enemy->teleport_type, isDefault ? 1 : 3, true);
+  helper_evolve(state, state->enemy->teleport_type, isDefault ? 1 : 2, true);
   state->enemy->health = state->enemy->teleport;
 }
 
@@ -53,7 +53,7 @@ void enemy_teleport(State* state) {
     case RESOURCE_ID_145:
     case RESOURCE_ID_172:
       if (rand() % 12 == 0) {
-        createTeleport(state, RESOURCE_ID_243, 3);
+        createTeleport(state, RESOURCE_ID_243, 2);
       }
       break;
     case RESOURCE_ID_4:
@@ -62,7 +62,7 @@ void enemy_teleport(State* state) {
     case RESOURCE_ID_136:
     case RESOURCE_ID_146:
       if (rand() % 12 == 0) {
-        createTeleport(state, RESOURCE_ID_244, 3);
+        createTeleport(state, RESOURCE_ID_244, 2);
       }
       break;
     case RESOURCE_ID_7:
@@ -70,7 +70,7 @@ void enemy_teleport(State* state) {
     case RESOURCE_ID_9:
     case RESOURCE_ID_134:
       if (rand() % 12 == 0) {
-        createTeleport(state, RESOURCE_ID_245, 3);
+        createTeleport(state, RESOURCE_ID_245, 2);
       }
       break;
   }
