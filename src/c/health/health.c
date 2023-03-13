@@ -32,7 +32,9 @@ void health_refresh(Health* health, bool reset) {
     health->steps = health_service_sum_today(HealthMetricStepCount);
     health->active = health_service_sum_today(HealthMetricActiveSeconds);
   }
-  health->steps_last = health->steps;
+  if (health->steps > health->steps_last) {
+    health->steps_last = health->steps;
+  }
   if (mode & DEMO_SLEEP) {
     if (reset) {
       health->sleep = rand() % 50000;
