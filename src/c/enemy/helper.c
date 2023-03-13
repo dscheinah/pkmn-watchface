@@ -38,7 +38,7 @@ ResourceValue helper_bird(State* state) {
     return RESOURCE_ID_249;
   }
 
-  if (rand() % 100 < (bird144 + bird145 + bird146 + bird249) / 8) {
+  if (rand() % 100 < (bird144 + bird145 + bird146 + bird249) / 7) {
     return RESOURCE_ID_250;
   }
   return 0;
