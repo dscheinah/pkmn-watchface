@@ -24,7 +24,7 @@ bool enemy_reset(State* state) {
     helper_evolve(state, RESOURCE_ID_92, 1, true);
     return true;
   }
-  if (state->event) {
+  if (state->enemy->type != RESOURCE_ID_216 && state->event) {
     helper_evolve(state, RESOURCE_ID_216, 1, true);
     return true;
   }
