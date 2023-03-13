@@ -51,9 +51,11 @@ void enemy_teleport(State* state) {
       break;
     case RESOURCE_ID_25:
     case RESOURCE_ID_26:
+    case RESOURCE_ID_125:
     case RESOURCE_ID_135:
     case RESOURCE_ID_145:
     case RESOURCE_ID_172:
+    case RESOURCE_ID_239:
       if (rand() % 12 == 0) {
         createTeleport(state, RESOURCE_ID_243, 2);
       }
