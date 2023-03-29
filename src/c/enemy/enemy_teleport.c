@@ -13,6 +13,7 @@ static void returnTeleport(State* state) {
   if (state->event) {
     if (isDefault) {
       helper_evolve(state, RESOURCE_ID_64, 2, true);
+      state->enemy->health = state->enemy->teleport;
       state->enemy->teleport = 0;
     }
     return;
@@ -33,7 +34,7 @@ void enemy_teleport(State* state) {
     state->enemy->teleport = 0;
     return;
   }
-  if (state->event & EVENT_BOSS) {
+  if (state->event & (EVENT_BOSS | EVENT_EGG | EVENT_GHOST)) {
     return;
   }
   if (state->enemy->teleport > 0) {
