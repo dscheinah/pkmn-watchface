@@ -23,6 +23,9 @@ static void returnTeleport(State* state) {
 }
 
 void enemy_teleport(State* state) {
+  if (state->enemy->type == RESOURCE_ID_150) {
+    return;
+  }
   if (state->enemy->health > 0) {
     if (state->enemy->type == state->enemy->teleport_type && state->enemy->teleport - 20 > state->enemy->health) {
       state->enemy->teleport = state->enemy->health;
