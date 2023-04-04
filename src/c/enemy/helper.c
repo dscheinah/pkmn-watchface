@@ -28,7 +28,7 @@ ResourceValue helper_bird(State* state) {
     return RESOURCE_ID_145;
   }
 
-  int bird146 = state->enemy->type != RESOURCE_ID_146 && state->ally->level >= 25 ? (state->ally->level - 14) / 6 : 0;
+  int bird146 = state->enemy->type != RESOURCE_ID_146 && state->ally->level >= 20 ? (state->ally->level - 14) / 6 : 0;
   if (rand() % 100 < bird146) {
     return RESOURCE_ID_146;
   }
