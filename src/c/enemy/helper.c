@@ -6,7 +6,7 @@ void helper_evolve(State* state, ResourceValue type, int level, bool reset) {
   state->enemy->level_multiplier = level;
   if (reset) {
     state->enemy->health = 100;
-    state->enemy->morph = rand() % 8 == 0;
+    state->enemy->morph = type != RESOURCE_ID_150 && rand() % 8 == 0;
     state->enemy->hours_alive = 0;
   }
 }
