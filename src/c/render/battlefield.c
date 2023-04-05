@@ -56,7 +56,8 @@ static void renderAllyExperience(Layer* layer, GContext* ctx) {
 }
 
 static void renderAllyHealth(Layer* layer, GContext* ctx) {
-  renderRect(layer, ctx, ALIGN_LEFT, GColorFromHealth(state->ally->health), state->ally->health);
+  GColor8 color = state->charging ? GColorLimerick : GColorFromHealth(state->ally->health);
+  renderRect(layer, ctx, ALIGN_LEFT, color, state->ally->health);
 }
 
 static void renderEnemyHealth(Layer* layer, GContext* ctx) {

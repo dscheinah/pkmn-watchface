@@ -88,6 +88,7 @@ typedef struct {
   bool missing;
   short identifier;
   uint16_t counter;
+  bool charging;
 } State;
 
 typedef int DarkValue;

@@ -43,6 +43,7 @@ static State state = {
   .missing = false,
   .identifier = -1,
   .counter = 0,
+  .charging = false,
 };
 
 static int ally_level_final() {
@@ -69,6 +70,8 @@ State* state_init() {
         ally.selected = 0;
       case 1:
         state.counter = 0;
+      case 2:
+        state.charging = false;
     }
   } else {
     state.index[0] = 1 << (RESOURCE_ID_133 - ENEMY_OFFSET);
@@ -106,7 +109,7 @@ bool state_update_index() {
 }
 
 void state_write() {
-  persist_write_int(VERSION_KEY, 2);
+  persist_write_int(VERSION_KEY, 3);
   persist_write_data(STATE_KEY, &state, sizeof(State));
   persist_write_data(ALLY_KEY, &ally, sizeof(Ally));
   persist_write_data(ENEMY_KEY, &enemy, sizeof(Enemy));

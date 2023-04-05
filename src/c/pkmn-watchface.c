@@ -101,6 +101,7 @@ static void handleTime(struct tm* tick_time, TimeUnits units_changed) {
 }
 
 static void handleBattery(BatteryChargeState charge_state) {
+  state->charging = charge_state.is_charging;
   state->ally->health = charge_state.charge_percent;
   if (charge_state.is_charging && enemy_charge(state)) {
     state->ally->level_modifier++;
