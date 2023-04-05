@@ -48,6 +48,9 @@ static void renderBitmap(Part* part, ResourceValue resource) {
 }
 
 static GColor8 GColorFromHealth(int percentage) {
+  if (percentage > 46 && percentage < 57) {
+    return GColorChromeYellow;
+  }
   return GColorFromRGB((100 - percentage) * 255 / 100, percentage * 255 / 100, 0);
 }
 
