@@ -3,6 +3,9 @@
 #include "cache.h"
 #include "helper.h"
 
+#define X (PBL_DISPLAY_WIDTH - 144) / 2
+#define Y (PBL_DISPLAY_HEIGHT - 168) / 2
+
 static Layer* watchLayer;
 static BitmapLayer* templateLayer;
 static GBitmap* templateBitmap;
@@ -14,11 +17,7 @@ void layout_load(Window* window, State* state) {
   }
 
   Layer* root = window_get_root_layer(window);
-  GRect bounds = layer_get_bounds(root);
-
-  int x = (bounds.size.w - 144) / 2;
-  int y = (bounds.size.h - 168) / 2;
-  GRect coords = GRect(x, y, 144, 168);
+  GRect coords = GRect(X, Y, 144, 168);
 
   templateBitmap = helper_create_bitmap(RESOURCE_ID_template, dark);
   templateLayer = helper_create_bitmap_layer(root, coords, templateBitmap);
