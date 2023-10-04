@@ -13,7 +13,8 @@ customFn.toString = function () {
 };
 
 var clay = new Clay(config, customFn, {
-    userData: pokedex.userData
+    userData: pokedex.userData,
+    autoHandleEvents: false
 });
 
 clay.components.select.initialize.toString = function () {
@@ -22,8 +23,28 @@ clay.components.select.initialize.toString = function () {
 
 pokedex.init(clay);
 
+var timeout;
+
+function openUrl() {
+    timeout = null;
+    Pebble.openURL(clay.generateUrl());
+}
+
+Pebble.addEventListener('showConfiguration', function() {
+    timeout = setTimeout(openUrl, 1000);
+    Pebble.sendAppMessage({});
+});
+
+Pebble.addEventListener('webviewclosed', function(e) {
+    Pebble.sendAppMessage(clay.getSettings(e && e.response || {}));
+});
+
 Pebble.addEventListener('ready', function () {
     Pebble.addEventListener('appmessage', function (event) {
         pokedex.pebble(clay, event.payload);
+        if (timeout) {
+            clearTimeout(timeout);
+            openUrl();
+        }
     });
 });

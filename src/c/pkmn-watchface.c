@@ -41,7 +41,6 @@ static void sendPokedex() {
 static void markDirty() {
   if (state_update_index()) {
     state_write();
-    sendPokedex();
     if (state->quiet < QUIET_NONE && (state->settings & SETTINGS_VIBES)) {
       vibes_enqueue_custom_pattern(vibes);
     }
@@ -133,6 +132,7 @@ static void handleInbox(DictionaryIterator* iter, void* context) {
     battlefield_mark_dirty();
   }
   state_write();
+  sendPokedex();
 }
 
 static void prv_window_load(Window* window) {
@@ -185,9 +185,6 @@ static void prv_init(void) {
 
   app_message_register_inbox_received(handleInbox);
   app_message_open(128, 128);
-
-  void* data = NULL;
-  app_timer_register(1000, &sendPokedex, data);
 }
 
 static void prv_deinit(void) {
