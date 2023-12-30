@@ -1,47 +1,24 @@
 #include <pebble.h>
 #include "health.h"
-#define DEMO 1
-#define DEMO_SLEEP 2
 
-static int mode = 0;
-
-void health_init() {
-  const time_t start = time_start_of_today();
-  const time_t end = time(NULL);
-  int available = HealthServiceAccessibilityMaskAvailable
-    & health_service_metric_accessible(HealthMetricStepCount, start, end)
-    & health_service_metric_accessible(HealthMetricActiveSeconds, start, end);
-  if (!available) {
-    mode |= DEMO;
-  }
-  int sleepAvailable = HealthServiceAccessibilityMaskAvailable
-    & health_service_metric_accessible(HealthMetricSleepSeconds, start, end)
-    & health_service_metric_accessible(HealthMetricSleepRestfulSeconds, start, end);
-  if (!sleepAvailable) {
-    mode |= DEMO_SLEEP;
-  }
-}
+static bool available = PBL_IF_HEALTH_ELSE(true, false);
 
 #if !defined(TEST)
-void health_refresh(Health* health, bool reset) {
-  if (mode & DEMO) {
-    if (reset) {
-      health->steps = rand() % 30000;
-    }
-  } else {
+void health_refresh(Health* health, int identifier, bool reset) {
+  if (available) {
     health->steps = health_service_sum_today(HealthMetricStepCount);
     health->active = health_service_sum_today(HealthMetricActiveSeconds);
+    health->sleep = health_service_sum_today(HealthMetricSleepSeconds);
+    health->restful_sleep = health_service_sum_today(HealthMetricSleepRestfulSeconds);
+  } else {
+    if (reset) {
+      health->sleep = rand() % 50000;
+      health->active_last = health->active = rand() % 1250;
+    }
+    health->steps = health->active * identifier;
   }
   if (health->steps > health->steps_last) {
     health->steps_last = health->steps;
-  }
-  if (mode & DEMO_SLEEP) {
-    if (reset) {
-      health->sleep = rand() % 50000;
-    }
-  } else {
-    health->sleep = health_service_sum_today(HealthMetricSleepSeconds);
-    health->restful_sleep = health_service_sum_today(HealthMetricSleepRestfulSeconds);
   }
 }
 #endif

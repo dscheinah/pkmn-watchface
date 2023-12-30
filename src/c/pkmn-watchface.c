@@ -61,12 +61,12 @@ static void game(struct tm* tick_time, TimeUnits units_changed) {
   if (aprilsFool) {
     state->ally->type = RESOURCE_ID_a142;
   }
-  bool reset = units_changed & DAY_UNIT;
+  bool reset = (units_changed & DAY_UNIT) && !(units_changed & INIT_UNIT);
   #if defined(TEST)
     reset = test_day();
   #endif
   settings_quiet_changed(state);
-  health_refresh(state->health, reset);
+  health_refresh(state->health, tick_time->tm_hour, reset);
   game_init(state);
   if (!(units_changed & INIT_UNIT)) {
     health_update(state->health, reset);
@@ -150,7 +150,6 @@ static void prv_window_unload(Window* window) {
 static void prv_init(void) {
   state = state_init();
   settings_init(state);
-  health_init();
 
   s_window = window_create();
   window_set_window_handlers(s_window, (WindowHandlers) {

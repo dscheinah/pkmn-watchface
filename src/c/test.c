@@ -294,7 +294,7 @@ bool event_boss() {
   return true;
 }
 
-void health_refresh(Health* health, bool reset) {
+void health_refresh(Health* health, int identifier, bool reset) {
   if (reset) {
     health->steps = 0;
     health->active = 0;
