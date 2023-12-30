@@ -119,7 +119,7 @@ void battlefield_mark_dirty() {
   }
 
   ResourceValue type = state->ally->type;
-  if (state->quiet > QUIET_NONE) {
+  if (state->quiet > QUIET_NONE || quiet_time_is_active()) {
     type += type == RESOURCE_ID_a201x ? 2 : 20;
   }
   if (state->ally->shiny) {

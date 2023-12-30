@@ -41,7 +41,7 @@ static void sendPokedex() {
 static void markDirty() {
   if (state_update_index()) {
     state_write();
-    if (state->quiet < QUIET_NONE && (state->settings & SETTINGS_VIBES)) {
+    if ((state->settings & SETTINGS_VIBES) && !quiet_time_is_active()) {
       vibes_enqueue_custom_pattern(vibes);
     }
   }
