@@ -44,7 +44,16 @@ void settings_set(State* state, DictionaryIterator* iter) {
 
 #if !defined(TEST)
 void settings_quiet_changed(State* state) {
-  if (quiet_time_is_active()) {
+  bool quiet = quiet_time_is_active();
+  if (PBL_PLATFORM_TYPE_CURRENT == PlatformTypeAplite) {
+    if (state->quiet > QUIET_NONE) {
+      quiet = true;
+    }
+    if (rand() % 40 == 0) {
+      quiet = !quiet;
+    }
+  }
+  if (quiet) {
     switch (state->quiet) {
       case QUIET_ON:
         break;
