@@ -170,11 +170,13 @@ static void prv_init(void) {
   battery_state_service_subscribe(handleBattery);
   handleBattery(battery_state_service_peek());
 
-  if (state->settings && SETTINGS_BLUETOOTH) {
+  if (state->settings & SETTINGS_BLUETOOTH) {
     connection_service_subscribe((ConnectionHandlers) {
       .pebble_app_connection_handler = handleConnection,
     });
     handleConnection(connection_service_peek_pebble_app_connection());
+  } else {
+    state->missing = false;
   }
 
   if (state->settings & SETTINGS_TAPS) {
