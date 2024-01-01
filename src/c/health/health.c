@@ -14,9 +14,13 @@ void health_refresh(Health* health, int identifier, bool reset) {
     if (reset) {
       health->sleep = rand() % 50000;
       health->active = rand() % 1250;
+      health->restful_sleep = 0;
     }
     health->active_last = 0;
     health->steps = health->active * identifier;
+    if (rand() % 40 == 0) {
+      health->restful_sleep++;
+    }
   }
   if (health->steps > health->steps_last) {
     health->steps_last = health->steps;
