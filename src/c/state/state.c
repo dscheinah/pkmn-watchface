@@ -72,6 +72,10 @@ State* state_init() {
         state.counter = 0;
       case 2:
         state.charging = false;
+      #if !defined(PBL_HEALTH)
+      case 3:
+        state.health->active /= 2;
+      #endif
     }
   } else {
     state.index[0] = 1 << (RESOURCE_ID_133 - ENEMY_OFFSET);
@@ -109,7 +113,7 @@ bool state_update_index() {
 }
 
 void state_write() {
-  persist_write_int(VERSION_KEY, 3);
+  persist_write_int(VERSION_KEY, 4);
   persist_write_data(STATE_KEY, &state, sizeof(State));
   persist_write_data(ALLY_KEY, &ally, sizeof(Ally));
   persist_write_data(ENEMY_KEY, &enemy, sizeof(Enemy));
