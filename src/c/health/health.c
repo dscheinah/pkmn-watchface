@@ -12,7 +12,7 @@ void health_refresh(Health* health, int identifier, bool reset) {
     health->restful_sleep = health_service_sum_today(HealthMetricSleepRestfulSeconds);
   } else {
     if (reset) {
-      health->sleep = rand() % 50000;
+      health->sleep = rand() % 40000 + 10000;
       health->active = rand() % 550;
       health->restful_sleep = 0;
       health->steps = 0;
