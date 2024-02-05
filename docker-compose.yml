@@ -7,5 +7,5 @@ services:
       - ./docker/browser.py:/opt/pebble-sdk-4.5-linux64/pebble-tool/pebble_tool/util/browser.py
       - /tmp/.X11-unit:/tmp.X11-unit
       - ~/.Xauthority:/home/pebble/.Xauthority
-      - .:/pebble
+      - ./app:/pebble
     network_mode: host

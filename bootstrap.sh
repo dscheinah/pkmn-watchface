@@ -9,14 +9,14 @@ hasOptiPng=$?
 
 cd "$(dirname "$0")"
 
-rm -rf ./resources/pokemon
-curl https://veekun.com/static/pokedex/downloads/generation-2.tar.gz | tar -xvzC ./resources
-rm -rf ./resources/pokemon/main-sprites/crystal ./resources/pokemon/main-sprites/silver
+rm -rf ./app/resources/pokemon
+curl https://veekun.com/static/pokedex/downloads/generation-2.tar.gz | tar -xvzC ./app/resources
+rm -rf ./app/resources/pokemon/main-sprites/crystal ./app/resources/pokemon/main-sprites/silver
 
-pokedex="./src/pkjs/pokedex.json"
+pokedex="./app/src/pkjs/pokedex.json"
 echo '[""' > $pokedex
 
-prefix=./resources/pokemon/main-sprites/gold
+prefix=./app/resources/pokemon/main-sprites/gold
 
 if [[ $hasConvert ]]; then
   convert "$prefix/back/2.png" -level 0%,100%,0.9 "$prefix/back/2.png"
@@ -50,8 +50,8 @@ if [[ $hasConvert ]]; then
   done
 fi
 
-grep main-sprites package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | while read -r file; do
-  file="./resources/$file"
+grep main-sprites app/package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | while read -r file; do
+  file="./app/resources/$file"
   fileColor="${file%.*}~color.png"
   fileBw="${file%.*}~bw.png"
   if [[ $hasConvert ]]; then
