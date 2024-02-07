@@ -40,7 +40,16 @@
       "ally",
       "pokedex",
       "pokedex0",
-      "pokedex1"
+      "pokedex1",
+      "mp_cmd",
+      "mp_ally",
+      "mp_enemy",
+      "mp_ally_health",
+      "mp_enemy_health",
+      "mp_steps",
+      "mp_sleep",
+      "mp_restful",
+      "mp_active"
     ],
     "resources": {
       "media": [
