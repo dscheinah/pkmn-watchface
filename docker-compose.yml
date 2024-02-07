@@ -9,3 +9,17 @@ services:
       - ~/.Xauthority:/home/pebble/.Xauthority
       - ./app:/pebble
     network_mode: host
+    depends_on:
+      - server
+  server:
+    image: node
+    networks:
+      default:
+        aliases:
+          - pkmn.dscheinah.de
+    ports:
+      - "${PORT:-8080}:80"
+    volumes:
+      - ./server:/server
+    working_dir: /server
+    command: sh -c "npm i && node index.js"

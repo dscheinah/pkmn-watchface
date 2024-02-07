@@ -1,0 +1,11 @@
+{
+  "name": "pkmn",
+  "version": "1.0.0",
+  "description": "Companion server for the Pokemon Gamified Watchface",
+  "main": "index.js",
+  "author": "Dscheinah",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
