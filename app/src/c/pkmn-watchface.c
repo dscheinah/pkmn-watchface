@@ -4,6 +4,7 @@
 #include "state/settings.h"
 #include "render/layout.h"
 #include "render/battlefield.h"
+#include "render/monster.h"
 #include "render/watch.h"
 #include "ally/ally.h"
 #include "enemy/enemy.h"
@@ -149,6 +150,7 @@ static void prv_window_unload(Window* window) {
 
 static void prv_init(void) {
   state = state_init();
+  monster_init(state);
   settings_init(state);
 
   s_window = window_create();
@@ -199,6 +201,8 @@ static void prv_deinit(void) {
   state_write();
 
   app_message_deregister_callbacks();
+
+  monster_deinit();
 }
 
 int main(void) {
