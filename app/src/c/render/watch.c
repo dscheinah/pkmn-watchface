@@ -17,7 +17,7 @@ static char dateBuffer[13];
 static char statusBuffer[4];
 static char secondsBuffer[3];
 
-void watch_load(Layer* root, Layer* cachedRoot, State* stateRef) {
+void watch_load(Layer* root, State* stateRef) {
   state = stateRef;
   timeFormat = state->settings & SETTINGS_TIME_FORMAT ? "%H:%M" : "%I:%M";
   dateFormat = state->settings & SETTINGS_DATE_FORMAT ? "%d / %m" : "%m / %d";
@@ -28,10 +28,10 @@ void watch_load(Layer* root, Layer* cachedRoot, State* stateRef) {
   } else {
     timeLayer = helper_create_text_layer(root, GRect(9, 121, 129, 32), FONT_LARGE, GTextAlignmentCenter, dark);
   }
-  dateLayer = helper_create_text_layer(cachedRoot, GRect(73, 95, 59, 14), FONT_SMALL, GTextAlignmentRight, dark);
+  dateLayer = helper_create_text_layer(root, GRect(73, 95, 59, 14), FONT_SMALL, GTextAlignmentRight, dark);
   text_layer_set_background_color(dateLayer, GColorClear);
   if (state->settings & SETTINGS_DOW) {
-    statusLayer = helper_create_text_layer(cachedRoot, GRect(101, 73, 35, 14), FONT_SMALL, GTextAlignmentRight, dark);
+    statusLayer = helper_create_text_layer(root, GRect(101, 73, 35, 14), FONT_SMALL, GTextAlignmentRight, dark);
   }
 }
 

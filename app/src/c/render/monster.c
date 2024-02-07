@@ -8,8 +8,8 @@ void monster_init(State* state) {
   templateBitmap = helper_create_bitmap(RESOURCE_ID_template, state->settings & SETTINGS_DARK ? DARK_FULL : DARK_OFF);
 }
 
-BitmapLayer* monster_create_template(Layer* root, GRect coords) {
-  return helper_create_bitmap_layer(root, coords, templateBitmap);
+BitmapLayer* monster_create_template(Layer* root) {
+  return helper_create_bitmap_layer(root, GRect(0, 0, 144, 168), templateBitmap);
 }
 
 void monster_load_ally(Layer* root, MonsterPart* part, DarkValue dark) {

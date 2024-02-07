@@ -4,8 +4,6 @@
 
 void layout_load(Window* window, State* state);
 
-Layer* layout_get_root();
-
 Layer* layout_get_battlefield();
 
 Layer* layout_get_watch();

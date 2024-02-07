@@ -12,7 +12,7 @@ typedef struct {
 
 void monster_init(State* state);
 
-BitmapLayer* monster_create_template(Layer* root, GRect coords);
+BitmapLayer* monster_create_template(Layer* root);
 
 void monster_load_ally(Layer* root, MonsterPart* part, DarkValue dark);
 

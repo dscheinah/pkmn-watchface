@@ -6,6 +6,7 @@
 #include "render/battlefield.h"
 #include "render/monster.h"
 #include "render/watch.h"
+#include "render/window.h"
 #include "ally/ally.h"
 #include "enemy/enemy.h"
 #include "game/event.h"
@@ -17,7 +18,7 @@
 
 #define INIT_UNIT 128
 
-static Window* s_window;
+static Window* window;
 
 static State* state;
 
@@ -139,7 +140,7 @@ static void handleInbox(DictionaryIterator* iter, void* context) {
 static void prv_window_load(Window* window) {
   layout_load(window, state);
   battlefield_load(layout_get_battlefield(), state);
-  watch_load(layout_get_watch(), layout_get_root(), state);
+  watch_load(layout_get_watch(), state);
 }
 
 static void prv_window_unload(Window* window) {
@@ -153,13 +154,11 @@ static void prv_init(void) {
   monster_init(state);
   settings_init(state);
 
-  s_window = window_create();
-  window_set_window_handlers(s_window, (WindowHandlers) {
+  window = window_create_custom(state, (WindowHandlers) {
     .load = prv_window_load,
     .unload = prv_window_unload,
   });
-  const bool animated = false;
-  window_stack_push(s_window, animated);
+  window_stack_push(window, false);
 
   #if defined(TEST)
     tick_timer_service_subscribe(SECOND_UNIT, handleTime);
@@ -196,7 +195,7 @@ static void prv_deinit(void) {
   connection_service_unsubscribe();
   accel_tap_service_unsubscribe();
 
-  window_destroy(s_window);
+  window_destroy(window);
 
   state_write();
 
