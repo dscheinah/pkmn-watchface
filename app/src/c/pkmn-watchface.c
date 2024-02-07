@@ -12,6 +12,7 @@
 #include "game/event.h"
 #include "game/game.h"
 #include "health/health.h"
+#include "multiplayer/multiplayer.h"
 #if defined(TEST)
   #include "test.h"
 #endif
@@ -127,6 +128,7 @@ static void handleTap(AccelAxisType axis, int32_t direction) {
 
 static void handleInbox(DictionaryIterator* iter, void* context) {
   settings_set(state, iter);
+  multiplayer_handle_inbox(iter);
   Tuple* tuple = dict_find(iter, MESSAGE_KEY_ally);
   if (tuple) {
     ally_switch(state->ally, tuple->value->uint8 - 48);
@@ -151,6 +153,7 @@ static void prv_window_unload(Window* window) {
 
 static void prv_init(void) {
   state = state_init();
+  multiplayer_init(state);
   monster_init(state);
   settings_init(state);
 
@@ -202,6 +205,7 @@ static void prv_deinit(void) {
   app_message_deregister_callbacks();
 
   monster_deinit();
+  multiplayer_deinit();
 }
 
 int main(void) {
