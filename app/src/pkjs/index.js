@@ -41,6 +41,9 @@ Pebble.addEventListener('webviewclosed', function(e) {
 
 Pebble.addEventListener('ready', function () {
     Pebble.addEventListener('appmessage', function (event) {
+        if (!event.payload.pokedex0) {
+            return;
+        }
         pokedex.pebble(clay, event.payload);
         if (timeout) {
             clearTimeout(timeout);
