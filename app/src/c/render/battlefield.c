@@ -101,9 +101,6 @@ void battlefield_mark_dirty() {
 }
 
 void battlefield_unload() {
-  gbitmap_destroy(allyPart.bitmap);
-  gbitmap_destroy(enemyPart.bitmap);
-
   monster_unload(&allyPart);
   layer_destroy(allyExperience);
 

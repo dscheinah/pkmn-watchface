@@ -35,9 +35,11 @@ void monster_render(MonsterPart* part, ResourceValue resource, DarkValue dark) {
 }
 
 void monster_unload(MonsterPart* part) {
+  gbitmap_destroy(part->bitmap);
   bitmap_layer_destroy(part->image);
   text_layer_destroy(part->level);
   layer_destroy(part->health);
+  part->previous = 0;
 }
 
 void monster_deinit() {
