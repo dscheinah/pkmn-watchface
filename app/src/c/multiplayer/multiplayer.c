@@ -5,8 +5,14 @@
 
 #define MP_START 0
 #define MP_FIGHT 10
+#define MP_NEW   11
 #define MP_LOST  100
 #define MP_WON   101
+
+#define VIBE_NONE   0
+#define VIBE_SHORT  1
+#define VIBE_LONG   2
+#define VIBE_DOUBLE 3
 
 static Window* window;
 
@@ -30,13 +36,24 @@ static void end() {
   window_stack_remove(window, true);
 }
 
-static void event(char* text, int endTimeout) {
+static void event(char* text, int endTimeout, int vibeType) {
   snprintf(textBuffer, 8, text);
   text_layer_set_text(textLayer, textBuffer);
   if (timer) {
     app_timer_cancel(timer);
   }
   timer = app_timer_register(endTimeout, end, NULL);
+  switch (vibeType) {
+    case VIBE_SHORT:
+      vibes_short_pulse();
+      break;
+    case VIBE_LONG:
+      vibes_long_pulse();
+      break;
+    case VIBE_DOUBLE:
+      vibes_double_pulse();
+      break;
+  }
 }
 
 static bool start() {
@@ -116,19 +133,22 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
   switch (tuple->value->uint8) {
     case MP_START:
       if (start()) {
-        event("WAITING", 60000);
+        event("WAITING", 60000, VIBE_SHORT);
       } else {
-        event("ERROR", 15000);
+        event("ERROR", 15000, VIBE_NONE);
       }
       break;
     case MP_FIGHT:
-      event("", 30000);
+      event("", 30000, VIBE_SHORT);
+      break;
+    case MP_NEW:
+      event("", 30000, VIBE_DOUBLE);
       break;
     case MP_LOST:
-      event("LOST", 15000);
+      event("LOST", 15000, VIBE_LONG);
       break;
     case MP_WON:
-      event("WON", 15000);
+      event("WON", 15000, VIBE_LONG);
       break;
   }
   update(iter);
