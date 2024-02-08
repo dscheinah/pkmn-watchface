@@ -30,15 +30,12 @@ static MonsterPart enemyPart = {.previous = 0};
 static uint16_t allyHealth;
 static uint16_t enemyHealth;
 
-static char textBuffer[8];
-
 static void end() {
   window_stack_remove(window, true);
 }
 
 static void event(char* text, int endTimeout, int vibeType) {
-  snprintf(textBuffer, 8, text);
-  text_layer_set_text(textLayer, textBuffer);
+  text_layer_set_text(textLayer, text);
   if (timer) {
     app_timer_cancel(timer);
   }
