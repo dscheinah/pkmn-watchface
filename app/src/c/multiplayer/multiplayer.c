@@ -63,10 +63,27 @@ static bool start() {
   if (!outbox) {
     return false;
   }
-  dict_write_cstring(outbox, MESSAGE_KEY_mp_steps,  "");
-  dict_write_cstring(outbox, MESSAGE_KEY_mp_sleep,  "");
-  dict_write_cstring(outbox, MESSAGE_KEY_mp_restful,  "");
-  dict_write_cstring(outbox, MESSAGE_KEY_mp_active, "");
+  time_t reference = time_start_of_today() - (6 * SECONDS_PER_DAY);
+  uint steps[6];
+  uint sleep[6];
+  uint restful[6];
+  uint active[6];
+  for (int i = 0; i < 6; i++) {
+    steps[i] = health_service_sum(HealthMetricStepCount, reference, reference + SECONDS_PER_DAY) / 300;
+    sleep[i] = health_service_sum(HealthMetricSleepSeconds, reference, reference + SECONDS_PER_DAY) / SECONDS_PER_HOUR;
+    restful[i] = health_service_sum(HealthMetricSleepRestfulSeconds, reference, reference + SECONDS_PER_DAY) * 5 / SECONDS_PER_HOUR;
+    active[i] = health_service_sum(HealthMetricActiveSeconds, reference, reference + SECONDS_PER_DAY) / SECONDS_PER_MINUTE / 15;
+    reference += SECONDS_PER_DAY;
+  }
+  char buffer[30];
+  snprintf(buffer, 30, "%i,%i,%i,%i,%i,%i", steps[0], steps[1], steps[2], steps[3], steps[4], steps[5]);
+  dict_write_cstring(outbox, MESSAGE_KEY_mp_steps, buffer);
+  snprintf(buffer, 30, "%i,%i,%i,%i,%i,%i", sleep[0], sleep[1], sleep[2], sleep[3], sleep[4], sleep[5]);
+  dict_write_cstring(outbox, MESSAGE_KEY_mp_sleep, buffer);
+  snprintf(buffer, 30, "%i,%i,%i,%i,%i,%i", restful[0], restful[1], restful[2], restful[3], restful[4], restful[5]);
+  dict_write_cstring(outbox, MESSAGE_KEY_mp_restful, buffer);
+  snprintf(buffer, 30, "%i,%i,%i,%i,%i,%i", active[0], active[1], active[2], active[3], active[4], active[5]);
+  dict_write_cstring(outbox, MESSAGE_KEY_mp_active, buffer);
   return app_message_outbox_send() == APP_MSG_OK;
 }
 
