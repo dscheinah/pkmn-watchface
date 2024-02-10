@@ -1,5 +1,8 @@
 var express = require('express');
 var expressWs = require('express-ws');
+var createInputFromJson = require('./mapper/input.js');
+var createOutputFromGameData = require('./mapper/output.js');
+var runGame = require('./game/game.js');
 
 var app = express();
 expressWs(app);
@@ -10,16 +13,19 @@ app.get('/', function (req, res) {
     res.send('');
 });
 app.ws('/multiplayer', function (ws) {
-    ws.on('start', function (json) {
-        var data = JSON.parse(json);
+    ws.on('message', function (json) {
+        var data = createInputFromJson(json);
         if (games.length) {
             var game = games.pop();
-            ws.send('data', JSON.stringify({}));
-            game.socket.send('data', JSON.stringify({}));
+            var gameData = runGame(game.data, data);
+            ws.send(createOutputFromGameData(gameData, 'player2', 'player1'));
+            game.socket.send(createOutputFromGameData(gameData, 'player1', 'player2'));
             return;
         }
-        data.socket = ws;
-        games.push(data);
+        games.push({
+            data: data,
+            socket: ws
+        });
     });
 });
 
