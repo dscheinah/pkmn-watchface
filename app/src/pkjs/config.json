@@ -134,6 +134,18 @@
 			{
 				"type": "pokedex",
 				"messageKey": "pokedex"
+			},
+			{
+				"type": "text",
+				"defaultValue": "Select at least one and up to six monsters to start a multiplayer battle. Your monsters level and damage will be based on your last days health data."
+			},
+			{
+				"type": "selection",
+				"messageKey": "selection"
+			},
+			{
+				"type": "submit",
+				"defaultValue": " START BATTLE"
 			}
 		]
 	}

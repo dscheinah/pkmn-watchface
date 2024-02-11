@@ -1,6 +1,7 @@
 var Clay = require('pebble-clay');
 var config = require('./config.json');
 var pokedex = require('./pokedex.js');
+var selection = require('./selection.js');
 
 function customFn () {
     var c = this;
@@ -22,6 +23,7 @@ clay.components.select.initialize.toString = function () {
 };
 
 pokedex.init(clay);
+selection.init(clay);
 
 var timeout;
 
