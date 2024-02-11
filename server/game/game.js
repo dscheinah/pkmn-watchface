@@ -1,29 +1,22 @@
 function dealDamage(ally, enemy) {
-    var modifier = 3;
+    var defense = ally.level / enemy.level;
 
-    if (Math.random() * 100 < ally.extra) {
-        modifier += 1;
-    }
-    if (Math.random() * 100 < ally.critical) {
-        modifier += 1;
-    }
+    var power = Math.random() * 100 < ally.extra ? 50 : 30;
+    var critical = Math.random() * 100 < ally.critical ? 1 : 0.5;
 
-    modifier += (ally.level - enemy.level) / 50;
-
+    var modifier = 1;
     ally.types.forEach(function (current) {
         if (enemy.weak.includes(current)) {
-            modifier += 1;
+            modifier *= 2;
         }
         if (enemy.resist.includes(current)) {
-            modifier -= 1;
+            modifier /= 2;
         }
     });
 
-    if (modifier < 1) {
-        modifier = 1;
-    }
+    var random = 1 - Math.random() * 0.15;
 
-    enemy.health -= 5 * modifier;
+    enemy.health -= Math.round(defense * power * critical * modifier * random);
     return enemy.health < 1;
 }
 
