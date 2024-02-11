@@ -49,7 +49,9 @@
       "mp_steps",
       "mp_sleep",
       "mp_restful",
-      "mp_active"
+      "mp_active",
+      "mp_ally_level",
+      "mp_enemy_level"
     ],
     "resources": {
       "media": [

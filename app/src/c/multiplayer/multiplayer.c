@@ -19,6 +19,7 @@ static Window* window;
 static Layer* root;
 static BitmapLayer* templateLayer;
 static TextLayer* textLayer;
+static TextLayer* healthLayer;
 
 static AppTimer* timer;
 
@@ -29,6 +30,10 @@ static MonsterPart enemyPart = {.previous = 0};
 
 static uint16_t allyHealth;
 static uint16_t enemyHealth;
+
+static char allyLevelBuffer[5];
+static char enemyLevelBuffer[5];
+static char healthBuffer[4];
 
 static void end() {
   window_stack_remove(window, true);
@@ -101,10 +106,22 @@ static void update(DictionaryIterator* iter) {
   tuple = dict_find(iter, MESSAGE_KEY_mp_ally_health);
   if (tuple) {
     allyHealth = tuple->value->uint16;
+    snprintf(healthBuffer, 4, "%d", allyHealth);
+    text_layer_set_text(healthLayer, healthBuffer);
   }
   tuple = dict_find(iter, MESSAGE_KEY_mp_enemy_health);
   if (tuple) {
     enemyHealth = tuple->value->uint16;
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_mp_ally_level);
+  if (tuple) {
+    snprintf(allyLevelBuffer, 5, "L%d", tuple->value->uint16);
+    text_layer_set_text(allyPart.level, allyLevelBuffer);
+  }
+  tuple = dict_find(iter, MESSAGE_KEY_mp_enemy_level);
+  if (tuple) {
+    snprintf(enemyLevelBuffer, 5, "L%d", tuple->value->uint16);
+    text_layer_set_text(enemyPart.level, enemyLevelBuffer);
   }
 }
 
@@ -124,6 +141,8 @@ static void window_load(Window* window) {
   monster_load_enemy(root, &enemyPart, dark);
   layer_set_update_proc(allyPart.health, renderAllyHealth);
   layer_set_update_proc(enemyPart.health, renderEnemyHealth);
+  healthLayer = helper_create_text_layer(root, GRect(73, 95, 59, 14), FONT_SMALL, GTextAlignmentRight, dark);
+  text_layer_set_background_color(healthLayer, GColorClear);
 }
 
 static void window_unload(Window* window) {

@@ -244,7 +244,9 @@ module.exports = function (data, ally, enemy) {
             mp_ally: mapper[entry[ally].id].ally,
             mp_enemy: mapper[entry[enemy].id].enemy,
             mp_ally_health: entry[ally].health,
-            mp_enemy_health: entry[enemy].health
+            mp_enemy_health: entry[enemy].health,
+            mp_ally_level: entry[ally].level,
+            mp_enemy_level: entry[enemy].level
         })
     });
     return JSON.stringify(mapped);

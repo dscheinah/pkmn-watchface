@@ -31,11 +31,13 @@ function transform(player) {
     if (!player.monsters[player.position]) {
         return {
             id: player.monsters[player.position - 1].id,
+            level: player.monsters[player.position - 1].level,
             health: 0
         };
     }
     return {
         id: player.monsters[player.position].id,
+        level: player.monsters[player.position].level,
         health: player.monsters[player.position].health
     };
 }
