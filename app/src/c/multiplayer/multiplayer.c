@@ -66,7 +66,10 @@ static bool start() {
   uint restful[6];
   uint active[6];
   for (int i = 0; i < 6; i++) {
-    steps[i] = health_service_sum(HealthMetricStepCount, reference, reference + SECONDS_PER_DAY) / 300;
+    steps[i] = PBL_IF_HEALTH_ELSE(
+        health_service_sum(HealthMetricStepCount, reference, reference + SECONDS_PER_DAY) / 300,
+        rand() % 100 + 1
+    );
     sleep[i] = health_service_sum(HealthMetricSleepSeconds, reference, reference + SECONDS_PER_DAY) / SECONDS_PER_HOUR;
     restful[i] = health_service_sum(HealthMetricSleepRestfulSeconds, reference, reference + SECONDS_PER_DAY) * 5 / SECONDS_PER_HOUR;
     active[i] = health_service_sum(HealthMetricActiveSeconds, reference, reference + SECONDS_PER_DAY) / SECONDS_PER_MINUTE / 15;
