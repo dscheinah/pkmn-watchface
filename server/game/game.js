@@ -7,7 +7,7 @@ function dealDamage(ally, enemy) {
     var modifier = 1;
     ally.types.forEach(function (current) {
         if (enemy.weak.includes(current)) {
-            modifier *= 2;
+            modifier++;
         }
         if (enemy.resist.includes(current)) {
             modifier /= 2;
