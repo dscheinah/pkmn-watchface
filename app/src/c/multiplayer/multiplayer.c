@@ -151,6 +151,8 @@ static void window_unload(Window* window) {
   text_layer_destroy(textLayer);
   bitmap_layer_destroy(templateLayer);
   layer_destroy(root);
+  allyHealth = 0;
+  enemyHealth = 0;
 }
 
 void multiplayer_init(State* state) {
@@ -166,14 +168,18 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
   if (!tuple) {
     return;
   }
+  if (tuple->value->uint8 == MP_START) {
+    if (start()) {
+      event("WAITING", 60000, VIBE_SHORT);
+    } else {
+      event("ERROR", 15000, VIBE_NONE);
+    }
+    return;
+  }
+  if (!window_stack_contains_window(window)) {
+    return;
+  }
   switch (tuple->value->uint8) {
-    case MP_START:
-      if (start()) {
-        event("WAITING", 60000, VIBE_SHORT);
-      } else {
-        event("ERROR", 15000, VIBE_NONE);
-      }
-      break;
     case MP_FIGHT:
       event("", 30000, VIBE_SHORT);
       break;
@@ -185,6 +191,9 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
       break;
     case MP_WON:
       event("WON", 15000, VIBE_LONG);
+      break;
+    default:
+      event("ERROR", 15000, VIBE_NONE);
       break;
   }
   update(iter);

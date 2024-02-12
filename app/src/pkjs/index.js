@@ -40,7 +40,7 @@ Pebble.addEventListener('showConfiguration', function() {
 
 Pebble.addEventListener('webviewclosed', function(e) {
     var settings = clay.getSettings(e && e.response || {}, false);
-    if (settings.selection.value.length) {
+    if (settings.selection && settings.selection.value && settings.selection.value.length) {
         multiplayer.init(settings.selection.value);
     }
     delete settings.selection;

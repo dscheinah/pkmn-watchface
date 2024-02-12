@@ -359,12 +359,22 @@ var mapper = {
 };
 
 module.exports = function (json) {
-    var input = JSON.parse(json);
+    if (!json) {
+        return null;
+    }
+    try {
+        var input = JSON.parse(json);
+    } catch (e) {
+        return null;
+    }
+    if (!input.monsters || !input.monsters.length) {
+        return null;
+    }
 
-    var steps = input.steps.split(',');
-    var sleep = input.sleep.split(',');
-    var restful = input.restful.split(',');
-    var active = input.active.split(',');
+    var steps = input.steps ? input.steps.split(',') : [];
+    var sleep = input.sleep ? input.sleep.split(',') : [];
+    var restful = input.restful ? input.restful.split(',') : [];
+    var active = input.active ? input.active.split(',') : [];
 
     var monsters = [];
     for (var i = 0; i < 6; i++) {
@@ -377,12 +387,16 @@ module.exports = function (json) {
             types: monster.types,
             weak: monster.weak,
             resist: monster.resist,
-            level: steps[i] || 0,
-            agility: sleep[i] || 0,
-            critical: restful[i] || 0,
-            extra: active[i] || 0,
+            level: parseInt(steps[i]) || 1,
+            agility: parseInt(sleep[i]) || 0,
+            critical: parseInt(restful[i]) || 0,
+            extra: parseInt(active[i]) || 0,
             health: 100
         })
+    }
+
+    if (!monsters.length) {
+        return null;
     }
 
     return {
