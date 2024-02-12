@@ -49,5 +49,12 @@ module.exports = {
             socket.close();
             socket = null;
         };
+        setTimeout(function () {
+            if (socket) {
+                running = false;
+                socket.close();
+                socket = null;
+            }
+        }, 60000);
     }
 };
