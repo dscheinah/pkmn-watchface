@@ -73,7 +73,7 @@ static int level(State* state) {
   if (allyLevel <= 100) {
     diff += 100;
   }
-  if (state->ally->type != RESOURCE_ID_a201x) {
+  if (state->ally->type <= RESOURCE_ID_a142) {
     diff += ((state->ally->type - 1) / 3) * 10;
   }
   if (diff < 50) {

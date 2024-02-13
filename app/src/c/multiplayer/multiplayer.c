@@ -23,6 +23,7 @@ static TextLayer* healthLayer;
 
 static AppTimer* timer;
 
+static State* state;
 static DarkValue dark;
 
 static MonsterPart allyPart = {.previous = 0};
@@ -155,7 +156,8 @@ static void window_unload(Window* window) {
   enemyHealth = 0;
 }
 
-void multiplayer_init(State* state) {
+void multiplayer_init(State* stateRef) {
+  state = stateRef;
   dark = state->settings & SETTINGS_DARK ? PBL_IF_BW_ELSE(DARK_FULL, DARK_ON) : DARK_OFF;
   window = window_create_custom(state, (WindowHandlers) {
     .load = window_load,
@@ -191,6 +193,7 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
       break;
     case MP_WON:
       event("WON", 15000, VIBE_LONG);
+      state->ally->type = allyPart.previous;
       break;
     default:
       event("ERROR", 15000, VIBE_NONE);
