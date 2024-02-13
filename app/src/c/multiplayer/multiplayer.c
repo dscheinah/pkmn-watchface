@@ -183,10 +183,10 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
   }
   switch (tuple->value->uint8) {
     case MP_FIGHT:
-      event("", 30000, VIBE_SHORT);
+      event("", 30000, VIBE_DOUBLE);
       break;
     case MP_NEW:
-      event("", 30000, VIBE_DOUBLE);
+      event("", 30000, VIBE_SHORT);
       break;
     case MP_LOST:
       event("LOST", 15000, VIBE_LONG);
