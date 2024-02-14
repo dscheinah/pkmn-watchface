@@ -1,16 +1,16 @@
 function dealDamage(ally, enemy) {
-    var defense = ally.level / enemy.level;
+    var defense = Math.log(ally.level / 10 + 1) / Math.log(enemy.level / 10 + 1) / 4;
 
-    var power = Math.random() * 100 < ally.extra ? 50 : 30;
-    var critical = Math.random() * 100 < ally.critical ? 1 : 0.5;
+    var power = Math.random() * 100 < ally.extra ? 100 : 75;
+    var critical = Math.random() * 100 < ally.critical ? 1.5 : 1;
 
     var modifier = 1;
     ally.types.forEach(function (current) {
         if (enemy.weak.includes(current)) {
-            modifier++;
+            modifier += 0.5;
         }
         if (enemy.resist.includes(current)) {
-            modifier /= 2;
+            modifier -= 0.25;
         }
     });
 
