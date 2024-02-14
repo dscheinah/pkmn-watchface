@@ -1,4 +1,5 @@
 #include "multiplayer.h"
+#include "../render/battlefield.h"
 #include "../render/helper.h"
 #include "../render/monster.h"
 #include "../render/window.h"
@@ -154,6 +155,7 @@ static void window_unload(Window* window) {
   layer_destroy(root);
   allyHealth = 0;
   enemyHealth = 0;
+  battlefield_mark_dirty();
 }
 
 void multiplayer_init(State* stateRef) {
