@@ -46,3 +46,18 @@ GBitmap* helper_create_bitmap(ResourceValue resource, DarkValue dark) {
   }
   return bitmap;
 }
+
+void helper_render_percentage_rect(Layer* layer, GContext* ctx, int alignment, GColor8 color, int percentage) {
+  GRect bounds = layer_get_bounds(layer);
+  graphics_context_set_fill_color(ctx, COLOR_FALLBACK(color, GColorLightGray));
+  int w = bounds.size.w * percentage / 100;
+  int x = alignment == ALIGN_LEFT ? 0 : bounds.size.w - w;
+  graphics_fill_rect(ctx, GRect(x, 0, w, bounds.size.h), 0, GCornerNone);
+}
+
+GColor8 helper_color_from_health(int percentage) {
+  if (percentage > 46 && percentage < 57) {
+    return GColorChromeYellow;
+  }
+  return GColorFromRGB((100 - percentage) * 255 / 100, percentage * 255 / 100, 0);
+}

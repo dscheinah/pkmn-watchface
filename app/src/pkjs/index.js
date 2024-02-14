@@ -1,6 +1,8 @@
 var Clay = require('pebble-clay');
 var config = require('./config.json');
 var pokedex = require('./pokedex.js');
+var selection = require('./selection.js');
+var multiplayer = require('./multiplayer.js');
 
 function customFn () {
     var c = this;
@@ -22,6 +24,7 @@ clay.components.select.initialize.toString = function () {
 };
 
 pokedex.init(clay);
+selection.init(clay);
 
 var timeout;
 
@@ -36,11 +39,22 @@ Pebble.addEventListener('showConfiguration', function() {
 });
 
 Pebble.addEventListener('webviewclosed', function(e) {
-    Pebble.sendAppMessage(clay.getSettings(e && e.response || {}));
+    var settings = clay.getSettings(e && e.response || {}, false);
+    if (settings.selection && settings.selection.value && settings.selection.value.length) {
+        multiplayer.init(settings.selection.value);
+    }
+    delete settings.selection;
+    Pebble.sendAppMessage(Clay.prepareSettingsForAppMessage(settings));
 });
 
 Pebble.addEventListener('ready', function () {
     Pebble.addEventListener('appmessage', function (event) {
+        if (event.payload.mp_steps) {
+            multiplayer.start(event.payload);
+        }
+        if (!event.payload.pokedex0) {
+            return;
+        }
         pokedex.pebble(clay, event.payload);
         if (timeout) {
             clearTimeout(timeout);

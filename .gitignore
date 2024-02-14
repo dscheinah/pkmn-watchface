@@ -1,6 +1,6 @@
 .*
-/build
-/node_modules
-/resources/pokemon
-/src/pkjs/pokedex.json
+node_modules
+/app/build
+/app/resources/pokemon
+/app/src/pkjs/pokedex.json
 !.git*

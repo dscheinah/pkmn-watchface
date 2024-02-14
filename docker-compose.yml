@@ -5,7 +5,21 @@ services:
       - DISPLAY
     volumes:
       - ./docker/browser.py:/opt/pebble-sdk-4.5-linux64/pebble-tool/pebble_tool/util/browser.py
-      - /tmp/.X11-unit:/tmp.X11-unit
-      - ~/.Xauthority:/home/pebble/.Xauthority
-      - .:/pebble
+      - /tmp/.X11-unit:/tmp/.X11-unit:ro
+      - ~/.Xauthority:/home/pebble/.Xauthority:ro
+      - ./app:/pebble
     network_mode: host
+    depends_on:
+      - server
+  server:
+    image: node
+    networks:
+      default:
+        aliases:
+          - pkmn.dscheinah.de
+    ports:
+      - "${PORT:-8080}:80"
+    volumes:
+      - ./server:/server
+    working_dir: /server
+    command: sh -c "npm i && node index.js"

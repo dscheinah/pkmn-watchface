@@ -4,19 +4,22 @@
 #include "state/settings.h"
 #include "render/layout.h"
 #include "render/battlefield.h"
+#include "render/monster.h"
 #include "render/watch.h"
+#include "render/window.h"
 #include "ally/ally.h"
 #include "enemy/enemy.h"
 #include "game/event.h"
 #include "game/game.h"
 #include "health/health.h"
+#include "multiplayer/multiplayer.h"
 #if defined(TEST)
   #include "test.h"
 #endif
 
 #define INIT_UNIT 128
 
-static Window* s_window;
+static Window* window;
 
 static State* state;
 
@@ -125,6 +128,7 @@ static void handleTap(AccelAxisType axis, int32_t direction) {
 
 static void handleInbox(DictionaryIterator* iter, void* context) {
   settings_set(state, iter);
+  multiplayer_handle_inbox(iter);
   Tuple* tuple = dict_find(iter, MESSAGE_KEY_ally);
   if (tuple) {
     ally_switch(state->ally, tuple->value->uint8 - 48);
@@ -138,7 +142,7 @@ static void handleInbox(DictionaryIterator* iter, void* context) {
 static void prv_window_load(Window* window) {
   layout_load(window, state);
   battlefield_load(layout_get_battlefield(), state);
-  watch_load(layout_get_watch(), layout_get_root(), state);
+  watch_load(layout_get_watch(), state);
 }
 
 static void prv_window_unload(Window* window) {
@@ -149,15 +153,15 @@ static void prv_window_unload(Window* window) {
 
 static void prv_init(void) {
   state = state_init();
+  multiplayer_init(state);
+  monster_init(state);
   settings_init(state);
 
-  s_window = window_create();
-  window_set_window_handlers(s_window, (WindowHandlers) {
+  window = window_create_custom(state, (WindowHandlers) {
     .load = prv_window_load,
     .unload = prv_window_unload,
   });
-  const bool animated = false;
-  window_stack_push(s_window, animated);
+  window_stack_push(window, false);
 
   #if defined(TEST)
     tick_timer_service_subscribe(SECOND_UNIT, handleTime);
@@ -194,11 +198,14 @@ static void prv_deinit(void) {
   connection_service_unsubscribe();
   accel_tap_service_unsubscribe();
 
-  window_destroy(s_window);
+  window_destroy(window);
 
   state_write();
 
   app_message_deregister_callbacks();
+
+  monster_deinit();
+  multiplayer_deinit();
 }
 
 int main(void) {
