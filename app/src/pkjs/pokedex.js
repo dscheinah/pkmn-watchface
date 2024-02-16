@@ -23,10 +23,10 @@ function set(index) {
     pokedex.innerHTML = html;
 
     pokedex.addEventListener('click', function (event) {
-        var clickedId = parseInt(event.target && event.target.dataset.id);
-        if (!clickedId) {
+        if (!event.target || event.target.dataset.id === undefined) {
             return;
         }
+        var clickedId = parseInt(event.target.dataset.id);
         var index = window.selected.indexOf(clickedId);
         if (index > -1) {
             window.selected.splice(index, 1);
@@ -54,7 +54,7 @@ function set(index) {
     }.bind(this));
 }
 set.toString = function () {
-    return 'function(e){if(this.x=e,this.i){for(var t="",i=this.m.length,n=0;n<i;n++){var s=this.m[n];(parseInt(e[s<32?0:1])||0)&1<<(s<32?s:s-32)?t+=this.e+this.p[s+1]+this.v+s+this.t:t+=this.u}var d=document.getElementById("pokedex");d.innerHTML=t,d.addEventListener("click",function(e){var t=parseInt(e.target&&e.target.dataset.id);if(t){var i=window.selected.indexOf(t);i>-1?window.selected.splice(i,1):(window.selected.push(t),window.selected.length>6&&window.selected.shift()),document.querySelectorAll(".pokedex-selected").forEach((function(e){e.className=""}));for(var n="",s=window.selected.length,d=0;d<s;d++){var c=window.selected[d];n+=this.e+this.p[c+1]+this.t,document.querySelectorAll(\'[data-id="\'+c+\'"]\').forEach((function(e){e.parentNode.className="pokedex-selected"}))}document.getElementById("selection").innerHTML=n}}.bind(this))}}';
+    return 'function(e){if(this.x=e,this.i){for(var t="",i=this.m.length,d=0;d<i;d++){var n=this.m[d];(parseInt(e[n<32?0:1])||0)&1<<(n<32?n:n-32)?t+=this.e+this.p[n+1]+this.v+n+this.t:t+=this.u}var s=document.getElementById("pokedex");s.innerHTML=t,s.addEventListener("click",function(e){if(e.target&&void 0!==e.target.dataset.id){var t=parseInt(e.target.dataset.id),i=window.selected.indexOf(t);i>-1?window.selected.splice(i,1):(window.selected.push(t),window.selected.length>6&&window.selected.shift()),document.querySelectorAll(".pokedex-selected").forEach((function(e){e.className=""}));for(var d="",n=window.selected.length,s=0;s<n;s++){var c=window.selected[s];d+=this.e+this.p[c+1]+this.t,document.querySelectorAll(\'[data-id="\'+c+\'"]\').forEach((function(e){e.parentNode.className="pokedex-selected"}))}document.getElementById("selection").innerHTML=d}}.bind(this))}}';
 };
 
 function setData(userData) {

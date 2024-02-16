@@ -378,7 +378,10 @@ module.exports = function (json) {
 
     var monsters = [];
     for (var i = 0; i < 6; i++) {
-        var monster = mapper[(input.monsters[i] || '').toString()];
+        if (input.monsters[i] === undefined) {
+            break;
+        }
+        var monster = mapper[input.monsters[i].toString()];
         if (!monster) {
             break;
         }
