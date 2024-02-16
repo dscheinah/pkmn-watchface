@@ -46,12 +46,13 @@ module.exports = {
             setTimeout(function () {
                 running = false;
             }, dataLength * 5000);
-            socket.close();
-            socket = null;
+            if (socket) {
+                socket.close();
+                socket = null;
+            }
         };
         setTimeout(function () {
             if (socket) {
-                running = false;
                 socket.close();
                 socket = null;
             }
