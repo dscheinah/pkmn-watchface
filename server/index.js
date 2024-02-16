@@ -21,6 +21,38 @@ function selectOpenGame() {
     return null;
 }
 
+function selectClosedGame() {
+    while (closed.length) {
+        var game = closed.shift();
+        if (!game.finished) {
+            return game;
+        }
+    }
+    return null
+}
+
+function clear(game) {
+    game.socket = null;
+    if (game.timeout) {
+        clearTimeout(game.timeout);
+        game.timeout = null;
+    }
+}
+
+function runAndFinish(player1, player2) {
+    var gameData = runGame(player1, player2);
+    player1.finished = true;
+    player2.finished = true;
+    if (player1.socket) {
+        player1.socket.send(createOutputFromGameData(gameData, 'player1', 'player2'));
+    }
+    clear(player1);
+    if (player2.socket) {
+        player2.socket.send(createOutputFromGameData(gameData, 'player2', 'player1'));
+    }
+    clear(player2);
+}
+
 app.get('/', function (req, res) {
     res.send('');
 });
@@ -31,35 +63,25 @@ app.ws('/multiplayer', function (ws) {
             ws.close();
             return;
         }
+        data.socket = ws;
 
         var game = selectOpenGame();
         if (game) {
-            var gameData = runGame(game, data);
-            ws.send(createOutputFromGameData(gameData, 'player2', 'player1'));
-            if (game.socket) {
-                game.socket.send(createOutputFromGameData(gameData, 'player1', 'player2'));
-            }
-            if (game.timeout) {
-                clearTimeout(game.timeout);
-            }
+            runAndFinish(game, data);
             return;
         }
 
-        data.socket = ws;
-        data.timeout = setTimeout(function () {
-            if (!data.socket || !closed.length) {
-                return;
-            }
-            var gameData = runGame(closed.shift(), data);
-            ws.send(createOutputFromGameData(gameData, 'player2', 'player1'));
-        }, 30000);
-
         games.push(data);
 
+        data.timeout = setTimeout(function () {
+            var game = selectClosedGame();
+            if (game) {
+                runAndFinish(game, data);
+            }
+        }, 30000);
+
         ws.on('close', function () {
-            data.socket = null;
-            clearTimeout(data.timeout);
-            data.timeout = null;
+            clear(data);
         });
     });
 
