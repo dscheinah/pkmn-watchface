@@ -60,15 +60,15 @@
 			},
 			{
 				"type": "toggle",
-				"messageKey": "seconds",
-				"label": "Render seconds",
-				"description": "Should only be enabled if you don't care about battery life."
-			},
-			{
-				"type": "toggle",
 				"messageKey": "taps",
 				"label": "Use taps to show seconds",
 				"description": "Only update seconds after a tap and until the next minute. If used without render seconds, the time will be replaced."
+			},
+			{
+				"type": "toggle",
+				"messageKey": "seconds",
+				"label": "Always render seconds",
+				"description": "Only enable without taps toggle if you don't care about battery life."
 			},
 			{
 				"type": "toggle",
