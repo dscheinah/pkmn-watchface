@@ -160,7 +160,7 @@ static void window_unload(Window* window) {
 
 void multiplayer_init(State* stateRef) {
   state = stateRef;
-  dark = state->settings & SETTINGS_DARK ? PBL_IF_BW_ELSE(DARK_FULL, DARK_ON) : DARK_OFF;
+  dark = state->settings & SETTINGS_DARK ? DARK_ON : DARK_OFF;
   window = window_create_custom(state, (WindowHandlers) {
     .load = window_load,
     .unload = window_unload,

@@ -7,8 +7,8 @@
 
 Window* window_create_custom(State* state, WindowHandlers handlers) {
   Window* window = window_create();
-  if (state->settings & SETTINGS_DARK ? DARK_FULL : DARK_OFF) {
-    window_set_background_color(window, COLOR_FALLBACK(GColorDarkGray, GColorBlack));
+  if (state->settings & SETTINGS_DARK) {
+    window_set_background_color(window, GColorBlack);
   }
   window_set_window_handlers(window, handlers);
   return window;

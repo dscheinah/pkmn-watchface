@@ -5,7 +5,7 @@
 static GBitmap* templateBitmap;
 
 void monster_init(State* state) {
-  templateBitmap = helper_create_bitmap(RESOURCE_ID_template, state->settings & SETTINGS_DARK ? DARK_FULL : DARK_OFF);
+  templateBitmap = helper_create_bitmap(RESOURCE_ID_template, state->settings & SETTINGS_DARK ? DARK_ON : DARK_OFF);
 }
 
 BitmapLayer* monster_create_template(Layer* root) {

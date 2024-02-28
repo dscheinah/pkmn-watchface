@@ -30,7 +30,6 @@
 
 #define DARK_OFF 0
 #define DARK_ON 1
-#define DARK_FULL 2
 
 typedef uint16_t ResourceValue;
 

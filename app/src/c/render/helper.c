@@ -8,7 +8,7 @@ TextLayer* helper_create_text_layer(Layer* parent, GRect rect, char* font, GText
   text_layer_set_text_alignment(layer, alignment);
   if (dark) {
     text_layer_set_text_color(layer, GColorWhite);
-    text_layer_set_background_color(layer, COLOR_FALLBACK(GColorDarkGray, GColorBlack));
+    text_layer_set_background_color(layer, GColorBlack);
   }
   return layer;
 }
@@ -36,11 +36,11 @@ GBitmap* helper_create_bitmap(ResourceValue resource, DarkValue dark) {
     int length = ARRAY_LENGTH(palette);
     for (int i = 0; i < length; i++) {
       if (gcolor_equal(palette[i], GColorWhite)) {
-        palette[i] = COLOR_FALLBACK(GColorDarkGray, GColorBlack);
+        palette[i] = GColorBlack;
         continue;
       }
-      if (dark == DARK_FULL && gcolor_equal(palette[i], GColorBlack)) {
-        palette[i] = COLOR_FALLBACK(GColorLightGray, GColorWhite);
+      if (gcolor_equal(palette[i], GColorBlack)) {
+        palette[i] = GColorWhite;
       }
     }
   }

@@ -60,7 +60,7 @@ static void renderIndicator(Layer* layer, GContext* ctx) {
 
 void battlefield_load(Layer* root, State* stateRef) {
   state = stateRef;
-  dark = state->settings & SETTINGS_DARK ? PBL_IF_BW_ELSE(DARK_FULL, DARK_ON) : DARK_OFF;
+  dark = state->settings & SETTINGS_DARK ? DARK_ON : DARK_OFF;
 
   monster_load_ally(root, &allyPart, dark);
   allyExperience = helper_create_layer(root, GRect(76, 111, 61, 2));
