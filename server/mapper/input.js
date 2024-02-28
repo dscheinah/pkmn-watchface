@@ -371,10 +371,10 @@ module.exports = function (json) {
         return null;
     }
 
-    var steps = input.steps ? input.steps.split(',') : [];
-    var sleep = input.sleep ? input.sleep.split(',') : [];
-    var restful = input.restful ? input.restful.split(',') : [];
-    var active = input.active ? input.active.split(',') : [];
+    var stepsPerDay = input.steps ? input.steps.split(',') : [];
+    var sleepPerDay = input.sleep ? input.sleep.split(',') : [];
+    var restfulPerDay = input.restful ? input.restful.split(',') : [];
+    var activePerDay = input.active ? input.active.split(',') : [];
 
     var monsters = [];
     for (var i = 0; i < 6; i++) {
@@ -385,15 +385,21 @@ module.exports = function (json) {
         if (!monster) {
             break;
         }
+        var steps = Math.abs(parseInt(stepsPerDay[i]) || 0);
+        var sleep = Math.abs(parseInt(sleepPerDay[i]) || 0);
+        var restful = Math.abs(parseInt(restfulPerDay[i]) || 0);
+        var active = Math.abs(parseInt(activePerDay[i]) || 0);
         monsters.push({
             id: monster.id,
             types: monster.types,
             weak: monster.weak,
             resist: monster.resist,
-            level: parseInt(steps[i]) || 1,
-            agility: parseInt(sleep[i]) || 0,
-            critical: parseInt(restful[i]) || 0,
-            extra: parseInt(active[i]) || 0,
+            level: Math.max(1, Math.min(100, (steps + sleep) / 1.5)),
+            power: Math.max(10, Math.min(100, (active + restful) / 2)),
+            offense: Math.max(100, Math.min(350, steps * 4)),
+            defense: Math.max(100, Math.min(450, sleep * 5)),
+            agility: Math.max(0, Math.min(20, Math.round(restful / 4))),
+            critical: Math.max(0, Math.min(100, active)),
             health: 100
         })
     }

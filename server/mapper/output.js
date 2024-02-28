@@ -243,10 +243,10 @@ module.exports = function (data, ally, enemy) {
             mp_cmd: cmd,
             mp_ally: mapper[entry[ally].id].ally,
             mp_enemy: mapper[entry[enemy].id].enemy,
-            mp_ally_health: entry[ally].health,
-            mp_enemy_health: entry[enemy].health,
-            mp_ally_level: entry[ally].level,
-            mp_enemy_level: entry[enemy].level
+            mp_ally_health: Math.round(entry[ally].health),
+            mp_enemy_health: Math.round(entry[enemy].health),
+            mp_ally_level: Math.round(entry[ally].level),
+            mp_enemy_level: Math.round(entry[enemy].level)
         })
     });
     return JSON.stringify(mapped);

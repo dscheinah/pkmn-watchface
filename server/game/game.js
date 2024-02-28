@@ -1,7 +1,8 @@
 function dealDamage(ally, enemy) {
-    var defense = Math.log(ally.level / 10 + 1) / Math.log(enemy.level / 10 + 1) / 4;
+    var level = 2 * ally.level / 5 + 2;
 
-    var power = Math.random() * 100 < ally.extra ? 100 : 75;
+    var stats = ally.offense / enemy.defense;
+
     var critical = Math.random() * 100 < ally.critical ? 1.5 : 1;
 
     var modifier = 1;
@@ -16,8 +17,8 @@ function dealDamage(ally, enemy) {
 
     var random = 1 - Math.random() * 0.15;
 
-    enemy.health -= Math.round(defense * power * critical * modifier * random);
-    return enemy.health < 1;
+    enemy.health -= Math.round(((level * ally.power * stats) / 50 * critical + 2) * modifier * random);
+    return enemy.health < 1 || enemy.health > 100;
 }
 
 function transform(player) {
