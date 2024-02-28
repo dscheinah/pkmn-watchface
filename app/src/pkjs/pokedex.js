@@ -79,8 +79,8 @@ var component = {
     template: '<div id="pokedex" class="component pokedex"></div>',
     manipulator: {get: get, set: set, setData: setData},
     style:
-        '.pokedex { display: flex; flex-wrap: wrap; }' +
-        '.pokedex div { margin: .4rem; display: flex; align-items: center; justify-content: center; background: white; border-radius: .25rem; width: 64px; height: 64px; border: 3px solid white; }' +
+        '.pokedex { display: flex; flex-wrap: wrap; justify-content: center; }' +
+        '.pokedex div { margin: .25rem; display: flex; align-items: center; justify-content: center; background: white; border-radius: .25rem; width: 64px; height: 64px; border: 3px solid white; }' +
         '.pokedex div span { font-size: 32px; color: rgba(0, 0, 0, .2); }' +
         '.pokedex .pokedex-selected { border-color: lightgreen; }' +
         '#main-form > .component:last-child, #main-form > .section:last-child { margin-bottom: 80px; }'
