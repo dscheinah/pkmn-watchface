@@ -120,9 +120,11 @@ static void handleConnection(bool connected) {
 }
 
 static void handleTap(AccelAxisType axis, int32_t direction) {
-  if (axis == ACCEL_AXIS_Z) {
+  if (axis != ACCEL_AXIS_Y) {
     tapActive = true;
     tick_timer_service_subscribe(SECOND_UNIT, handleTime);
+    time_t now = time(NULL);
+    handleTime(localtime(&now), SECOND_UNIT);
     light_enable_interaction();
   }
 }
