@@ -123,6 +123,7 @@ static void handleTap(AccelAxisType axis, int32_t direction) {
   if (axis == ACCEL_AXIS_Z) {
     tapActive = true;
     tick_timer_service_subscribe(SECOND_UNIT, handleTime);
+    light_enable_interaction();
   }
 }
 

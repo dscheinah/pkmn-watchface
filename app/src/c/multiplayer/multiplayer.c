@@ -58,6 +58,7 @@ static void event(char* text, int endTimeout, int vibeType) {
       vibes_double_pulse();
       break;
   }
+  light_enable_interaction();
 }
 
 static bool start() {
