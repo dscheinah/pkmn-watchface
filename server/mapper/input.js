@@ -398,7 +398,7 @@ module.exports = function (json) {
             power: Math.max(10, Math.min(100, (steps + active + restful) / 2)),
             offense: Math.max(100, Math.min(350, steps * 4)),
             defense: Math.max(100, Math.min(450, sleep * 5)),
-            agility: Math.max(0, Math.min(20, Math.round(restful / 4))),
+            agility: Math.max(0, Math.min(20, Math.round(restful / 2))),
             critical: Math.max(0, Math.min(100, active)),
             health: 100
         })
