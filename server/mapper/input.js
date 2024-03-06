@@ -395,7 +395,7 @@ module.exports = function (json) {
             weak: monster.weak,
             resist: monster.resist,
             level: Math.max(1, Math.min(100, (steps + sleep) / 1.5)),
-            power: Math.max(10, Math.min(100, (active + restful) / 2)),
+            power: Math.max(10, Math.min(100, (steps + active + restful) / 2)),
             offense: Math.max(100, Math.min(350, steps * 4)),
             defense: Math.max(100, Math.min(450, sleep * 5)),
             agility: Math.max(0, Math.min(20, Math.round(restful / 4))),
