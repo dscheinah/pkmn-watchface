@@ -41,7 +41,13 @@ module.exports = {
             for (var i = 0; i < dataLength; i++) {
                 setTimeout(function () {
                     Pebble.sendAppMessage(this);
-                }.bind(data[i]), i * 5000);
+                }.bind(data[i]), (i + 0.5) * 5000);
+            }
+            if (data[i - 1] && data[i - 1].mp_cmd === 101) {
+                Pebble.sendAppMessage({
+                    'mp_cmd': 1,
+                    'mp_ally': data[i - 1].mp_ally
+                });
             }
             setTimeout(function () {
                 running = false;

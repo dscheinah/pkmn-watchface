@@ -5,6 +5,7 @@
 #include "../render/window.h"
 
 #define MP_START 0
+#define MP_UP    1
 #define MP_FIGHT 10
 #define MP_NEW   11
 #define MP_LOST  100
@@ -173,13 +174,20 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
   if (!tuple) {
     return;
   }
-  if (tuple->value->uint8 == MP_START) {
-    if (start()) {
-      event("WAITING", 60000, VIBE_SHORT);
-    } else {
-      event("ERROR", 15000, VIBE_NONE);
-    }
-    return;
+  switch (tuple->value->uint8) {
+    case MP_START:
+      if (start()) {
+        event("WAITING", 60000, VIBE_SHORT);
+      } else {
+        event("ERROR", 15000, VIBE_NONE);
+      }
+      return;
+    case MP_UP:
+      tuple = dict_find(iter, MESSAGE_KEY_mp_ally);
+      if (tuple) {
+        state->ally->type = tuple->value->uint32;
+      }
+      return;
   }
   if (!window_stack_contains_window(window)) {
     return;
@@ -196,11 +204,10 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
       break;
     case MP_WON:
       event("WON", 15000, VIBE_LONG);
-      state->ally->type = allyPart.previous;
       break;
     default:
       event("ERROR", 15000, VIBE_NONE);
-      break;
+      return;
   }
   update(iter);
 }
