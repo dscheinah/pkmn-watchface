@@ -18,7 +18,7 @@ function dealDamage(ally, enemy) {
     var random = 1 - Math.random() * 0.15;
 
     enemy.health -= Math.round(((level * ally.power * stats) / 50 * critical + 2) * modifier * random);
-    if (ally.power > 25) {
+    if (ally.power > 30) {
         ally.power -= 5;
     }
     return enemy.health < 1 || enemy.health > 100;
