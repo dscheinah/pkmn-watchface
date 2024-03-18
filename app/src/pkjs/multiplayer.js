@@ -1,10 +1,25 @@
 var url = 'ws://pkmn.dscheinah.de/multiplayer';
 
 var lastSelected;
+
 var socket;
+var timeout;
 
 var timer = 750;
+
 var running = false;
+
+function finish(newRunning) {
+    running = newRunning;
+    if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+    }
+    if (socket) {
+        socket.close();
+        socket = null;
+    }
+}
 
 module.exports = {
     init: function (selected) {
@@ -15,16 +30,11 @@ module.exports = {
         Pebble.sendAppMessage({'mp_cmd': 0});
     },
     start: function (payload) {
-        if (running) {
-            return;
-        }
         var currentSelected = lastSelected;
-        if (!currentSelected) {
+        if (running || !currentSelected) {
             return;
         }
-        if (socket) {
-            socket.close();
-        }
+        finish(false);
         socket = new WebSocket(url);
         socket.onopen = function () {
             socket.send(JSON.stringify({
@@ -36,13 +46,13 @@ module.exports = {
             }));
         };
         socket.onmessage = function (event) {
-            running = true;
+            finish(true);
             var data = JSON.parse(event.data);
             var dataLength = data.length;
             for (var i = 0; i < dataLength; i++) {
                 setTimeout(function () {
                     Pebble.sendAppMessage(this);
-                }.bind(data[i]), (i + 0.5) * timer);
+                }.bind(data[i]), (i + 1) * timer);
             }
             if (data[i - 1] && data[i - 1].mp_cmd === 101) {
                 Pebble.sendAppMessage({
@@ -51,18 +61,11 @@ module.exports = {
                 });
             }
             setTimeout(function () {
-                running = false;
-            }, dataLength * timer);
-            if (socket) {
-                socket.close();
-                socket = null;
-            }
+                finish(false);
+            }, dataLength * timer + 10000);
         };
-        setTimeout(function () {
-            if (socket) {
-                socket.close();
-                socket = null;
-            }
+        timeout = setTimeout(function () {
+            finish(false);
         }, 60000);
     }
 };

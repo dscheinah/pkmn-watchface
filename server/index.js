@@ -32,7 +32,10 @@ function selectClosedGame() {
 }
 
 function clear(game) {
-    game.socket = null;
+    if (game.socket) {
+        game.socket.close();
+        game.socket = null;
+    }
     if (game.timeout) {
         clearTimeout(game.timeout);
         game.timeout = null;
@@ -78,7 +81,7 @@ app.ws('/multiplayer', function (ws) {
             if (game) {
                 runAndFinish(game, data);
             }
-        }, 30000);
+        }, 40000);
 
         ws.on('close', function () {
             clear(data);
