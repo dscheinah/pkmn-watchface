@@ -179,7 +179,7 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
       if (start()) {
         event("WAITING", 60000, VIBE_SHORT);
       } else {
-        event("ERROR", 15000, VIBE_NONE);
+        event("ERROR", 10000, VIBE_NONE);
       }
       return;
     case MP_UP:
@@ -194,19 +194,19 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
   }
   switch (tuple->value->uint8) {
     case MP_FIGHT:
-      event("", 30000, VIBE_DOUBLE);
+      event("", 30000, VIBE_NONE);
       break;
     case MP_NEW:
-      event("", 30000, VIBE_SHORT);
+      event("", 30000, VIBE_DOUBLE);
       break;
     case MP_LOST:
-      event("LOST", 15000, VIBE_LONG);
+      event("LOST", 10000, VIBE_SHORT);
       break;
     case MP_WON:
-      event("WON", 15000, VIBE_LONG);
+      event("WON", 10000, VIBE_LONG);
       break;
     default:
-      event("ERROR", 15000, VIBE_NONE);
+      event("ERROR", 10000, VIBE_NONE);
       return;
   }
   update(iter);

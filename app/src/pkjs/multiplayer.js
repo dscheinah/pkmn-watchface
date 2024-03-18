@@ -3,6 +3,7 @@ var url = 'ws://pkmn.dscheinah.de/multiplayer';
 var lastSelected;
 var socket;
 
+var timer = 750;
 var running = false;
 
 module.exports = {
@@ -41,7 +42,7 @@ module.exports = {
             for (var i = 0; i < dataLength; i++) {
                 setTimeout(function () {
                     Pebble.sendAppMessage(this);
-                }.bind(data[i]), (i + 0.5) * 5000);
+                }.bind(data[i]), (i + 0.5) * timer);
             }
             if (data[i - 1] && data[i - 1].mp_cmd === 101) {
                 Pebble.sendAppMessage({
@@ -51,7 +52,7 @@ module.exports = {
             }
             setTimeout(function () {
                 running = false;
-            }, dataLength * 5000);
+            }, dataLength * timer);
             if (socket) {
                 socket.close();
                 socket = null;
