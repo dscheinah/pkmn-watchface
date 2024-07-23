@@ -71,6 +71,7 @@ ResourceValue helper_morph(State* state, bool morph) {
             return RESOURCE_ID_201a;
         }
       }
+    case RESOURCE_ID_200:
     case RESOURCE_ID_216:
       return RESOURCE_ID_203 + rand() % 6;
   }
