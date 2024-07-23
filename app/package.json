@@ -557,6 +557,11 @@
           "type": "bitmap"
         },
         {
+          "file": "pokemon/main-sprites/gold/201-a.png",
+          "name": "201a",
+          "type": "bitmap"
+        },
+        {
           "file": "pokemon/main-sprites/gold/back/201-x.png",
           "name": "a201x",
           "type": "bitmap"

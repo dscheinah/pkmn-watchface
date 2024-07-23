@@ -4,11 +4,7 @@
 
 bool enemy_evolution(State* state) {
   if (state->event & EVENT_MORPH) {
-    if (state->enemy->type == RESOURCE_ID_132) {
-      helper_evolve(state, RESOURCE_ID_203 + rand() % 6, state->enemy->level_multiplier, false);
-    } else {
-      helper_evolve(state, RESOURCE_ID_132, state->enemy->level_multiplier, false);
-    }
+    helper_evolve(state, helper_morph(state, true), state->enemy->level_multiplier, false);
     return true;
   }
   if (state->event & EVENT_SLEEP) {

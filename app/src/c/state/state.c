@@ -76,6 +76,10 @@ State* state_init() {
       case 3:
         state.health->active /= 2;
       #endif
+      case 4:
+        if (state.ally->type >= RESOURCE_ID_201a) {
+          state.ally->type++;
+        }
     }
   } else {
     state.index[0] = 1 << (RESOURCE_ID_133 - ENEMY_OFFSET);
@@ -113,7 +117,7 @@ bool state_update_index() {
 }
 
 void state_write() {
-  persist_write_int(VERSION_KEY, 4);
+  persist_write_int(VERSION_KEY, 5);
   persist_write_data(STATE_KEY, &state, sizeof(State));
   persist_write_data(ALLY_KEY, &ally, sizeof(Ally));
   persist_write_data(ENEMY_KEY, &enemy, sizeof(Enemy));

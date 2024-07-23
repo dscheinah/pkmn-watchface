@@ -43,3 +43,36 @@ ResourceValue helper_bird(State* state) {
   }
   return 0;
 }
+
+ResourceValue helper_morph(State* state, bool morph) {
+  switch (state->enemy->type) {
+    case RESOURCE_ID_132:
+      if (rand() % 4 == 0) {
+        switch (state->ally->type) {
+          case RESOURCE_ID_a1:
+            return RESOURCE_ID_1;
+          case RESOURCE_ID_a2:
+            return RESOURCE_ID_2;
+          case RESOURCE_ID_a3:
+            return RESOURCE_ID_3;
+          case RESOURCE_ID_a4:
+            return RESOURCE_ID_4;
+          case RESOURCE_ID_a5:
+            return RESOURCE_ID_5;
+          case RESOURCE_ID_a6:
+            return RESOURCE_ID_6;
+          case RESOURCE_ID_a7:
+            return RESOURCE_ID_7;
+          case RESOURCE_ID_a8:
+            return RESOURCE_ID_8;
+          case RESOURCE_ID_a9:
+            return RESOURCE_ID_9;
+          case RESOURCE_ID_a201x:
+            return RESOURCE_ID_201a;
+        }
+      }
+    case RESOURCE_ID_216:
+      return RESOURCE_ID_203 + rand() % 6;
+  }
+  return morph ? RESOURCE_ID_132 : RESOURCE_ID_216;
+}
