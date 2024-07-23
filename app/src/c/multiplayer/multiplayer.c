@@ -185,7 +185,7 @@ void multiplayer_handle_inbox(DictionaryIterator* iter) {
     case MP_UP:
       tuple = dict_find(iter, MESSAGE_KEY_mp_ally);
       if (tuple) {
-        state->ally->type = tuple->value->uint32;
+        state->ally->type = state->ally->selected = tuple->value->uint32;
       }
       return;
   }
