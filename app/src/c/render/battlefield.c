@@ -88,7 +88,7 @@ void battlefield_mark_dirty() {
       type += type == RESOURCE_ID_a201x ? 2 : 20;
     }
     if (state->ally->shiny) {
-      type += type == RESOURCE_ID_a201x ? 1 : 10;
+      type += (type == RESOURCE_ID_a201x || type == RESOURCE_ID_a201o) ? 1 : 10;
     }
   }
   monster_render(&allyPart, type, dark);
