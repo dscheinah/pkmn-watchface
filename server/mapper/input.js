@@ -266,6 +266,12 @@ var mapper = {
         weak: [types.GHOST, types.DARK],
         resist: [types.NORMAL, types.BATTLE, types.GROUND, types.POISON, types.BUG]
     },
+    '56': {
+        id: '201',
+        types: [types.PSYCHO],
+        weak: [types.BUG, types.BUG, types.DARK],
+        resist: [types.BATTLE, types.PSYCHO, types.GROUND]
+    },
     '27': {
         id: '203',
         types: [types.NORMAL, types.PSYCHO],

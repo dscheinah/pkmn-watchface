@@ -36,191 +36,195 @@ var mapper = {
         enemy: 53
     },
     '025': {
-        ally: 105,
+        ally: 106,
         enemy: 54
     },
     '026': {
-        ally: 106,
+        ally: 107,
         enemy: 55
     },
     '039': {
-        ally: 139,
+        ally: 140,
         enemy: 88
     },
     '040': {
-        ally: 140,
+        ally: 141,
         enemy: 89
     },
     '063': {
-        ally: 107,
+        ally: 108,
         enemy: 56
     },
     '064': {
-        ally: 108,
+        ally: 109,
         enemy: 57
     },
     '065': {
-        ally: 109,
+        ally: 110,
         enemy: 58
     },
     '086': {
-        ally: 110,
+        ally: 111,
         enemy: 59
     },
     '087': {
-        ally: 111,
+        ally: 112,
         enemy: 60
     },
     '092': {
-        ally: 112,
+        ally: 113,
         enemy: 61
     },
     '093': {
-        ally: 113,
+        ally: 114,
         enemy: 62
     },
     '094': {
-        ally: 114,
+        ally: 115,
         enemy: 63
     },
     '125': {
-        ally: 149,
+        ally: 150,
         enemy: 98
     },
     '132': {
-        ally: 115,
+        ally: 116,
         enemy: 64
     },
     '133': {
-        ally: 116,
+        ally: 117,
         enemy: 65
     },
     '134': {
-        ally: 117,
+        ally: 118,
         enemy: 66
     },
     '135': {
-        ally: 120,
+        ally: 121,
         enemy: 69
     },
     '136': {
-        ally: 118,
+        ally: 119,
         enemy: 67
     },
     '143': {
-        ally: 142,
+        ally: 143,
         enemy: 91
     },
     '144': {
-        ally: 133,
+        ally: 134,
         enemy: 82
     },
     '145': {
-        ally: 134,
+        ally: 135,
         enemy: 83
     },
     '146': {
-        ally: 135,
+        ally: 136,
         enemy: 84
     },
     '150': {
-        ally: 138,
+        ally: 139,
         enemy: 87
     },
     '151': {
-        ally: 121,
+        ally: 122,
         enemy: 70
     },
     '172': {
-        ally: 130,
+        ally: 131,
         enemy: 79
     },
     '174': {
-        ally: 141,
+        ally: 142,
         enemy: 90
     },
     '175': {
-        ally: 131,
+        ally: 132,
         enemy: 80
     },
     '176': {
-        ally: 132,
+        ally: 133,
         enemy: 81
     },
     '185': {
-        ally: 148,
+        ally: 149,
         enemy: 97
     },
     '196': {
-        ally: 119,
+        ally: 120,
         enemy: 68
     },
     '197': {
-        ally: 122,
+        ally: 123,
         enemy: 71
     },
     '200': {
-        ally: 151,
+        ally: 152,
         enemy: 100
     },
+    '201': {
+        ally: 102,
+        enemy: 101
+    },
     '203': {
-        ally: 123,
+        ally: 124,
         enemy: 72
     },
     '213': {
-        ally: 124,
+        ally: 125,
         enemy: 73
     },
     '214': {
-        ally: 125,
+        ally: 126,
         enemy: 74
     },
     '216': {
-        ally: 143,
+        ally: 144,
         enemy: 92
     },
     '217': {
-        ally: 144,
+        ally: 145,
         enemy: 93
     },
     '225': {
-        ally: 126,
+        ally: 127,
         enemy: 75
     },
     '235': {
-        ally: 127,
+        ally: 128,
         enemy: 76
     },
     '239': {
-        ally: 150,
+        ally: 151,
         enemy: 99
     },
     '241': {
-        ally: 128,
+        ally: 129,
         enemy: 77
     },
     '243': {
-        ally: 145,
+        ally: 146,
         enemy: 94
     },
     '244': {
-        ally: 146,
+        ally: 147,
         enemy: 95
     },
     '245': {
-        ally: 147,
+        ally: 148,
         enemy: 96
     },
     '249': {
-        ally: 136,
+        ally: 137,
         enemy: 85
     },
     '250': {
-        ally: 137,
+        ally: 138,
         enemy: 86
     },
     '251': {
-        ally: 129,
+        ally: 130,
         enemy: 78
     }
 };
