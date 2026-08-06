@@ -33,7 +33,18 @@ GBitmap* helper_create_bitmap(ResourceValue resource, DarkValue dark) {
   GBitmap* bitmap = gbitmap_create_with_resource(resource);
   if (dark) {
     GColor* palette = gbitmap_get_palette(bitmap);
-    int length = ARRAY_LENGTH(palette);
+    int length = 0;
+    switch (gbitmap_get_format(bitmap)) {
+        case GBitmapFormat1Bit:
+        case GBitmapFormat1BitPalette:
+          length = 2;
+          break;
+        case GBitmapFormat2BitPalette:
+          length = 4;
+          break;
+        default:
+          length = 0;
+    }
     for (int i = 0; i < length; i++) {
       if (gcolor_equal(palette[i], GColorWhite)) {
         palette[i] = GColorBlack;

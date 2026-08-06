@@ -70,10 +70,10 @@ static bool start() {
     return false;
   }
   time_t reference = time_start_of_today() - (6 * SECONDS_PER_DAY);
-  uint steps[6];
-  uint sleep[6];
-  uint restful[6];
-  uint active[6];
+  unsigned int steps[6];
+  unsigned int sleep[6];
+  unsigned int restful[6];
+  unsigned int active[6];
   for (int i = 0; i < 6; i++) {
     steps[i] = PBL_IF_HEALTH_ELSE(
         health_service_sum(HealthMetricStepCount, reference, reference + SECONDS_PER_DAY) / 300,

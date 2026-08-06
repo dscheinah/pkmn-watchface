@@ -1,4 +1,4 @@
-var Clay = require('pebble-clay');
+var Clay = require('@rebble/clay');
 var config = require('./config.json');
 var pokedex = require('./pokedex.js');
 var selection = require('./selection.js');

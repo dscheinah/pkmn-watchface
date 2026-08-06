@@ -68,18 +68,24 @@ State* state_init() {
     switch (persist_read_int(VERSION_KEY)) {
       case 0:
         ally.selected = 0;
+        [[fallthrough]];
       case 1:
         state.counter = 0;
+        [[fallthrough]];
       case 2:
         state.charging = false;
+        [[fallthrough]];
       #if !defined(PBL_HEALTH)
       case 3:
         state.health->active /= 2;
+        [[fallthrough]];
       #endif
       case 4:
         if (state.ally->type >= RESOURCE_ID_201a) {
           state.ally->type++;
         }
+        [[fallthrough]];
+      default:
     }
   } else {
     state.index[0] = 1 << (RESOURCE_ID_133 - ENEMY_OFFSET);

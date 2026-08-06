@@ -83,7 +83,7 @@ typedef struct {
   EventValue event;
   SettingsValue settings;
   QuietValue quiet;
-  uint index[2];
+  unsigned int index[2];
   bool missing;
   short identifier;
   uint16_t counter;
