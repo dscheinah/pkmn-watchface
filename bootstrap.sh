@@ -54,16 +54,20 @@ grep main-sprites app/package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | 
   file="./app/resources/$file"
   fileColor="${file%.*}~color.png"
   fileBw="${file%.*}~bw.png"
+  fileUp="${file%.*}~color~228h.png"
   if [ $hasConvert -eq 0 ]; then
     magick "$file" -flatten -alpha off +dither -remap ./pebble_colors_64.gif -trim -colors 4 -type palette "$fileColor"
     magick "$file" -flatten -alpha off -monochrome -trim -colors 2 -type palette "$fileBw"
+    magick "$file" -sample 120% -flatten -alpha off +dither -remap ./pebble_colors_64.gif -trim -colors 4 -type palette "$fileUp"
   else
-    cp "$file" "${file%.*}~color.png"
-    cp "$file" "${file%.*}~bw.png"
+    cp "$file" "$fileColor"
+    cp "$file" "$fileBw"
+    cp "$file" "$fileUp"
   fi
   if [ $hasOptiPng -eq 0 ]; then
     optipng -strip all -o7 "$fileColor"
     optipng -strip all -o7 "$fileBw"
+    optipng -strip all -o7 "$fileUp"
   fi
   if [[ "$file" != *"back"* ]]; then
     line=$(base64 -w0 "$fileColor")
