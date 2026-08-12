@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-set -e
-
-which convert > /dev/null 2>&1
+which magick > /dev/null 2>&1
 hasConvert=$?
 which optipng > /dev/null 2>&1
 hasOptiPng=$?
+
+set -e
 
 cd "$(dirname "$0")"
 
@@ -18,35 +18,35 @@ echo '[""' > $pokedex
 
 prefix=./app/resources/pokemon/main-sprites/gold
 
-if [[ $hasConvert ]]; then
-  convert "$prefix/back/2.png" -level 0%,100%,0.9 "$prefix/back/2.png"
-  convert "$prefix/back/4.png" -level 0%,100%,0.7 "$prefix/back/4.png"
-  convert "$prefix/back/5.png" -level 0%,100%,0.9 "$prefix/back/5.png"
-  convert "$prefix/back/6.png" -level 0%,100%,0.8 "$prefix/back/6.png"
-  convert "$prefix/back/7.png" -level 0%,100%,0.9 "$prefix/back/7.png"
-  convert "$prefix/back/8.png" -level 0%,100%,0.9 "$prefix/back/8.png"
-  convert "$prefix/back/142.png" -level 0%,100%,1.1 "$prefix/back/142.png"
-  convert "$prefix/back/158.png" -level 0%,100%,0.8 "$prefix/back/158.png"
-  convert "$prefix/back/159.png" -level 0%,100%,0.7 "$prefix/back/159.png"
-  convert "$prefix/back/shiny/1.png" -level 0%,100%,2 "$prefix/back/shiny/1.png"
-  convert "$prefix/back/shiny/5.png" -level 0%,100%,1.4 "$prefix/back/shiny/5.png"
-  convert "$prefix/back/shiny/154.png" -level 0%,100%,1.1 "$prefix/back/shiny/154.png"
-  convert "$prefix/back/shiny/160.png" -level 0%,100%,1.1 "$prefix/back/shiny/160.png"
-  convert "$prefix/92.png" -level 0%,100%,0.7 "$prefix/92.png"
-  convert "$prefix/93.png" -level 0%,100%,1.7 "$prefix/93.png"
-  convert "$prefix/94.png" -level 0%,100%,1.5 "$prefix/94.png"
-  convert "$prefix/200.png" -level 0%,100%,1.7 "$prefix/200.png"
-  convert "$prefix/214.png" -level 0%,100%,1.2 "$prefix/214.png"
-  convert "$prefix/216.png" -level 0%,100%,1.1 "$prefix/216.png"
+if [ $hasConvert -eq 0 ]; then
+  magick "$prefix/back/2.png" -level 0%,100%,0.9 "$prefix/back/2.png"
+  magick "$prefix/back/4.png" -level 0%,100%,0.7 "$prefix/back/4.png"
+  magick "$prefix/back/5.png" -level 0%,100%,0.9 "$prefix/back/5.png"
+  magick "$prefix/back/6.png" -level 0%,100%,0.8 "$prefix/back/6.png"
+  magick "$prefix/back/7.png" -level 0%,100%,0.9 "$prefix/back/7.png"
+  magick "$prefix/back/8.png" -level 0%,100%,0.9 "$prefix/back/8.png"
+  magick "$prefix/back/142.png" -level 0%,100%,1.1 "$prefix/back/142.png"
+  magick "$prefix/back/158.png" -level 0%,100%,0.8 "$prefix/back/158.png"
+  magick "$prefix/back/159.png" -level 0%,100%,0.7 "$prefix/back/159.png"
+  magick "$prefix/back/shiny/1.png" -level 0%,100%,2 "$prefix/back/shiny/1.png"
+  magick "$prefix/back/shiny/5.png" -level 0%,100%,1.4 "$prefix/back/shiny/5.png"
+  magick "$prefix/back/shiny/154.png" -level 0%,100%,1.1 "$prefix/back/shiny/154.png"
+  magick "$prefix/back/shiny/160.png" -level 0%,100%,1.1 "$prefix/back/shiny/160.png"
+  magick "$prefix/92.png" -level 0%,100%,0.7 "$prefix/92.png"
+  magick "$prefix/93.png" -level 0%,100%,1.7 "$prefix/93.png"
+  magick "$prefix/94.png" -level 0%,100%,1.5 "$prefix/94.png"
+  magick "$prefix/200.png" -level 0%,100%,1.7 "$prefix/200.png"
+  magick "$prefix/214.png" -level 0%,100%,1.2 "$prefix/214.png"
+  magick "$prefix/216.png" -level 0%,100%,1.1 "$prefix/216.png"
 
   for i in 125 200 214 225 239 241; do
-    convert "$prefix/$i.png" -sample 44x44 "$prefix/$i.png"
+    magick "$prefix/$i.png" -sample 44x44 "$prefix/$i.png"
   done
   for i in 26 64 92 203 217 235; do
-    convert "$prefix/$i.png" -sample 48x48 "$prefix/$i.png"
+    magick "$prefix/$i.png" -sample 48x48 "$prefix/$i.png"
   done
   for i in 3 6 9 65 143 144 145 146 243 244 245 249 250; do
-    convert "$prefix/$i.png" -sample 52x52 "$prefix/$i.png"
+    magick "$prefix/$i.png" -sample 52x52 "$prefix/$i.png"
   done
 fi
 
@@ -54,21 +54,21 @@ grep main-sprites app/package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | 
   file="./app/resources/$file"
   fileColor="${file%.*}~color.png"
   fileBw="${file%.*}~bw.png"
-  if [[ $hasConvert ]]; then
-    convert "$file" -flatten -alpha off +dither -remap ./pebble_colors_64.gif -trim -colors 4 -type palette "$fileColor"
-    convert "$file" -flatten -alpha off -monochrome -trim -colors 2 -type palette "$fileBw"
+  if [ $hasConvert -eq 0 ]; then
+    magick "$file" -flatten -alpha off +dither -remap ./pebble_colors_64.gif -trim -colors 4 -type palette "$fileColor"
+    magick "$file" -flatten -alpha off -monochrome -trim -colors 2 -type palette "$fileBw"
   else
     cp "$file" "${file%.*}~color.png"
     cp "$file" "${file%.*}~bw.png"
   fi
-  if [[ $hasOptiPng ]]; then
+  if [ $hasOptiPng -eq 0 ]; then
     optipng -strip all -o7 "$fileColor"
     optipng -strip all -o7 "$fileBw"
   fi
   if [[ "$file" != *"back"* ]]; then
     line=$(base64 -w0 "$fileColor")
-    if [[ $hasConvert ]]; then
-      gif=$(convert "$fileColor" -strip gif:- | base64 -w0)
+    if [ $hasConvert -eq 0 ]; then
+      gif=$(magick "$fileColor" -strip gif:- | base64 -w0)
       if [[ ${#gif} -lt ${#line} ]]; then
         line=${gif}
       fi
@@ -77,22 +77,22 @@ grep main-sprites app/package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | 
   fi
 done
 
-if [[ $hasConvert ]]; then
-  convert "$prefix/back/1.png" -flatten -alpha off -colorspace gray -threshold 85% -type bilevel "$prefix/back/1.base.png"
-  convert "$prefix/back/1.png" -flatten -channel rgba -transparent black -fill black -opaque white -fill white -opaque none -alpha off -colorspace gray -threshold 85% -type bilevel "$prefix/back/1.mask.png"
-  convert "$prefix/back/1.base.png" "$prefix/back/1.mask.png" -compose add -composite "$prefix/back/1~bw.png"
-  convert "$prefix/back/4.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/4~bw.png"
-  convert "$prefix/back/7.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/7~bw.png"
-  convert "$prefix/back/8.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/8~bw.png"
-  convert "$prefix/back/shiny/4.png" -flatten -level 0%,100%,0.5 -alpha off -monochrome -type palette "$prefix/back/shiny/4~bw.png"
-  convert "$prefix/back/shiny/222.png" -flatten -level 0%,100%,0.3 -alpha off -monochrome -type palette "$prefix/back/shiny/222~bw.png"
+if [ $hasConvert -eq 0 ]; then
+  magick "$prefix/back/1.png" -flatten -alpha off -colorspace gray -threshold 85% -type bilevel "$prefix/back/1.base.png"
+  magick "$prefix/back/1.png" -flatten -channel rgba -transparent black -fill black -opaque white -fill white -opaque none -alpha off -colorspace gray -threshold 85% -type bilevel "$prefix/back/1.mask.png"
+  magick "$prefix/back/1.base.png" "$prefix/back/1.mask.png" -compose add -composite "$prefix/back/1~bw.png"
+  magick "$prefix/back/4.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/4~bw.png"
+  magick "$prefix/back/7.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/7~bw.png"
+  magick "$prefix/back/8.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/8~bw.png"
+  magick "$prefix/back/shiny/4.png" -flatten -level 0%,100%,0.5 -alpha off -monochrome -type palette "$prefix/back/shiny/4~bw.png"
+  magick "$prefix/back/shiny/222.png" -flatten -level 0%,100%,0.3 -alpha off -monochrome -type palette "$prefix/back/shiny/222~bw.png"
   for i in 155 156 157 201-x 201-o; do
-    convert "$prefix/back/shiny/$i.png" -flatten -alpha off -colorspace gray -threshold 99% -type bilevel "$prefix/back/shiny/$i.base.png"
-    convert "$prefix/back/shiny/$i.png" -flatten -channel rgba -transparent black -fill black -opaque white -fill white -opaque none -alpha off -colorspace gray -threshold 99% -type bilevel "$prefix/back/shiny/$i.mask.png"
-    convert "$prefix/back/shiny/$i.base.png" "$prefix/back/shiny/$i.mask.png" -compose add -composite "$prefix/back/shiny/$i~bw.png"
+    magick "$prefix/back/shiny/$i.png" -flatten -alpha off -colorspace gray -threshold 99% -type bilevel "$prefix/back/shiny/$i.base.png"
+    magick "$prefix/back/shiny/$i.png" -flatten -channel rgba -transparent black -fill black -opaque white -fill white -opaque none -alpha off -colorspace gray -threshold 99% -type bilevel "$prefix/back/shiny/$i.mask.png"
+    magick "$prefix/back/shiny/$i.base.png" "$prefix/back/shiny/$i.mask.png" -compose add -composite "$prefix/back/shiny/$i~bw.png"
   done
 fi
-if [[ $hasOptiPng ]]; then
+if [ $hasOptiPng -eq 0 ]; then
   optipng -strip all -o7 "$prefix/back/1~bw.png"
   optipng -strip all -o7 "$prefix/back/4~bw.png"
   optipng -strip all -o7 "$prefix/back/7~bw.png"
