@@ -82,18 +82,14 @@ grep main-sprites app/package.json | xargs -l | cut -d" " -f2 | cut -d"," -f1 | 
 done
 
 if [ $hasConvert -eq 0 ]; then
-  magick "$prefix/back/1.png" -flatten -alpha off -colorspace gray -threshold 85% -type bilevel "$prefix/back/1.base.png"
-  magick "$prefix/back/1.png" -flatten -channel rgba -transparent black -fill black -opaque white -fill white -opaque none -alpha off -colorspace gray -threshold 85% -type bilevel "$prefix/back/1.mask.png"
-  magick "$prefix/back/1.base.png" "$prefix/back/1.mask.png" -compose add -composite "$prefix/back/1~bw.png"
+  magick "$prefix/back/1.png" -flatten -fill white -opaque black -colorspace gray -threshold 85% -type bilevel "$prefix/back/1~bw.png"
   magick "$prefix/back/4.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/4~bw.png"
   magick "$prefix/back/7.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/7~bw.png"
   magick "$prefix/back/8.png" -flatten -level 0%,100%,0.8 -alpha off -monochrome -type palette "$prefix/back/8~bw.png"
   magick "$prefix/back/shiny/4.png" -flatten -level 0%,100%,0.5 -alpha off -monochrome -type palette "$prefix/back/shiny/4~bw.png"
   magick "$prefix/back/shiny/222.png" -flatten -level 0%,100%,0.3 -alpha off -monochrome -type palette "$prefix/back/shiny/222~bw.png"
   for i in 155 156 157 201-x 201-o; do
-    magick "$prefix/back/shiny/$i.png" -flatten -alpha off -colorspace gray -threshold 99% -type bilevel "$prefix/back/shiny/$i.base.png"
-    magick "$prefix/back/shiny/$i.png" -flatten -channel rgba -transparent black -fill black -opaque white -fill white -opaque none -alpha off -colorspace gray -threshold 99% -type bilevel "$prefix/back/shiny/$i.mask.png"
-    magick "$prefix/back/shiny/$i.base.png" "$prefix/back/shiny/$i.mask.png" -compose add -composite "$prefix/back/shiny/$i~bw.png"
+    magick "$prefix/back/shiny/$i.png" -flatten -fill white -opaque black -colorspace gray -threshold 99% -type bilevel "$prefix/back/shiny/$i~bw.png"
   done
 fi
 if [ $hasOptiPng -eq 0 ]; then
