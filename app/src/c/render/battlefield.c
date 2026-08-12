@@ -19,7 +19,7 @@ DarkValue dark;
 
 static void renderCircle(GContext* ctx, GColor8 color, int pos) {
   graphics_context_set_stroke_color(ctx, COLOR_FALLBACK(color, dark ? GColorWhite : GColorBlack));
-  graphics_draw_round_rect(ctx, GRect(10 * pos, 0, 7, 4), 4);
+  graphics_draw_round_rect(ctx, GRectOffset(10 * pos, 0, 7, 4), 4);
 }
 
 static void renderAllyExperience(Layer* layer, GContext* ctx) {
@@ -63,12 +63,12 @@ void battlefield_load(Layer* root, State* stateRef) {
   dark = state->settings & SETTINGS_DARK ? DARK_ON : DARK_OFF;
 
   monster_load_ally(root, &allyPart, dark);
-  allyExperience = helper_create_layer(root, GRect(76, 111, 61, 2));
+  allyExperience = helper_create_layer(root, GRectOffset(76, 111, 61, 2));
 
   monster_load_enemy(root, &enemyPart, dark);
-  enemyExperience = helper_create_layer(root, GRect(20, 41, 49, 1));
+  enemyExperience = helper_create_layer(root, GRectOffset(20, 41, 49, 1));
 
-  indicator = helper_create_layer(root, GRect(21, 35, 47, 4));
+  indicator = helper_create_layer(root, GRectOffset(21, 35, 47, 4));
 
   layer_set_update_proc(allyPart.health, renderAllyHealth);
   layer_set_update_proc(allyExperience, renderAllyExperience);

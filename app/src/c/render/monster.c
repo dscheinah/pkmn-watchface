@@ -9,19 +9,19 @@ void monster_init(State* state) {
 }
 
 BitmapLayer* monster_create_template(Layer* root) {
-  return helper_create_bitmap_layer(root, GRect(0, 0, 144, 168), templateBitmap);
+  return helper_create_bitmap_layer(root, GRect(0, 0, WIDTH, HEIGHT), templateBitmap);
 }
 
 void monster_load_ally(Layer* root, MonsterPart* part, DarkValue dark) {
-  part->image = helper_create_bitmap_layer(root, GRect(10, 68, 48, 48), NULL);
-  part->level = helper_create_text_layer(root, GRect(72, 73, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter, dark);
-  part->health = helper_create_layer(root, GRect(96, 91, 37, 4));
+  part->image = helper_create_bitmap_layer(root, GRectOffset(10, 68, 48, 48), NULL);
+  part->level = helper_create_text_layer(root, GRectOffset(72, 73, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter, dark);
+  part->health = helper_create_layer(root, GRectOffset(96, 91, 37, 4));
 }
 
 void monster_load_enemy(Layer* root, MonsterPart* part, DarkValue dark) {
-  part->image = helper_create_bitmap_layer(root, GRect(82, 14, 56, 56), NULL);
-  part->level = helper_create_text_layer(root, GRect(16, 10, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter, dark);
-  part->health = helper_create_layer(root, GRect(40, 28, 29, 3));
+  part->image = helper_create_bitmap_layer(root, GRectOffset(82, 14, 56, 56), NULL);
+  part->level = helper_create_text_layer(root, GRectOffset(16, 10, 25, 14), FONT_SMALL_BOLD, GTextAlignmentCenter, dark);
+  part->health = helper_create_layer(root, GRectOffset(40, 28, 29, 3));
 }
 
 void monster_render(MonsterPart* part, ResourceValue resource, DarkValue dark) {

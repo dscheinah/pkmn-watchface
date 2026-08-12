@@ -61,3 +61,14 @@ GColor8 helper_color_from_health(int percentage) {
   }
   return GColorFromRGB((100 - percentage) * 255 / 100, percentage * 255 / 100, 0);
 }
+
+GRect GRectOffset(int x, int y, int w, int h) {
+  int xOff = x * OFFSET;
+  int yOff = y * OFFSET;
+  int wOff = w * OFFSET;
+  int hOff = h * OFFSET;
+  if (y != yOff && h < 3) {
+    hOff++;
+  }
+  return GRect(xOff, yOff, wOff, hOff);
+}

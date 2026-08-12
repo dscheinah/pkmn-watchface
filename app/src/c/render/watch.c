@@ -23,15 +23,15 @@ void watch_load(Layer* root, State* stateRef) {
   dateFormat = state->settings & SETTINGS_DATE_FORMAT ? "%d / %m" : "%m / %d";
   DarkValue dark = state->settings & SETTINGS_DARK ? DARK_ON : DARK_OFF;
   if (state->settings & SETTINGS_SECONDS) {
-    secondsLayer = helper_create_text_layer(root, GRect(110, PBL_IF_ROUND_ELSE(125, 133), 28, 20), FONT_MEDIUM, GTextAlignmentLeft, dark);
-    timeLayer = helper_create_text_layer(root, GRect(13, 121, 97, 32), FONT_LARGE, GTextAlignmentCenter, dark);
+    secondsLayer = helper_create_text_layer(root, GRectOffset(110, PBL_IF_ROUND_ELSE(125, 133), 28, 20), FONT_MEDIUM, GTextAlignmentLeft, dark);
+    timeLayer = helper_create_text_layer(root, GRectOffset(13, 121, 97, 32), FONT_LARGE, GTextAlignmentCenter, dark);
   } else {
-    timeLayer = helper_create_text_layer(root, GRect(9, 121, 129, 32), FONT_LARGE, GTextAlignmentCenter, dark);
+    timeLayer = helper_create_text_layer(root, GRectOffset(9, 121, 129, 32), FONT_LARGE, GTextAlignmentCenter, dark);
   }
-  dateLayer = helper_create_text_layer(root, GRect(73, 95, 59, 14), FONT_SMALL, GTextAlignmentRight, dark);
+  dateLayer = helper_create_text_layer(root, GRectOffset(73, 95, 59, 14), FONT_SMALL, GTextAlignmentRight, dark);
   text_layer_set_background_color(dateLayer, GColorClear);
   if (state->settings & SETTINGS_DOW) {
-    statusLayer = helper_create_text_layer(root, GRect(101, 73, 35, 14), FONT_SMALL, GTextAlignmentRight, dark);
+    statusLayer = helper_create_text_layer(root, GRectOffset(101, 73, 35, 14), FONT_SMALL, GTextAlignmentRight, dark);
   }
 }
 
