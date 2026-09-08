@@ -6,7 +6,7 @@
   "author": "Dscheinah",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.22.2",
+    "express": "^5.2.1",
     "express-ws": "^5.0.2"
   }
 }
